@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #514FBF">
-        <a class="navbar-brand" href="#">Simplicité</a>
+        <router-link to="/home" class="navbar-brand"> Simplicité</router-link>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <form id="search-form" class="form-inline my-2 my-lg-0">
                 <input id="search-input" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -9,12 +9,11 @@
 
             <ul class="navbar-nav ml-auto ">
                 <li class="nav-item active">
-
-                    <a class="nav-link" href="#">Courses</a>
+                   <router-link to="/courses" class="nav-link"> Courses</router-link>
+                   <!-- <a class="nav-link" href="#">Courses</a>-->
                 </li>
                 <li class="nav-item active">
-
-                    <a class="nav-link" href="#">Lessons</a>
+                    <router-link to="/lessons" class="nav-link"> Lessons</router-link>
                 </li>
                 <li class="nav-item dropdown active">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
