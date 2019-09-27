@@ -6,17 +6,13 @@ import HomePage from "./components/HomePage";
 import CourseList from "./components/CourseList";
 import LessonList from "./components/LessonList";
 
+//1 middleware to use vue-router
 Vue.use(VueRouter);
 
 Vue.config.productionTip = false
 
-/*{
-  routes: [
-    { path: '/', component: LessonPage },
-    { path: '/list', component: ListComponent }
-  ], mode:'history'
-}*/
 
+//2. Routes definition
 const routes = [
   { path: '/', component: LessonPage },
   { path: '/home', component: HomePage },
@@ -24,10 +20,12 @@ const routes = [
   { path: '/lessons', component: LessonList }
 ];
 
+//3. Creating the router instance
 const router = new VueRouter({
   mode: 'history',
   routes});
 
+//4. Creating the Vue instance with the router and el:'#app'
 new Vue({
   el: '#app',
   render: h => h(App),
