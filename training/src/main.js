@@ -5,6 +5,7 @@ import LessonPage from "./components/LessonPage";
 import HomePage from "./components/HomePage";
 import CourseList from "./components/CourseList";
 import LessonList from "./components/LessonList";
+import vuetify from './plugins/vuetify';
 
 //1 middleware to use vue-router
 Vue.use(VueRouter);
@@ -29,5 +30,6 @@ const router = new VueRouter({
 new Vue({
   el: '#app',
   render: h => h(App),
+  vuetify,
   router: router
 }).$mount('#app')
