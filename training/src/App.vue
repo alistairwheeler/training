@@ -7,12 +7,6 @@
     <v-app-bar app color="primary" dark clipped-left="true">
       <v-app-bar-nav-icon @click="drawer = ! drawer" ></v-app-bar-nav-icon>
       <v-toolbar-title>Simplicité</v-toolbar-title>
-<!--      <form id="search-form" class="form-inline my-2 my-lg-0">
-        <input id="search-input" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </form>-->
 
       <v-text-field
               flat
@@ -23,13 +17,7 @@
               class="ml-12"
       ></v-text-field>
 
-<!--      <v-form align-center justify-center>
-        <v-text-field append-icon="mdi-magnify" placeholder="Search for a course"> </v-text-field>
-      </v-form>-->
-
       <div class="flex-grow-1"></div>
-
-
 
       <v-btn icon>
         <v-icon>mdi-skip-previous</v-icon>
@@ -54,9 +42,6 @@
       </v-container>
     </v-content>
 
-    <v-footer app padless="true">
-      <!-- -->
-    </v-footer>
   </v-app>
 </template>
 
@@ -140,10 +125,18 @@
           ],
         },
       ],
+      icons: [
+        'mdi-email',
+        'fab fa-twitter',
+        'fab fa-google-plus',
+        'fab fa-linkedin',
+        'fab fa-instagram',
+      ],
     }),
   };
 </script>
 
 <style >
+
 
 </style>
