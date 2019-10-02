@@ -1,6 +1,6 @@
 <template>
     <div id="container">
-        <div id="textual-content" class="col-6" @click="fetchPlaceHolderData">
+        <div id="textual-content" class="col-6" >
             <h1 class="lesson-title">Lesson 1 : What is Simplicité ? </h1>
             <div id="learning-outcomes">
                 <h2 class="sub-part-title">Learning Outcomes : </h2>
@@ -61,7 +61,7 @@
 
         <div id="visual-content" class="col-6">
             <div id="pdf-container">
-
+                <embed :src="pdfAddress" type="application/pdf" width="100%" height="100%">
             </div>
             <div id="video-container">
                 <iframe width="100%" height="100%" src="https://www.youtube.com/embed/GQaC561iSUo"
@@ -83,7 +83,7 @@
         props: {},
         data() {
             return {
-                joke: '',
+                pdfAddress: 'http://www.africau.edu/images/default/sample.pdf',
             }
         },
         methods: {
@@ -94,7 +94,6 @@
                     }
                 };
                const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1', config);
-               console.log(response.data);
             }
         }
     }

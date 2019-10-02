@@ -6,7 +6,7 @@
 
     <v-app-bar app color="primary" dark clipped-left>
       <v-app-bar-nav-icon @click="openOrCloseDrawer" v-if="isNavigationDrawerVisible()"></v-app-bar-nav-icon>
-      <v-toolbar-title @click="printPathResult()">Simplicité</v-toolbar-title>
+      <v-toolbar-title>Simplicité</v-toolbar-title>
 
       <v-text-field
               flat
@@ -36,8 +36,6 @@
 
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
-
-        <!-- If using vue-router -->
         <router-view></router-view>
       </v-container>
     </v-content>
@@ -132,7 +130,6 @@
       },
       goToPreviousLesson(){
         alert('You need to implement that !')
-        console.log(this.$router.currentRoute.path.split("/courses/").length);
       },
       goToNextLesson(){
         alert('You need to implement that !')
@@ -140,18 +137,12 @@
       hideButtons(){
         return this.checkIfRouteIsLesson()
       },
-      emptyNavigationDrawer(){
-        this.items=[]
-      },
       isNavigationDrawerVisible(){
         return this.checkIfRouteIsLesson()
       },
       checkIfRouteIsLesson(){
         return this.$router.currentRoute.path.split("/courses/").length > 1;
       },
-      printPathResult(){
-        console.log(this.$router.currentRoute.path.split("/courses/").length);
-      }
     }
   };
 </script>

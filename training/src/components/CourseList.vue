@@ -1,31 +1,27 @@
 <template >
     <div id="container" >
-        <h1>Simplicité Training</h1>
-<!--        <v-card class="course-item">
-            <v-img  v-if="media"
-                    class="white&#45;&#45;text"
-                    height="200px"
-                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-            >
-                <v-card-title class="align-end fill-height">I'm a title</v-card-title>
-            </v-img>
-        </v-card>-->
+        <div id="title-container">
+            <h1>Simplicité Training</h1>
+        </div>
 
-        <v-card class="course-item" @click="onCourseClicked()" v-for="course in courses" :key="course.imgSource" transition="slide-x-transition">
-            <div class="course-left">
-                <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" alt="course logo"/>
-            </div>
+        <div class="list-container">
+            <v-card class="course-item" @click="onCourseClicked()" v-for="course in courses" :key="course.imgSource" transition="slide-x-transition">
+                <div class="course-left">
+                    <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" alt="course logo"/>
+                </div>
 
-            <div class="course-right">
-                <h2 class="course-level">{{course.courseLevel}}</h2>
-                <h3 class="course-short-description">{{course.courseShortDescription}}</h3>
-                <p class="course-long-description">{{course.courseLongDescription}}</p>
-                <v-card-actions>
-                    <div class="flex-grow-1"></div>
-                    <v-btn text class="action-btn">Discover</v-btn>
-                </v-card-actions>
-            </div>
-        </v-card>
+                <div class="course-right">
+                    <h2 class="course-level">{{course.courseLevel}}</h2>
+                    <h3 class="course-short-description">{{course.courseShortDescription}}</h3>
+                    <p class="course-long-description">{{course.courseLongDescription}}</p>
+                    <v-card-actions>
+                        <div class="flex-grow-1"></div>
+                        <v-btn text class="action-btn">Discover</v-btn>
+                    </v-card-actions>
+                </div>
+            </v-card>
+        </div>
+
     </div>
 </template>
 
@@ -75,6 +71,18 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+    #title-container {
+        width: 70%;
+        margin-bottom: 10px;
+    }
+    .list-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    h1 {
+        color: #514FBF;
     }
     .course-item {
         width: 70%;
