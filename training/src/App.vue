@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-navigation-drawer app clipped="true" v-model="drawer" >
+    <v-navigation-drawer v-if="isNavigationDrawerVisible()" app clipped v-model="drawer" >
       <v-treeview :items="items" activatable color="warning" open-on-click></v-treeview>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark clipped-left="true">
-      <v-app-bar-nav-icon @click="drawer = ! drawer" ></v-app-bar-nav-icon>
-      <v-toolbar-title>Simplicité</v-toolbar-title>
+    <v-app-bar app color="primary" dark clipped-left>
+      <v-app-bar-nav-icon @click="openOrCloseDrawer" v-if="isNavigationDrawerVisible()"></v-app-bar-nav-icon>
+      <v-toolbar-title @click="printPathResult()">Simplicité</v-toolbar-title>
 
       <v-text-field
               flat
@@ -19,16 +19,16 @@
 
       <div class="flex-grow-1"></div>
 
-      <v-btn icon>
-        <v-icon>mdi-skip-previous</v-icon>
+      <v-btn v-show="hideButtons()" fab icon @click="goToPreviousLesson">
+        <v-icon >mdi-skip-previous</v-icon>
       </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-skip-next</v-icon>
+      <v-btn v-show="hideButtons()" fab icon @click="goToNextLesson">
+        <v-icon >mdi-skip-next</v-icon>
       </v-btn>
 
       <v-toolbar-items>
-        <v-btn text > Courses</v-btn>
-        <v-btn text>Lessons</v-btn>
+        <v-btn text to="/courses" > Courses</v-btn>
+        <v-btn text to="/lessons">Lessons</v-btn>
       </v-toolbar-items>
     </v-app-bar>
     <!-- Sizes your content based upon application components -->
@@ -125,14 +125,34 @@
           ],
         },
       ],
-      icons: [
-        'mdi-email',
-        'fab fa-twitter',
-        'fab fa-google-plus',
-        'fab fa-linkedin',
-        'fab fa-instagram',
-      ],
     }),
+    methods: {
+      openOrCloseDrawer(){
+        this.drawer =! this.drawer;
+      },
+      goToPreviousLesson(){
+        alert('You need to implement that !')
+        console.log(this.$router.currentRoute.path.split("/courses/").length);
+      },
+      goToNextLesson(){
+        alert('You need to implement that !')
+      },
+      hideButtons(){
+        return this.checkIfRouteIsLesson()
+      },
+      emptyNavigationDrawer(){
+        this.items=[]
+      },
+      isNavigationDrawerVisible(){
+        return this.checkIfRouteIsLesson()
+      },
+      checkIfRouteIsLesson(){
+        return this.$router.currentRoute.path.split("/courses/").length > 1;
+      },
+      printPathResult(){
+        console.log(this.$router.currentRoute.path.split("/courses/").length);
+      }
+    }
   };
 </script>
 

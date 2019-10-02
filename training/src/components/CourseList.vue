@@ -1,5 +1,5 @@
-<template>
-    <div id="container">
+<template >
+    <div id="container" >
         <h1>Simplicité Training</h1>
 <!--        <v-card class="course-item">
             <v-img  v-if="media"
@@ -11,20 +11,21 @@
             </v-img>
         </v-card>-->
 
-        <div class="course-item">
+        <v-card class="course-item" @click="onCourseClicked()" v-for="course in courses" :key="course.imgSource" transition="slide-x-transition">
             <div class="course-left">
-                <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg "/>
+                <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" alt="course logo"/>
             </div>
 
             <div class="course-right">
-                <h2 class="course-level">Course level</h2>
-                <h3 class="course-short-description">Course short Description</h3>
-                <p class="course-long-description">Course long Description</p>
+                <h2 class="course-level">{{course.courseLevel}}</h2>
+                <h3 class="course-short-description">{{course.courseShortDescription}}</h3>
+                <p class="course-long-description">{{course.courseLongDescription}}</p>
+                <v-card-actions>
+                    <div class="flex-grow-1"></div>
+                    <v-btn text class="action-btn">Discover</v-btn>
+                </v-card-actions>
             </div>
-
-        </div>
-
-
+        </v-card>
     </div>
 </template>
 
@@ -34,16 +35,36 @@
         props: {
         },
         data: () => ({
-            flat: false,
-            media: true,
-            loading: false,
-            actions: true,
-            outlined: false,
-            elevation: undefined,
-            raised: false,
-            width: 344,
-            height: undefined,
+            courses: [
+                {
+                    courseLevel: 'Beginner level',
+                    courseShortDescription:'Learn the basics of Simplicité® Platform',
+                    courseLongDescription:'This course will teach you the fundamental concepts of the Simplicité® platform, and help you discovering\n' +
+                        '                    the interface used during the creation of an application.',
+                    imgSource:'../assets/Capture.png'
+                },
+                {
+                    courseLevel: 'Intermediate level',
+                    courseShortDescription:'Learn more advanced skills of the Simplicité® platform',
+                    courseLongDescription:'This set of lessons is designed to help you with more sophisticated topics, like UI creation or workflow\n' +
+                        'designing, to make sure you can create a completely personnalized application, meeting your own needs.',
+                    imgSource:'../assets/Capture2.png'
+                },
+                {
+                    courseLevel: 'Expert level',
+                    courseShortDescription:'Learn the most complicated features of Simplicité®',
+                    courseLongDescription:'The expertise you will get from this course will help you to completely master Simplicité®. making you able\n' +
+                        'to create any kind of application. It is recommended that you follow the beginner and intermediate courses \n' +
+                        'before signing up for this one.',
+                    imgSource:'../assets/Capture3.png'
+                }
+            ]
         }),
+        methods: {
+            onCourseClicked() {
+                alert('Course clicked !')
+            }
+        }
     }
 </script>
 
@@ -57,27 +78,35 @@
     }
     .course-item {
         width: 70%;
-        min-height: 100px;
-        border-radius: 20px;
-        border: solid black 1px;
+        min-height: 200px;
         display: flex;
+        margin-bottom: 30px;
     }
     .course-left {
         width: 30%;
-        background-color: beige;
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .course-picture {
-        max-width: 80%;
-        max-height: 80%;
-        min-width: 60%;
-        min-height: 60%;
+        height: 70%;
+        width: 80%;
         background-color: coral;
         border: solid black 0.3px;
     }
     .course-right {
         width: 70%;
+        padding-top: 25px;
     }
+    .course-level {
+        color: #514FBF;
+        font-size: 1em;
+    }
+    .course-short-description {
+        font-size: 1.4em;
+    }
+    .action-btn {
+        color: orange;
+    }
+
 </style>
