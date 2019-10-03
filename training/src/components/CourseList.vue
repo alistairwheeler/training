@@ -5,7 +5,7 @@
         </div>
 
         <div class="list-container">
-            <v-card class="course-item" @click="onCourseClicked()" v-for="course in courses" :key="course.imgSource" transition="slide-x-transition">
+            <v-card class="course-item" @click="onCourseClicked()" v-for="course in courses" :key="course.imgSource" transition="slide-x-transition" v-ripple="orange">
                 <div class="course-left">
                     <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" alt="course logo"/>
                 </div>
@@ -58,7 +58,7 @@
         }),
         methods: {
             onCourseClicked() {
-                alert('Course clicked !')
+                this.$router.push('/courses/12');
             }
         }
     }
@@ -99,7 +99,6 @@
     .course-picture {
         height: 70%;
         width: 80%;
-        background-color: coral;
         border: solid black 0.3px;
     }
     .course-right {

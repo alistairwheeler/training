@@ -3,8 +3,9 @@
         <div id="textual-content" class="col-6" >
             <h1 class="lesson-title">Lesson 1 : What is Simplicité ? </h1>
             <div id="learning-outcomes">
-                <h2 class="sub-part-title">Learning Outcomes : </h2>
-                <ul id="lo-list">
+
+               <h2 class="sub-part-title">Learning Outcomes : </h2>
+               <ul id="lo-list">
                     <li class="lo-item">Understanding the Concept of Simplicité Platform</li>
                     <li class="lo-item">Determining if Simplicité is made for you and your team</li>
                 </ul>
@@ -112,8 +113,12 @@
     }
 
     #textual-content {
-        background-color: aliceblue;
+        /*background-color: aliceblue;*/
         overflow: hidden;
+    }
+
+    #learning-outcomes {
+
     }
 
     #visual-content {
@@ -121,12 +126,11 @@
         right: 0;
         display: flex;
         flex-direction: column;
-        background-color: beige;
+       /* background-color: beige; */
         height: 100%;
     }
 
     #video-container {
-        background-color: darkred;
         height: 40%;
         display: flex;
         align-items: center;
@@ -135,7 +139,7 @@
     #pdf-container {
         justify-content: center;
         height: 45%;
-        background-color: aqua;
+        margin-bottom: 3%;
     }
 
     .lesson-title {
@@ -149,7 +153,7 @@
     }
 
     .gen-concept-subtitle {
-
+        font-size: 1em;
     }
 
     .step-title {

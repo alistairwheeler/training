@@ -5,7 +5,6 @@ import LessonPage from "./components/LessonPage";
 import HomePage from "./components/HomePage";
 import CourseList from "./components/CourseList";
 import LessonList from "./components/LessonList";
-import Course12 from "./components/courses12";
 import vuetify from './plugins/vuetify';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
@@ -19,11 +18,11 @@ Vue.config.productionTip = false
 
 //2. Routes definition
 const routes = [
-  { path: '/', component: LessonPage },
+  { path: '/', component: HomePage },
   { path: '/home', component: HomePage },
   { path: '/courses', component: CourseList },
   { path: '/lessons', component: LessonList },
-  { path: '/courses/12', component: Course12 },
+  { path: '/courses/12', component: LessonPage },
 ];
 
 //3. Creating the router instance
