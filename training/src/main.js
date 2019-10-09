@@ -6,12 +6,8 @@ import HomePage from "./components/HomePage";
 import CourseList from "./components/CourseList";
 import LessonList from "./components/LessonList";
 import vuetify from './plugins/vuetify';
-import axios from 'axios';
-import VueAxios from 'vue-axios';
-
-//1 middleware to use vue-router
+//1. middleware to use vue-router
 Vue.use(VueRouter);
-Vue.use(axios, VueAxios);
 
 Vue.config.productionTip = false
 

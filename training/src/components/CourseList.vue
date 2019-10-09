@@ -1,10 +1,10 @@
 <template >
-    <div id="container" >
-        <div id="title-container">
-            <h1>Simplicité Training</h1>
+    <div id="page-wrapper" >
+        <div id="title-wrapper">
+            <h1>Available Courses :</h1>
         </div>
 
-        <div class="list-container">
+        <div class="list-wrapper">
             <v-card class="course-item" @click="onCourseClicked()" v-for="course in courses" :key="course.imgSource" transition="slide-x-transition" v-ripple="orange">
                 <div class="course-left">
                     <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" alt="course logo"/>
@@ -41,7 +41,7 @@
                 },
                 {
                     courseLevel: 'Intermediate level',
-                    courseShortDescription:'Learn more advanced skills of the Simplicité® platform',
+                    courseShortDescription:'Learn more advanced skills',
                     courseLongDescription:'This set of lessons is designed to help you with more sophisticated topics, like UI creation or workflow\n' +
                         'designing, to make sure you can create a completely personnalized application, meeting your own needs.',
                     imgSource:'../assets/Capture2.png'
@@ -58,7 +58,7 @@
         }),
         methods: {
             onCourseClicked() {
-                this.$router.push('/courses/12');
+                this.$router.push('/lessons');
             }
         }
     }
@@ -67,23 +67,26 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #container {
+    h1 {
+        color: #387ED1;
+        margin-top: 20px;
+    }
+
+    #page-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-    #title-container {
+    #title-wrapper {
         width: 70%;
         margin-bottom: 10px;
     }
-    .list-container {
+    .list-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-    h1 {
-        color: #514FBF;
-    }
+
     .course-item {
         width: 70%;
         min-height: 200px;
@@ -106,7 +109,7 @@
         padding-top: 25px;
     }
     .course-level {
-        color: #514FBF;
+        color: #F08A7B;
         font-size: 1em;
     }
     .course-short-description {

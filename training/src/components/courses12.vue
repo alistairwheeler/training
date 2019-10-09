@@ -1,5 +1,6 @@
 <template>
-    <div id="container">
+    <div id="page-wrapper">
+        <button @click="onButtonClicked()">Hello</button>
         <div id="textual-content" class="col-6" >
             <h1 class="lesson-title">Lesson 1 : What is Simplicité ? </h1>
             <div id="learning-outcomes">
@@ -77,7 +78,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
 
     export default {
         name: 'LessonPage',
@@ -88,14 +88,9 @@
             }
         },
         methods: {
-            async fetchPlaceHolderData(){
-                let config = {
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                };
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1', config);
-            }
+            onButtonClicked(){
+
+            },
         }
     }
 
@@ -104,7 +99,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #container {
+    #page-wrapper {
         display: flex;
     }
 

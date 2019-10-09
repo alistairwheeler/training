@@ -1,10 +1,10 @@
 <template>
-    <div id="container">
-        <div id="textual-content" class="col-6" >
-            <h1 class="lesson-title">Lesson 1 : What is Simplicité ? </h1>
+    <div id="page-wrapper">
+        <div id="textual-content" class="col-6"  >
+            <h1 id="lesson-title" class="lesson-title"> {{lessonTitle}}</h1>
             <div id="learning-outcomes">
 
-               <h2 class="sub-part-title">Learning Outcomes : </h2>
+               <h2 class="sub-part-title">Learning Outcomes :</h2>
                <ul id="lo-list">
                     <li class="lo-item">Understanding the Concept of Simplicité Platform</li>
                     <li class="lo-item">Determining if Simplicité is made for you and your team</li>
@@ -14,11 +14,7 @@
             <div id="general-concepts">
                 <h2 class="sub-part-title">General Concepts : </h2>
                 <h3 class="gen-concept-subtitle">What is Simplicité® made for ?</h3>
-                <p>The Simplicité® platform offers you a wide range of generic mechanisms to dynamically run your
-                    business models.
-                    The configuration is data centric meaning that any business application configuration starts with
-                    the configuration of
-                    a logical data model. Then, on top of this data model, custom behaviors can be added: </p>
+                <p>{{lessonConcepts}}</p>
                 <ul>
                     <li>Rights enforcements</li>
                     <li> Contextual constraintss</li>
@@ -77,7 +73,8 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    /* eslint-disable no-console */
+
 
     export default {
         name: 'LessonPage',
@@ -85,17 +82,41 @@
         data() {
             return {
                 pdfAddress: 'http://www.africau.edu/images/default/sample.pdf',
+                displayedLesson: {
+                    title: 'placeHolder',
+                    concepts:'placeHolder',
+                    exercice: 'placeHolder'
+                },
+                lessonTitle: '',
+                lessonConcepts:'concept',
+                lessonExercice:'exercice',
             }
         },
         methods: {
-            async fetchPlaceHolderData(){
-                let config = {
-                    headers: {
-                        'Accept': 'application/json'
+            writeLessonIntoPage(title, concepts, exercice){
+                this.lessonTitle = title;
+                this.lessonConcepts = concepts;
+                this.lessonExercice = exercice;
+            },
+            getLessonContent() {
+                let rowId = 1;
+                let app = new Simplicite.Ajax('https://maxime.dev.simplicite.io', 'api', 'designer', 'simplicite');
+                let lessonObject = app.getBusinessObject("LrnLesson");
+                lessonObject.get(function(response){
+                    console.log(response)
+                    let result = {
+                        title: response.lrnLsnTitle,
+                        concepts: response.lrnLsnConcepts,
                     }
-                };
-               const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1', config);
-            }
+                    console.log("Result = "+result.title)
+                    //return result;
+                }, rowId);
+                //console.log("Result = "+result.title) ==> ne peut pas etre vu pcq result n'est pas visible hors du scope de la foonction get
+            },
+        },
+        mounted() {
+            let result = this.getLessonContent();
+            console.log('Result title = '+result.title);
         }
     }
 
@@ -104,7 +125,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #container {
+    #page-wrapper {
         display: flex;
     }
 

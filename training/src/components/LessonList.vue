@@ -1,26 +1,27 @@
 <template>
-    <div id="lesson-page-wrapper">
-        <h2>All the lessons for the course : {{courseName}}</h2>
+    <div id="lessons-page-wrapper">
+        <div id="wrapper">
+            <h1>Every lesson for the course : {{courseName}}</h1>
 
-        <ul id="lesson-list">
+            <ul id="lesson-list">
 
-            <li class="lesson-item" v-for="lesson in lessonList" :key="lesson.lessonName">
-                <a href="#">
-                    <div class="content-wrapper">
-                        <div class="image-wrapper">
-                            <img class="lesson-image"
-                                 :src="getPictureUrl(lesson.lessonName)"
-                                 alt="lesson image">
+                <li class="lesson-item" v-for="lesson in lessonList" :key="lesson.lessonName">
+                    <a href="#">
+                        <div class="content-wrapper">
+                            <div class="image-wrapper">
+                                <img class="lesson-image"
+                                     :src="getPictureUrl(lesson.lessonName)"
+                                     alt="lesson image">
+                            </div>
+                            <div class="information-wrapper">
+                                <h3 :class="getCourseColor(lesson.lessonCourse)">{{lesson.lessonCourse}}</h3>
+                                <h2 class="lesson-name">{{lesson.lessonName}}</h2>
+                            </div>
                         </div>
-                        <div class="information-wrapper">
-                            <h3 :class="getCourseColor(lesson.lessonCourse)">{{lesson.lessonCourse}}</h3>
-                            <h2 class="lesson-name">{{lesson.lessonName}}</h2>
-                        </div>
-                    </div>
-                </a>
-            </li>
-
-        </ul>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -34,7 +35,8 @@
                 {
                     lessonName:'Introduction to Simplicité',
                     lessonPictureUrl: 'https://cdn.vuetifyjs.com/images/cards/mountain.jpg',
-                    lessonCourse: 'Beginner'
+                    lessonCourse: 'Beginner',
+                    lessonUrl: '/courses/12'
                 },
                 {
                     lessonName:'Business objects',
@@ -58,6 +60,10 @@
             ]
         }),
         methods: {
+            onLessonClicked(lessonUrl) {
+                lessonUrl
+                this.$router.push('/courses/12');
+            },
             getPictureUrl(lessonName) {
                 lessonName.toString()
                 return 'https://picsum.photos/510/300?random'
@@ -82,20 +88,38 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #lesson-list {
+    #lessons-page-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #wrapper {
         width: 70%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        color: #387ED1;
+        margin-top: 20px;
+        padding-left: 35px;
+    }
+
+    #lesson-list {
+        /*width: 70%;*/
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         margin: auto;
         box-sizing: border-box;
-        padding: 16px;
         /*background-color: aliceblue;*/
     }
 
     .lesson-item {
         width: 33%;
-        height: 14vw;
+        height: 18vw;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
@@ -142,24 +166,24 @@
         font-size: 1em;
     }
     .lesson-course-name-purple {
-        color: #514FBF;
+        color: #7272FF;
     }
 
     .lesson-course-name-red {
         color: red;
     }
     .lesson-course-name-blue {
-        color: cornflowerblue;
+        color: coral;
     }
 
     .lesson-name {
         font-size: 1.4em;
-        color: black;
+        color: #2B2B2B;
         font-weight: normal;
     }
 
     .lesson-short-description {
-        color: black;
+        color: #2B2B2B;
         box-sizing: border-box;
         text-overflow: ellipsis;
         white-space: nowrap;

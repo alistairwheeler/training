@@ -1,5 +1,5 @@
 <template>
-    <v-app class="content-container">
+    <v-app class="app">
         <v-navigation-drawer v-if="isNavigationDrawerVisible()" app clipped v-model="drawer">
             <v-treeview :items="items" activatable color="warning" open-on-click></v-treeview>
         </v-navigation-drawer>
@@ -33,9 +33,9 @@
         </v-app-bar>
 
         <!-- Sizes your content based upon application components -->
-        <v-content class="router-container">
+        <v-content class="content">
             <!-- Provides the application the proper gutter -->
-            <v-container pa-0 mt-1 fluid class="router-container">
+            <v-container pa-0 mt-1 fluid class="router-container-2">
                 <router-view></router-view>
             </v-container>
         </v-content>
@@ -157,13 +157,16 @@
         outline:0;
     }
 
-    .content-container {
+    .app {
         background-color: green;
     }
 
-    .router-container {
+    .content {
         width: 100%;
-       /* background-color: darkred; */
+        background-color: white;
     }
 
+    .router-container-2 {
+        background-color: white;
+    }
 </style>
