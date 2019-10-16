@@ -1,11 +1,10 @@
 <template>
-    <div id="page-wrapper">
-        <div id="title-wrapper">
+    <div id="course-list-wrapper">
+        <div id="wrapper">
             <h1>Available Courses :</h1>
 
             <div class="list-wrapper">
-                <!--@click="onCourseClicked(course.row_id)"-->
-                <v-card class="course-item"  v-for="course in courses"
+                <v-card class="course-item" @click="onCourseClicked(course.row_id)" v-for="course in courses"
                         :key="course.row_id">
                     <div class="course-left">
                         <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
@@ -58,6 +57,8 @@
                 });
             },
         },
+
+        //LIFECYCLE HOOKS
         created(){
             console.log("CourseList CREATED");
         },
@@ -83,34 +84,36 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #title-wrapper {
-        width: 80%;
-    }
-
-    h1 {
-        color: #387ED1;
-        margin-top: 20px;
-    }
-
-    #page-wrapper {
+    #course-list-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
+        /*background-color: plum;*/
     }
 
+    #wrapper {
+        width: 80%;
+        /*background-color: green;*/
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        color: #7272FF;
+        margin-top: 20px;
+    }
 
     .list-wrapper {
         display: flex;
         flex-direction: column;
-        align-items: center;
     }
 
     .course-item {
-        width: 70%;
+        width: 100%;
         min-height: 200px;
         display: flex;
         margin-bottom: 30px;
-        background-color: plum;
+        /*background-color: plum;*/
         position: relative;
     }
 

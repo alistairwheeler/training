@@ -1,5 +1,5 @@
 <template>
-    <div id="lessons-page-wrapper">
+    <div id="lesson-list-wrapper">
         <div id="wrapper">
             <h1>Every lesson for the course : {{courseName}}</h1>
 
@@ -97,7 +97,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #lessons-page-wrapper {
+    #lesson-list-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;

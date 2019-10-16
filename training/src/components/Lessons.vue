@@ -1,5 +1,5 @@
 <template>
-    <div id="lessons-page-wrapper">
+    <div id="lesson-list-wrapper">
         <div id="wrapper">
             <h1 >All available lessons </h1>
 
@@ -86,31 +86,30 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #lessons-page-wrapper {
+    #lesson-list-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        /*background-color: plum;*/
     }
 
     #wrapper {
-        width: 70%;
+        width: 80%;
         display: flex;
         flex-direction: column;
+        /*background-color: green;*/
     }
 
     h1 {
         color: #387ED1;
         margin-top: 20px;
-        padding-left: 35px;
     }
 
     #lesson-list {
-        /*width: 70%;*/
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        margin: auto;
+
         box-sizing: border-box;
         /*background-color: aliceblue;*/
     }

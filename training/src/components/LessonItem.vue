@@ -1,5 +1,5 @@
 <template>
-    <div id="page-wrapper">
+    <div id="course-list-wrapper">
         <div id="textual-content" class="col-6"  >
             <h1 id="lesson-title" class="lesson-title" v-html="lessonTitle"></h1>
             <span>{{lessonId}}</span>
@@ -104,7 +104,7 @@
 <style scoped>
 
     /*PAGE */
-    #page-wrapper {
+    #course-list-wrapper {
         display: flex;
     }
 

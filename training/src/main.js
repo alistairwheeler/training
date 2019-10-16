@@ -2,10 +2,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
-import LessonPage from "./components/LessonPage";
+import Lesson from "./components/LessonItem";
 import HomePage from "./components/HomePage";
-import CourseList from "./components/CourseList";
-import LessonList from "./components/LessonList";
+import CourseList from "./components/Courses";
+import LessonList from "./components/Lessons";
 import CourseLessons from "./components/CourseLessons"
 import NotFound from "./components/NotFound"
 import vuetify from './plugins/vuetify';
@@ -24,7 +24,7 @@ const routes = [
   { path: '/courses', component: CourseList },
   { path: '/lessons', component: LessonList },
   { path: '/courses/lessons/:courseId', component: CourseLessons },
-  { path: '/courses/lessons/:courseId/:lessonId', component: LessonPage },
+  { path: '/courses/lessons/:courseId/:lessonId', component: Lesson },
     //This route should be last in the list because it can overcome the other ones (because it matches all routes)
   { path: '/*', component: NotFound }
 ];
