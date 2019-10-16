@@ -1,10 +1,10 @@
 <template>
     <div id="lesson-list-wrapper">
         <div id="wrapper">
-            <h1 >All available lessons </h1>
+            <h1 id="page-title" class="smp-light-purple">All available lessons </h1>
 
             <ul id="lesson-list">
-                <li class="lesson-item" @click="onLessonClicked(lesson.row_id, lesson.lrnLsnPrtId)" v-for="lesson in displayedLessons" :key="lesson.row_id">
+                <li class="lesson-item" @click="onLessonClicked(lesson.row_id)" v-for="lesson in displayedLessons" :key="lesson.row_id">
                     <a href="">
                         <div class="content-wrapper">
                             <div class="image-wrapper">
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+    /* eslint-disable no-unused-vars,no-console */
+
     export default {
         name: 'ListComponent',
         props: {},
@@ -32,28 +34,15 @@
             displayedLessons: [],
         }),
         methods: {
-            onLessonClicked(lessonId, courseId) {
-                this.$router.push('/courses/lessons/'+courseId+'/'+lessonId);
+            onLessonClicked(lessonId) {
+                this.$router.push('/lessonItem/'+lessonId);
             },
-            getPictureUrl(lessonName) {
-                lessonName.toString()
-                return 'https://picsum.photos/510/300?random'
-               /* return this.lessonList.find(function (element) {
-                    if (element.lessonName === lessonName)
-                        return element.lessonPictureUrl
-                });*/
-            },
-            getCourseColor(lessonCourse) {
-                if (lessonCourse === "Beginner") {
-                    return 'lesson-course-name-purple'
-                } else if (lessonCourse ==="Intermediate")  {
-                    return 'lesson-course-name-blue'
-                } else {
+            getCourseColor() {
                     return 'lesson-course-name-red'
-                }
+
             },
 
-            async getLessons(){
+            async getLesson(){
                 return new Promise((resolve, reject)=> {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
                     lessonObject.search(()=> {
@@ -65,20 +54,47 @@
                     }, {}) //We give empty filters to the research so it doesn't remember previous researches
                 });
             },
+
+            async getLessonsFromCourse(courseName){
+                return new Promise((resolve, reject) => {
+                    let lessonObject = this.$smp.getBusinessObject("LrnLesson");
+                    lessonObject.search(()=> {
+                        if (lessonObject.list)
+                            resolve(lessonObject.list);
+                         else {
+                            reject("Could not load the content")
+                        }
+                    }, {"lrnLsnPrtId__lrnPrtTitle": courseName})
+                })
+            }
+        },
+        //LIFECYCLE HOOKS
+        async mounted() {
+
+            if(this.$route.params.courseName){
+                console.log(this.$route.params.courseName);
+                document.getElementById("page-title").innerText = "All available lessons from : "+this.$route.params.courseName;
+                const lessons = await this.getLessonsFromCourse(this.$route.params.courseName)
+
+                lessons.map((elt => {
+                    this.displayedLessons.push(elt);
+                }));
+            }
+             else {
+                const lessons = await this.getLesson();
+                console.log(lessons)
+                lessons.map((elt => {
+                    this.displayedLessons.push(elt);
+                }));
+            }
+
         },
         created() {
-            console.log("LessonList CREATED");
-        },
-        async mounted() {
-            const lessons = await this.getLessons();
-            lessons.map((elt => {
-                console.log(elt);
-                this.displayedLessons.push(elt);
-            }));
-            console.log(this.displayedLessons.length);
+            console.clear()
+            console.log("Lessons CREATED");
         },
         destroyed() {
-            console.info("LessonList DESTROYED");
+            console.info("Lessons DESTROYED");
         }
     }
 </script>
@@ -101,7 +117,6 @@
     }
 
     h1 {
-        color: #387ED1;
         margin-top: 20px;
     }
 

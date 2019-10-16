@@ -2,15 +2,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
-import Lesson from "./components/LessonItem";
+import LessonItem from "./components/LessonItem";
 import HomePage from "./components/HomePage";
-import CourseList from "./components/Courses";
-import LessonList from "./components/Lessons";
-import CourseLessons from "./components/CourseLessons"
+import Courses from "./components/Courses";
+import Lessons from "./components/Lessons";
 import NotFound from "./components/NotFound"
 import vuetify from './plugins/vuetify';
+import Lesson from './Models/Lesson';
 //1. middleware to use vue-router
 Vue.use(VueRouter);
+Vue.use(Lesson)
 
 Vue.config.productionTip = false
 // To use the simplicite API :
@@ -21,10 +22,10 @@ Vue.prototype.$smp = new Simplicite.Ajax('https://maxime.dev.simplicite.io', 'ap
 const routes = [
   { path: '/', component: HomePage },
   { path: '/home', component: HomePage },
-  { path: '/courses', component: CourseList },
-  { path: '/lessons', component: LessonList },
-  { path: '/courses/lessons/:courseId', component: CourseLessons },
-  { path: '/courses/lessons/:courseId/:lessonId', component: Lesson },
+  { path: '/courses', component: Courses },
+  { path: '/lessons', component: Lessons },
+  { path: '/lessons/:courseName/', component: Lessons },
+  { path: '/lessonItem/:lessonId', component: LessonItem },
     //This route should be last in the list because it can overcome the other ones (because it matches all routes)
   { path: '/*', component: NotFound }
 ];

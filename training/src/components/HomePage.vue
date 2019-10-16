@@ -9,15 +9,15 @@
 
             <div class="additional-information">
                 <div class="additional-information-wrapper">
-                    <h2 class="additional-information-title">Welcome To</h2>
-                    <h2 class="additional-information-title-bold">Simplicité's Learning Center</h2>
+                    <h2 class="additional-information-title text-white ">Welcome To</h2>
+                    <h2 class="font-weight-bold text-white">Simplicité's Learning Center</h2>
                 </div>
             </div>
         </div>
 
         <div id="content-wrapper">
             <div id="text-wrapper">
-                <h1>We built this site for you ! </h1>
+                <h1 class="smp-light-purple">We built this site for you ! </h1>
             </div>
         </div>
 
@@ -101,10 +101,8 @@
         height: 100%;
         padding: 10px;
     }
-    .additional-information-title, .additional-information-title-bold {
-        color: white;
+    .additional-information-title {
         font-size: 2em;
-        font-weight: lighter;
         text-align: right;
     }
 
@@ -114,37 +112,14 @@
         flex-flow: column nowrap;
     }
 
-    #text-wrapper {
-    }
-
-    #text-wrapper h1{
-    }
-
     .button-container {
         align-self: center;
         position: absolute;
         bottom: 20px;
     }
 
-    #header-btn {
-        color: white;
-    }
-
-    #headline p {
-        color: white;
-        text-justify: auto;
-        font-size: 3em;
-    }
-
-
-    h1 {
-        color: #7272FF;
-    }
-
     .homepage-subtitle {
-        color: #38D1AB;
         text-decoration-line: underline;
-        text-decoration: #38D1AB;
     }
 
     .action-btn {
@@ -152,16 +127,6 @@
         font-size: 2em;
     }
 
-    #site-description-container {
-        display: flex;
-        flex-flow: column nowrap;
-    }
-
-
-
-    .additional-information-title-bold {
-        font-weight: bold;
-    }
 </style>
 
 <!--<div>

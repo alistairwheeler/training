@@ -1,10 +1,10 @@
 <template>
     <div id="course-list-wrapper">
         <div id="wrapper">
-            <h1>Available Courses :</h1>
+            <h1 class="smp-light-purple">Available Courses :</h1>
 
             <div class="list-wrapper">
-                <v-card class="course-item" @click="onCourseClicked(course.row_id)" v-for="course in courses"
+                <v-card class="course-item" @click="onCourseClicked(course.lrnPlnTitle)" v-for="course in courses"
                         :key="course.row_id">
                     <div class="course-left">
                         <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
@@ -12,12 +12,12 @@
                     </div>
 
                     <div class="course-right">
-                        <h2 class="course-level">{{course.lrnPlnTitle}}</h2>
+                        <h2 class="course-level smp-coral">{{course.lrnPlnTitle}}</h2>
                         <h3 class="course-short-description">place holder short description</h3>
                         <p class="course-long-description">place holder LONG DESCRIPTION</p>
                         <v-card-actions>
                             <div class="flex-grow-1"></div>
-                            <v-btn @click.stop="onCourseClicked(course.row_id)" text class="action-btn">Discover</v-btn>
+                            <v-btn @click.stop="onCourseClicked(course.lrnPlnTitle)" text class="action-btn">Discover</v-btn>
                         </v-card-actions>
                     </div>
                 </v-card>
@@ -39,9 +39,10 @@
             }
         },
         methods: {
-            onCourseClicked(courseId) {
-                //alert(courseId);
-                this.$router.push('/courses/lessons/' + courseId);
+            onCourseClicked(courseName) {
+                //this.$router.push('/lessons/' + courseName);
+                //Fonctionne : ajoute un %20 à la place de l'espace dans l'url
+                this.$router.push('/lessons/Simplicité Concept');
             },
 
             async getCourses(){
@@ -60,7 +61,7 @@
 
         //LIFECYCLE HOOKS
         created(){
-            console.log("CourseList CREATED");
+            console.log("Courses CREATED");
         },
 
         async mounted() {
@@ -76,7 +77,7 @@
             //Empty the array of courses
             this.courses = [];
             //console.clear();
-            console.log("CourseList DESTROYED");
+            console.log("Courses DESTROYED");
         }
     }
 </script>
@@ -99,7 +100,6 @@
     }
 
     h1 {
-        color: #7272FF;
         margin-top: 20px;
     }
 
@@ -136,7 +136,6 @@
     }
 
     .course-level {
-        color: #F08A7B;
         font-size: 1em;
     }
 

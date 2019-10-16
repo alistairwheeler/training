@@ -1,35 +1,35 @@
 <template>
     <div id="course-list-wrapper">
         <div id="textual-content" class="col-6"  >
-            <h1 id="lesson-title" class="lesson-title" v-html="lessonTitle"></h1>
-            <span>{{lessonId}}</span>
-            <span>{{courseName}}</span>
-            <span>{{courseId}}</span>
+            <h1 id="lesson-title" class="lesson-title smp-blue" v-html="displayedLesson.title"></h1>
+            <span>{{displayedLesson.row_id}}</span>
+            <span>{{displayedLesson.courseName}}</span>
+            <span>{{displayedLesson.courseId}}</span>
             <div id="learning-outcomes" >
-               <h2 class="sub-part-title">Learning Outcomes</h2>
-                <div id="learning-outcomes-wrapper" v-html="learningOutcomes"></div>
+               <h2 class="sub-part-title smp-coral">Learning Outcomes</h2>
+                <div id="learning-outcomes-wrapper" v-html="displayedLesson.learningOutcomes"></div>
             </div>
 
             <div id="general-concepts">
-                <h2 class="sub-part-title">General Concepts : </h2>
-                <div id="concepts-wrapper" v-html="concepts"></div>
+                <h2 class="sub-part-title smp-coral">General Concepts : </h2>
+                <div id="concepts-wrapper" v-html="displayedLesson.genConcepts"></div>
 
             </div>
 
             <div id="exercise">
-                <h2 class="sub-part-title">Exercise : </h2>
-                <div id="exercise-wrapper" v-html="exercise"></div>
+                <h2 class="sub-part-title smp-coral">Exercise : </h2>
+                <div id="exercise-wrapper" v-html="displayedLesson.exercise"></div>
 
             </div>
         </div>
 
         <div id="support-content" class="col-6">
             <div id="pdf-container">
-                <embed :src="pdfAddress" type="application/pdf" width="100%" height="100%">
+                <embed :src="displayedLesson.pdfUrl" type="application/pdf" width="100%" height="100%">
             </div>
 
             <div id="video-container">
-                <iframe width="100%" height="100%" :src="videoUrl"
+                <iframe width="100%" height="100%" :src="displayedLesson.videoUrl"
                         frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen>
                 </iframe>
@@ -43,12 +43,38 @@
 <script>
     /* eslint-disable no-console,no-unused-vars,no-undef */
 
+    class Lesson {
+        constructor(row_id, title, genConcepts, learningOutcomes, exercise, pdfUrl, videoUrl, courseId, courseName ){
+            this.row_id = row_id;
+            this.title = title;
+            this.genConcepts = genConcepts;
+            this.learningOutcomes = learningOutcomes;
+            this.exercise = exercise;
+            this.pdfUrl = pdfUrl; this.videoUrl = videoUrl;
+            this.courseId = courseId;
+            this.courseName = courseName;
+        }
+
+        static formatFromBackEnd(smpLesson){
+            return new Lesson(
+                smpLesson.row_id,
+                smpLesson.lrnLsnTitle,
+                smpLesson.lrnLsnConcepts,
+                smpLesson.lrnLsnLearningOutcomes,
+                smpLesson.lrnLsnExercice,
+                smpLesson.lrnLsnSlides,
+                smpLesson.lrnLsnVideo,
+                smpLesson.lrnLsnPrtId,
+                smpLesson.lrnLsnPrtId__lrnPrtTitle,
+            );
+        }
+    }
 
     export default {
         name: 'LessonPage',
         props: {},
         data() {
-            return {
+            return {/*
                 lessonId: 0,
                 courseId: '',
                 courseName: '',
@@ -57,44 +83,28 @@
                 exercise:'',
                 learningOutcomes:'',
                 videoUrl:'',
-                pdfAddress: '',
+                pdfAddress: '',*/
+                displayedLesson: {},
              }
         },
         methods: {
-            getLessonData(lessonId){
-                console.log('getLessonData');
-                this.getLessonObject(lessonId)
-                    .then((response)=>{
-                        this.lessonId = response.row_id;
-                        this.courseId = response.lrnLsnPrtId;
-                        this.courseName = response.lrnLsnPrtId__lrnPrtTitle;
-                        this.lessonTitle = response.lrnLsnTitle;
-                        this.concepts = response.lrnLsnConcepts;
-                        this.exercise = response.lrnLsnExercice;
-                        this.learningOutcomes = response.lrnLsnLearningOutcomes;
-                        this.videoUrl = response.lrnLsnVideo;
-                        this.pdfAddress = response.lrnLsnSlides;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            },
-
-            getLessonObject(lessonId){
-                console.log('getLessonObject');
-                return new Promise((resolve, reject) => {
+            async getLesson(lessonId){
+                return new Promise((resolve, reject)=> {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
-                    lessonObject.get(function(response){
-                        console.log(response);
-                        resolve(response)
+                    lessonObject.get((response)=> {
+                        if (response)
+                            resolve(response);
+                        else
+                            reject("Could not load the lesson");
                     }, lessonId)
                 })
             },
         },
-        mounted() {
-            let result = this.getLessonData(this.$route.params.lessonId);
+        async mounted() {
+              //  let result = this.getLessonData(this.$route.params.lessonId);
+            let lesson = await this.getLesson(this.$route.params.lessonId);
+            this.displayedLesson = Lesson.formatFromBackEnd(lesson);
         }
-
 
     }
 
@@ -139,15 +149,12 @@
         margin-bottom: 3%;
     }
 
-
     .lesson-title {
         font-size: 2em;
-        color: #387ED1;
     }
 
     .sub-part-title {
         font-size: 2em;
-        color: #F08A7B ;
     }
 
     .gen-concept-subtitle {
@@ -167,48 +174,3 @@
 
 </style>
 
-<!--
-                <h3 class="gen-concept-subtitle">What is Simplicité® made for ?</h3>
-                <p v-html="concepts"></p>
-                <ul>
-                    <li>Rights enforcements</li>
-                    <li> Contextual constraintss</li>
-                    <li>State model workflows</li>
-                    <li>Activity workflows</li>
-                </ul>
-                <h3 class="gen-concept-subtitle">What is Simplicité® made for ?</h3>
-                <p>The Simplicité® platform is composed of several components (see this document for details on the
-                    platform’s
-                    technical architecture)
-                    The core component is the business engine which is responsible for running the configured business
-                    models.
-                    Based on what is processed by the engine, the platform offers various presentation/publication
-                    layers:</p>
-                <ul>
-                    <li>A generic web user interface (UI) and its mobile web variant,</li>
-                    <li>A generic webservices stack (WS) exposing JSON/REST and XML/SOAP services,</li>
-                    <li>A generic HTTP based I/O integration interface that can be easily invoked from the command line
-                        curl tool,
-                    </li>
-                    <li>A generic Git interface for configuration.</li>
-                </ul>-->
-
-
-<!--<ul id="lo-list">
-                    <li class="lo-item">Understanding the Concept of Simplicité Platform</li>
-                    <li class="lo-item">Determining if Simplicité is made for you and your team</li>
-                </ul>-->
-
-<!--
-                <ol>
-                    <li class="sl-number">
-                        <h4 class="step-title">Create your first Project</h4>
-                        <p>Open your instance of Simplicité® and login with your login and password.
-                            Go in the design mode </p>
-                    </li>
-                    <li class="sl-number">
-                        <h4 class="step-title">Create a Module</h4>
-                        <p>Open your instance of Simplicité® and login with your login and password.
-                            Go in the design mode </p>
-                    </li>
-                </ol>-->

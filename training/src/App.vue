@@ -143,7 +143,7 @@
                 return this.checkIfRouteIsLesson()
             },
             checkIfRouteIsLesson() {
-                return this.$router.currentRoute.path.split("/courses/").length > 1;
+                return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
             },
         }
     };
@@ -174,4 +174,21 @@
     .simplicite-logo:hover {
         cursor: pointer;
     }
+
+    .smp-blue {
+        color: #387ED1;
+    }
+
+    .smp-aqua-blue {
+        color: #38D1AB;
+    }
+
+    .smp-light-purple {
+        color: #7272FF;
+    }
+
+    .smp-coral {
+        color: #F08A7B;
+    }
+
 </style>
