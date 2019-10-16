@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <div id="visual-content" class="col-6">
+        <div id="support-content" class="col-6">
             <div id="pdf-container">
                 <embed :src="pdfAddress" type="application/pdf" width="100%" height="100%">
             </div>
@@ -116,7 +116,7 @@
 
     }
 
-    #visual-content {
+    #support-content {
         position: fixed;
         right: 0;
         display: flex;

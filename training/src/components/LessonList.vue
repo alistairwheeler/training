@@ -1,21 +1,20 @@
 <template>
     <div id="lessons-page-wrapper">
         <div id="wrapper">
-            <h1>Every lesson for the course : {{courseName}}</h1>
+            <h1 >All available lessons </h1>
 
             <ul id="lesson-list">
-
-                <li class="lesson-item" v-for="lesson in lessonList" :key="lesson.lessonName">
-                    <a href="#">
+                <li class="lesson-item" @click="onLessonClicked(lesson.row_id, lesson.lrnLsnPrtId)" v-for="lesson in displayedLessons" :key="lesson.row_id">
+                    <a href="">
                         <div class="content-wrapper">
                             <div class="image-wrapper">
                                 <img class="lesson-image"
-                                     :src="getPictureUrl(lesson.lessonName)"
+                                     src="https://picsum.photos/510/300?random"
                                      alt="lesson image">
                             </div>
                             <div class="information-wrapper">
-                                <h3 :class="getCourseColor(lesson.lessonCourse)">{{lesson.lessonCourse}}</h3>
-                                <h2 class="lesson-name">{{lesson.lessonName}}</h2>
+                                <h3 :class="getCourseColor(lesson.lessonCourse)">{{lesson.lrnLsnPrtId__lrnPrtTitle}}</h3>
+                                <h2 class="lesson-name" v-html="lesson.lrnLsnTitle"></h2>
                             </div>
                         </div>
                     </a>
@@ -30,39 +29,11 @@
         name: 'ListComponent',
         props: {},
         data: () => ({
-            courseName: 'Beginner',
-            lessonList: [
-                {
-                    lessonName:'Introduction to Simplicité',
-                    lessonPictureUrl: 'https://cdn.vuetifyjs.com/images/cards/mountain.jpg',
-                    lessonCourse: 'Beginner',
-                    lessonUrl: '/courses/12'
-                },
-                {
-                    lessonName:'Business objects',
-                    lessonPictureUrl: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
-                    lessonCourse: 'Beginner'
-                },
-                {
-                    lessonName:'Permission granting',
-                    lessonPictureUrl: 'https://picsum.photos/510/300?random',
-                    lessonCourse: 'Intermediate'
-                },{
-                    lessonName:'UI Designing',
-                    lessonPictureUrl: 'https://picsum.photos/id/11/500/300',
-                    lessonCourse: 'Expert'
-                }
-                ,{
-                    lessonName:'Workflow creation',
-                    lessonPictureUrl: 'https://picsum.photos/510/300?random',
-                    lessonCourse: 'Expert'
-                }
-            ]
+            displayedLessons: [],
         }),
         methods: {
-            onLessonClicked(lessonUrl) {
-                lessonUrl
-                this.$router.push('/courses/12');
+            onLessonClicked(lessonId, courseId) {
+                this.$router.push('/courses/lessons/'+courseId+'/'+lessonId);
             },
             getPictureUrl(lessonName) {
                 lessonName.toString()
@@ -80,7 +51,34 @@
                 } else {
                     return 'lesson-course-name-red'
                 }
-            }
+            },
+
+            async getLessons(){
+                return new Promise((resolve, reject)=> {
+                    let lessonObject = this.$smp.getBusinessObject("LrnLesson");
+                    lessonObject.search(()=> {
+                        if (lessonObject.list) {
+                            resolve(lessonObject.list);
+                        } else {
+                            reject("Could not load the content");
+                        }
+                    }, {}) //We give empty filters to the research so it doesn't remember previous researches
+                });
+            },
+        },
+        created() {
+            console.log("LessonList CREATED");
+        },
+        async mounted() {
+            const lessons = await this.getLessons();
+            lessons.map((elt => {
+                console.log(elt);
+                this.displayedLessons.push(elt);
+            }));
+            console.log(this.displayedLessons.length);
+        },
+        destroyed() {
+            console.info("LessonList DESTROYED");
         }
     }
 </script>
@@ -125,7 +123,6 @@
         box-sizing: border-box;
         margin-bottom: 24px;
     }
-
     .lesson-item a {
         width: 100%;
         height: 100%;
@@ -168,7 +165,6 @@
     .lesson-course-name-purple {
         color: #7272FF;
     }
-
     .lesson-course-name-red {
         color: red;
     }

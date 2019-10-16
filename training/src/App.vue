@@ -6,7 +6,7 @@
 
         <v-app-bar app color="primary" dark clipped-left>
             <v-app-bar-nav-icon @click="openOrCloseDrawer" v-if="isNavigationDrawerVisible()"></v-app-bar-nav-icon>
-            <v-toolbar-title @click="goHome()" >Simplicité</v-toolbar-title>
+            <v-toolbar-title class="simplicite-logo" @click="goHome()" >Simplicité</v-toolbar-title>
 
             <v-text-field
                     flat
@@ -155,6 +155,7 @@
         padding: 0;
         list-style-type: none;
         outline:0;
+        font-family: 'Source Sans Pro', sans-serif;
     }
 
     .app {
@@ -168,5 +169,9 @@
 
     .router-container-2 {
         background-color: white;
+    }
+
+    .simplicite-logo:hover {
+        cursor: pointer;
     }
 </style>
