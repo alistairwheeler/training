@@ -1,12 +1,9 @@
 <template>
-    <div id="course-list-wrapper">
-        <div id="textual-content" class="col-6"  >
-            <h1 id="lesson-title" class="lesson-title smp-blue" v-html="displayedLesson.title"></h1>
-            <span>{{displayedLesson.row_id}}</span>
-            <span>{{displayedLesson.courseName}}</span>
-            <span>{{displayedLesson.courseId}}</span>
-            <div id="learning-outcomes" >
-               <h2 class="sub-part-title smp-coral">Learning Outcomes</h2>
+    <div id="lesson-item-wrapper">
+        <div id="textual-content" class="col-6">
+            <h1 id="lesson-title" class="lesson-title smp-purple" v-html="displayedLesson.title"></h1>
+            <div id="learning-outcomes">
+                <h2 class="sub-part-title smp-coral">Learning Outcomes</h2>
                 <div id="learning-outcomes-wrapper" v-html="displayedLesson.learningOutcomes"></div>
             </div>
 
@@ -16,11 +13,11 @@
 
             </div>
 
-            <div id="exercise">
+            <div id="exercise" @click="changeCurrentId()">
                 <h2 class="sub-part-title smp-coral">Exercise : </h2>
                 <div id="exercise-wrapper" v-html="displayedLesson.exercise"></div>
-
             </div>
+            <button @click="goToStupid">Go To Stupid</button>
         </div>
 
         <div id="support-content" class="col-6">
@@ -43,55 +40,23 @@
 <script>
     /* eslint-disable no-console,no-unused-vars,no-undef */
 
-    class Lesson {
-        constructor(row_id, title, genConcepts, learningOutcomes, exercise, pdfUrl, videoUrl, courseId, courseName ){
-            this.row_id = row_id;
-            this.title = title;
-            this.genConcepts = genConcepts;
-            this.learningOutcomes = learningOutcomes;
-            this.exercise = exercise;
-            this.pdfUrl = pdfUrl; this.videoUrl = videoUrl;
-            this.courseId = courseId;
-            this.courseName = courseName;
-        }
-
-        static formatFromBackEnd(smpLesson){
-            return new Lesson(
-                smpLesson.row_id,
-                smpLesson.lrnLsnTitle,
-                smpLesson.lrnLsnConcepts,
-                smpLesson.lrnLsnLearningOutcomes,
-                smpLesson.lrnLsnExercice,
-                smpLesson.lrnLsnSlides,
-                smpLesson.lrnLsnVideo,
-                smpLesson.lrnLsnPrtId,
-                smpLesson.lrnLsnPrtId__lrnPrtTitle,
-            );
-        }
-    }
+    import {Lesson} from "../Models/Lesson";
 
     export default {
-        name: 'LessonPage',
-        props: {},
-        data() {
-            return {/*
-                lessonId: 0,
-                courseId: '',
-                courseName: '',
-                lessonTitle: '',
-                concepts:'',
-                exercise:'',
-                learningOutcomes:'',
-                videoUrl:'',
-                pdfAddress: '',*/
+        name: 'LessonItem',
+        data: function() {
+            return {
                 displayedLesson: {},
-             }
+                currentLessonId: 1,
+                nextLessonId: 1,
+                previousLessonId: 2,
+            }
         },
         methods: {
-            async getLesson(lessonId){
-                return new Promise((resolve, reject)=> {
+            async getLesson(lessonId) {
+                return new Promise((resolve, reject) => {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
-                    lessonObject.get((response)=> {
+                    lessonObject.get((response) => {
                         if (response)
                             resolve(response);
                         else
@@ -99,13 +64,38 @@
                     }, lessonId)
                 })
             },
+            async getNextLessonId() {
+                //Fetch the next lesson from the same course
+                let nextLessonId = 2;
+                //Then load it :
+                let lesson = await this.getLesson(nextLessonId);
+                this.displayedLesson = Lesson.formatFromBackEnd(lesson)
+            },
+            async getPreviousLessonId(currentLessonId) {
+                // Fetch the previous lesson ID from the same course
+                let previousLessonId = 0;
+                //Then load it :
+                let lesson = await this.getLesson(previousLessonId);
+                this.displayedLesson = Lesson.formatFromBackEnd(lesson);
+            },
+            changeCurrentId(){
+                this.currentLessonId++;
+                this.$store.commit('updateCurrentLessonId', this.currentLessonId)
+                console.log(this.currentLessonId, this.$store.state.currentLessonId)
+            },
+            goToStupid(){
+                this.$router.push('/Stupid')
+            }
         },
-        async mounted() {
-              //  let result = this.getLessonData(this.$route.params.lessonId);
+        async created() {
+            console.log("LessonItem CREATED");
             let lesson = await this.getLesson(this.$route.params.lessonId);
             this.displayedLesson = Lesson.formatFromBackEnd(lesson);
-        }
-
+            console.log("lesson has finished fetched")
+        },
+        async mounted() {
+            console.log("LessonItem MOUNTED");
+        },
     }
 
 </script>
@@ -114,7 +104,7 @@
 <style scoped>
 
     /*PAGE */
-    #course-list-wrapper {
+    #lesson-item-wrapper {
         display: flex;
     }
 

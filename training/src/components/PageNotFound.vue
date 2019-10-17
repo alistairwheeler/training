@@ -1,5 +1,5 @@
 <template>
-        <div id="not-found-container">
+        <div id="stupid-wrapper">
                 <h1 class="mx-auto">404 NOT FOUND, sorry, this page doesn't exist</h1>
         </div>
 
@@ -7,7 +7,7 @@
 
 <script>
     export default {
-        name: 'NotFound',
+        name: 'PageNotFound',
         props: {
         }
     }
@@ -21,7 +21,7 @@
         font-size: 4em;
     }
 
-    #not-found-container {
+    #stupid-wrapper {
             height: 80vh;
             width: 100%;
             display: flex;

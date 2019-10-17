@@ -1,10 +1,10 @@
 <template>
-    <v-app class="app">
+    <v-app class="app" >
         <v-navigation-drawer v-if="isNavigationDrawerVisible()" app clipped v-model="drawer">
             <v-treeview :items="items" activatable color="warning" open-on-click></v-treeview>
         </v-navigation-drawer>
 
-        <v-app-bar app color="primary" dark clipped-left>
+        <v-app-bar app color="primary" dark clipped-left >
             <v-app-bar-nav-icon @click="openOrCloseDrawer" v-if="isNavigationDrawerVisible()"></v-app-bar-nav-icon>
             <v-toolbar-title class="simplicite-logo" @click="goHome()" >Simplicité</v-toolbar-title>
 
@@ -19,10 +19,10 @@
 
             <div class="flex-grow-1"></div>
 
-            <v-btn v-show="hideButtons()" fab icon @click="goToPreviousLesson">
+            <v-btn v-show="hideButtons()" fab icon @click="goToPreviousLesson()" >
                 <v-icon>mdi-skip-previous</v-icon>
             </v-btn>
-            <v-btn v-show="hideButtons()" fab icon @click="goToNextLesson">
+            <v-btn v-show="hideButtons()" fab icon @click="goToNextLesson()">
                 <v-icon>mdi-skip-next</v-icon>
             </v-btn>
 
@@ -35,8 +35,8 @@
         <!-- Sizes your content based upon application components -->
         <v-content class="content">
             <!-- Provides the application the proper gutter -->
-            <v-container pa-0 mt-1 fluid class="router-container-2">
-                <router-view></router-view>
+            <v-container pa-0 mt-1 fluid class="router-container-2" v-on:test-event="logMessage()">
+                <router-view :key="$route.fullPath"></router-view> <!-- This makes the page reload when the url changes(check api doc for more info) -->
             </v-container>
         </v-content>
 
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+    /* eslint-disable no-console */
 
     export default {
         name: 'App',
@@ -123,18 +124,28 @@
                 },
             ],
         }),
+        created(){
+
+        },
         methods: {
             openOrCloseDrawer() {
                 this.drawer = !this.drawer;
             },
             goHome(){
+                console.log("home !")
                 this.$router.push('/home');
             },
             goToPreviousLesson() {
-                alert('You need to implement that !')
+                //TODO: Make the application change the url to the previousLessonId that is in the store
+                this.$router.push("/lessonItem/"+ --this.$store.state.currentLessonId);
+                //this.$router.push("/lessonItem/4");
+                console.log("previous button clicked");
             },
             goToNextLesson() {
-                alert('You need to implement that !')
+                //TODO: Make the application change the url to the nextLessonId that is in the store
+                this.$router.push("/lessonItem/"+ ++this.$store.state.currentLessonId);
+                //this.$router.push("/lessonItem/3");
+                console.log("next button clicked");
             },
             hideButtons() {
                 return this.checkIfRouteIsLesson()
@@ -178,15 +189,12 @@
     .smp-blue {
         color: #387ED1;
     }
-
     .smp-aqua-blue {
         color: #38D1AB;
     }
-
-    .smp-light-purple {
+    .smp-purple {
         color: #7272FF;
     }
-
     .smp-coral {
         color: #F08A7B;
     }

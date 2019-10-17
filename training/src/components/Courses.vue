@@ -1,7 +1,7 @@
 <template>
-    <div id="course-list-wrapper">
+    <div id="lesson-item-wrapper">
         <div id="wrapper">
-            <h1 class="smp-light-purple">Available Courses :</h1>
+            <h1 class="smp-purple">Available Courses :</h1>
 
             <div class="list-wrapper">
                 <v-card class="course-item" @click="onCourseClicked(course.lrnPlnTitle)" v-for="course in courses"
@@ -31,7 +31,7 @@
     /* eslint-disable no-console,no-unused-vars */
 
     export default {
-        name: 'ListComponent',
+        name: 'Courses',
         props: {},
         data: function () {
             return {
@@ -85,7 +85,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #course-list-wrapper {
+    #lesson-item-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;

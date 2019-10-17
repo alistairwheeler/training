@@ -1,7 +1,7 @@
 <template>
-    <div id="lesson-list-wrapper">
+    <div id="lessons-wrapper">
         <div id="wrapper">
-            <h1 id="page-title" class="smp-light-purple">All available lessons </h1>
+            <h1 id="page-title" class="smp-purple">All available lessons </h1>
 
             <ul id="lesson-list">
                 <li class="lesson-item" @click="onLessonClicked(lesson.row_id)" v-for="lesson in displayedLessons" :key="lesson.row_id">
@@ -28,7 +28,7 @@
     /* eslint-disable no-unused-vars,no-console */
 
     export default {
-        name: 'ListComponent',
+        name: 'Lessons',
         props: {},
         data: () => ({
             displayedLessons: [],
@@ -102,7 +102,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    #lesson-list-wrapper {
+    #lessons-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -187,7 +187,7 @@
     }
 
     .lesson-name {
-        font-size: 1.4em;
+        font-size: 1em;
         color: #2B2B2B;
         font-weight: normal;
     }

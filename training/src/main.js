@@ -1,44 +1,29 @@
 /* eslint-disable no-console,no-undef */
 import Vue from 'vue'
 import App from './App.vue'
-import VueRouter from 'vue-router'
-import LessonItem from "./components/LessonItem";
-import HomePage from "./components/HomePage";
-import Courses from "./components/Courses";
-import Lessons from "./components/Lessons";
-import NotFound from "./components/NotFound"
-import vuetify from './plugins/vuetify';
-import Lesson from './Models/Lesson';
-//1. middleware to use vue-router
-Vue.use(VueRouter);
-Vue.use(Lesson)
+import VueRouter from 'vue-router' //Documentation + Guide : https://router.vuejs.org/guide/
+import vuetify from './plugins/vuetify' //Documentation + Guide : https://vuetifyjs.com/en/getting-started/quick-start
+import Vuex from 'vuex' //Documentation + Guide : https://vuex.vuejs.org/guide/
 
-Vue.config.productionTip = false
-// To use the simplicite API :
+Vue.config.productionTip = false;
+
+//1. middleware to use vue-router, vuex
+Vue.use(VueRouter);
+Vue.use(Vuex);
+
+//2. Importing the router from router.js :
+import router from './router'
+//3. Importing the Store instance from store.js :
+import store from './store'
+
+//4. Use the simplicite API :
 Vue.prototype.$smp = new Simplicite.Ajax('https://maxime.dev.simplicite.io', 'api', 'designer', 'simplicite');
 
-
-//2. Routes definition
-const routes = [
-  { path: '/', component: HomePage },
-  { path: '/home', component: HomePage },
-  { path: '/courses', component: Courses },
-  { path: '/lessons', component: Lessons },
-  { path: '/lessons/:courseName/', component: Lessons },
-  { path: '/lessonItem/:lessonId', component: LessonItem },
-    //This route should be last in the list because it can overcome the other ones (because it matches all routes)
-  { path: '/*', component: NotFound }
-];
-
-//3. Creating the router instance
-const router = new VueRouter({
-  mode: 'history',
-  routes});
-
-//4. Creating the Vue instance with the router and el:'#app'
+//5. Creating the Vue instance with the router, the store and el:'#app' as the root instance of vue
 new Vue({
   el: '#app',
+  store,
   render: h => h(App),
   vuetify,
   router: router,
-}).$mount('#app')
+}).$mount('#app');

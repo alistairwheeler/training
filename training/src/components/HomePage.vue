@@ -17,7 +17,7 @@
 
         <div id="content-wrapper">
             <div id="text-wrapper">
-                <h1 class="smp-light-purple">We built this site for you ! </h1>
+                <h1 class="smp-purple">We built this site for you ! </h1>
             </div>
         </div>
 

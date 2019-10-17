@@ -1,4 +1,4 @@
-class Lesson {
+export class Lesson {
     constructor(row_id, title, genConcepts, learningOutcomes, exercise, pdfUrl, videoUrl, courseId, courseName ){
         this.row_id = row_id;
         this.title = title;
@@ -21,6 +21,6 @@ class Lesson {
             smpLesson.lrnLsnVideo,
             smpLesson.lrnLsnPrtId,
             smpLesson.lrnLsnPrtId__lrnPrtTitle,
-            );
+        );
     }
 }
