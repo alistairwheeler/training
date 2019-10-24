@@ -13,11 +13,15 @@
 
                     <div class="course-right">
                         <h2 class="course-level smp-coral">{{course.lrnPlnTitle}}</h2>
-                        <h3 class="course-short-description">place holder short description</h3>
-                        <p class="course-long-description">place holder LONG DESCRIPTION</p>
+                        <h3 class="course-short-description">{{getDescription(course.lrnPlnShortDescription)}}</h3>
+                        <p class="course-long-description">{{getDescription(course.lrnPlnLongDescription)}}</p>
                         <v-card-actions>
                             <div class="flex-grow-1"></div>
-                            <v-btn @click.stop="onCourseClicked(course.lrnPlnTitle)" text class="action-btn">Discover</v-btn>
+                            <v-btn @click.stop="onCourseClicked(course.lrnPlnTitle)"
+                                   text
+                                   class="action-btn">
+                                Discover
+                            </v-btn>
                         </v-card-actions>
                     </div>
                 </v-card>
@@ -40,15 +44,15 @@
         },
         methods: {
             onCourseClicked(courseName) {
-                //this.$router.push('/lessons/' + courseName);
+                this.$router.push('/lessons/' + courseName);
                 //Fonctionne : ajoute un %20 à la place de l'espace dans l'url
-                this.$router.push('/lessons/Simplicité Concept');
+                //this.$router.push('/lessons/Simplicité Concept');
             },
 
-            async getCourses(){
-                return new Promise((resolve, reject)=> {
+            async getCourses() {
+                return new Promise((resolve, reject) => {
                     let course = this.$smp.getBusinessObject("LrnPlan");
-                    course.search(()=> {
+                    course.search(() => {
                         if (course.list) {
                             resolve(course.list);
                         } else {
@@ -57,10 +61,19 @@
                     }, {}) //We give empty filters to the research so it doesn't remember previous researches
                 });
             },
+
+            getDescription(description) {
+                if (typeof (description) === 'undefined' || description === null)
+                    return ("There is no description for this course")
+                else if (description.length > 0) {
+                    return description;
+                }
+            }
+
         },
 
         //LIFECYCLE HOOKS
-        created(){
+        created() {
             console.log("Courses CREATED");
         },
 
@@ -74,7 +87,7 @@
         },
 
         destroyed() {
-            //Empty the array of courses
+            //Empty the array of sections
             this.courses = [];
             //console.clear();
             console.log("Courses DESTROYED");
@@ -115,6 +128,14 @@
         margin-bottom: 30px;
         /*background-color: plum;*/
         position: relative;
+        transform: scale(1);
+        transition: transform 400ms;
+
+    }
+
+    .course-item:hover {
+        transform: scale(1.01);
+        transition: transform 200ms;
     }
 
     .course-left {
@@ -150,4 +171,7 @@
         right: 10px;
     }
 
+    .course-long-description {
+        padding-right: 10px;
+    }
 </style>

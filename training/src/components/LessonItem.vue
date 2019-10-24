@@ -1,5 +1,5 @@
 <template>
-    <div id="lesson-item-wrapper">
+    <div id="lesson-item-wrapper" v-cloak>
         <div id="textual-content" class="col-6">
             <h1 id="lesson-title" class="lesson-title smp-purple" v-html="displayedLesson.title"></h1>
             <div id="learning-outcomes">
@@ -13,11 +13,10 @@
 
             </div>
 
-            <div id="exercise" @click="changeCurrentId()">
+            <div id="exercise" @click="updateCurrentLessonID()">
                 <h2 class="sub-part-title smp-coral">Exercise : </h2>
                 <div id="exercise-wrapper" v-html="displayedLesson.exercise"></div>
             </div>
-            <button @click="goToStupid">Go To Stupid</button>
         </div>
 
         <div id="support-content" class="col-6">
@@ -47,52 +46,122 @@
         data: function() {
             return {
                 displayedLesson: {},
-                currentLessonId: 1,
-                nextLessonId: 1,
-                previousLessonId: 2,
             }
         },
         methods: {
-            async getLesson(lessonId) {
+            /**
+             * Fetches the lesson with id given as argument
+             * @returns {Promise<*>}
+             */
+            async fetchLesson(lessonId) {
+                console.log('fetchLesson')
                 return new Promise((resolve, reject) => {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
                     lessonObject.get((response) => {
-                        if (response)
+                        if (response){
+                            console.log(response)
                             resolve(response);
+                        }
                         else
                             reject("Could not load the lesson");
                     }, lessonId)
                 })
             },
-            async getNextLessonId() {
-                //Fetch the next lesson from the same course
-                let nextLessonId = 2;
-                //Then load it :
-                let lesson = await this.getLesson(nextLessonId);
-                this.displayedLesson = Lesson.formatFromBackEnd(lesson)
+
+            async fetchSectionsFromCourse(courseName){
+                console.log("fetchSectionsFromCourse");
+                return new Promise((resolve, reject) => {
+                    let sectionObject = this.$smp.getBusinessObject("LrnPart");
+                    sectionObject.search(()=> {
+                        if(sectionObject.list){
+                            console.log(sectionObject.list)
+                            resolve(sectionObject.list)
+                        } else
+                            reject("Impossible to fetch sections")
+                    }, {"lrnPrtPlnId__lrnPlnTitle": courseName})
+                })
             },
-            async getPreviousLessonId(currentLessonId) {
-                // Fetch the previous lesson ID from the same course
-                let previousLessonId = 0;
-                //Then load it :
-                let lesson = await this.getLesson(previousLessonId);
-                this.displayedLesson = Lesson.formatFromBackEnd(lesson);
+
+            async fetchLessonsFromCourse(courseName){
+                console.log("fetchLessonsFromCourse");
+                return new Promise((resolve, reject)=> {
+                    let lessonObject = this.$smp.getBusinessObject("LrnLesson");
+                    lessonObject.search(()=> {
+                        if(lessonObject.list){
+                            console.log(lessonObject.list)
+                            resolve(lessonObject.list)
+                        } else {
+                            resolve('Could not load the content')
+                        }
+                    }, {'lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle': courseName})
+                })
             },
-            changeCurrentId(){
-                this.currentLessonId++;
-                this.$store.commit('updateCurrentLessonId', this.currentLessonId)
-                console.log(this.currentLessonId, this.$store.state.currentLessonId)
-            },
-            goToStupid(){
-                this.$router.push('/Stupid')
+
+            sortLessonIDs(treeViewItems){
+                let orderedItems = [];
+                treeViewItems.forEach(section => {
+                   section.children.forEach(lesson => orderedItems.push(parseInt(lesson.id)))
+                });
+                //treeViewItems.map((section) => {orderedItems.push(section.children.map(elt => elt))})
+                return orderedItems;
             }
+
+            /*//UPDATE STORE DATA
+            /!**
+             * Updates the currentLessonID in the store
+             *!/
+            updateCurrentLessonID(){
+                console.log("updateCurrentLessonID");
+                this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id))
+            },
+
+            /!**
+             * Updates the otherLessonsIDs in the store with the array of IDs given in argument
+             * @param lessonsIds
+             * @returns {Promise<void>}
+             *!/
+            async updateOtherLessonsIDs(lessonsIds){
+                console.log("updateOtherLessonsIDs");
+                this.$store.commit('setOtherLessonsIDs', lessonsIds);
+            },
+
+            updateTreeViewItems(treeViewItems){
+                this.$store.commit('updateTreeViewItems', treeViewItems);
+            }*/
         },
         async created() {
             console.log("LessonItem CREATED");
-            let lesson = await this.getLesson(this.$route.params.lessonId);
-            this.displayedLesson = Lesson.formatFromBackEnd(lesson);
-            console.log("lesson has finished fetched")
+            //Get the lesson to display on the page
+            let lesson = await this.fetchLesson(this.$route.params.lessonId);
+            this.displayedLesson = Lesson.formatFromSimplicite(lesson);
+            this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id))
+
+            //Get the sections from the same course
+            let sections = await this.fetchSectionsFromCourse(this.displayedLesson.courseName);
+            let tvSections = await sections.map((elt) => ({id: elt.row_id, name: elt.lrnPrtTitle, children: []}));
+
+            //Get the other lessons from the same course
+            let lessons = await this.fetchLessonsFromCourse(this.displayedLesson.courseName);
+            let tvLessons = await lessons.map((elt) => ({id: elt.row_id, name: elt.lrnLsnTitle, sectionId: elt.lrnLsnPrtId}));
+
+            //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
+            for(let i = 0; i < tvLessons.length; i++){
+                for (let j = 0; j < tvSections.length; j++) {
+                    if(tvLessons[i].sectionId === tvSections[j].id){
+                        tvSections[j].children.push(tvLessons[i])
+                    }
+                }
+            }
+            this.$store.commit('updateTreeViewItems', tvSections);
+
+            //Get the other lessons IDs from the same course
+            let orderedLessonIDs = this.sortLessonIDs(tvSections);
+            console.log(orderedLessonIDs);
+            this.$store.commit('setOtherLessonsIDs', orderedLessonIDs);
+
         },
+
+
         async mounted() {
             console.log("LessonItem MOUNTED");
         },
@@ -102,6 +171,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+    [v-cloak] {
+        display: none;
+    }
 
     /*PAGE */
     #lesson-item-wrapper {

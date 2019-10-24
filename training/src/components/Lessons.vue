@@ -3,6 +3,14 @@
         <div id="wrapper">
             <h1 id="page-title" class="smp-purple">All available lessons </h1>
 
+            <v-btn v-if="emptyList"
+                   class="redirect-button"
+                   outlined
+                   color="#387ED1"
+                   @click="pushToCourses()">
+                Return to courses
+            </v-btn>
+
             <ul id="lesson-list">
                 <li class="lesson-item" @click="onLessonClicked(lesson.row_id)" v-for="lesson in displayedLessons" :key="lesson.row_id">
                     <a href="">
@@ -13,8 +21,8 @@
                                      alt="lesson image">
                             </div>
                             <div class="information-wrapper">
-                                <h3 :class="getCourseColor(lesson.lessonCourse)">{{lesson.lrnLsnPrtId__lrnPrtTitle}}</h3>
-                                <h2 class="lesson-name" v-html="lesson.lrnLsnTitle"></h2>
+                                <h2 class="lesson-name course-name-blue">{{lesson.lrnLsnTitle}}</h2>
+                                <h3 class="course-name">{{lesson.lrnLsnPrtId__lrnPrtTitle}}</h3>
                             </div>
                         </div>
                     </a>
@@ -32,57 +40,101 @@
         props: {},
         data: () => ({
             displayedLessons: [],
+            emptyList: false,
         }),
         methods: {
             onLessonClicked(lessonId) {
                 this.$router.push('/lessonItem/'+lessonId);
             },
             getCourseColor() {
-                    return 'lesson-course-name-red'
+                    return 'course-name-blue'
 
             },
 
-            async getLesson(){
+            pushToCourses(){
+                this.$router.push('/courses')
+            },
+
+            async fetchAllLessons(){
+                console.log("fetchAllLessons");
                 return new Promise((resolve, reject)=> {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
                     lessonObject.search(()=> {
-                        if (lessonObject.list) {
-                            resolve(lessonObject.list);
+                        if(lessonObject.list){
+                            resolve(lessonObject.list)
                         } else {
-                            reject("Could not load the content");
+                            resolve('Could not load the content')
                         }
-                    }, {}) //We give empty filters to the research so it doesn't remember previous researches
-                });
+                    }, {})
+                })
             },
 
-            async getLessonsFromCourse(courseName){
+            async fetchLessonsFromCourse(courseName){
                 return new Promise((resolve, reject) => {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
                     lessonObject.search(()=> {
-                        if (lessonObject.list)
+                        if (lessonObject.list){
                             resolve(lessonObject.list);
+                        }
                          else {
                             reject("Could not load the content")
                         }
-                    }, {"lrnLsnPrtId__lrnPrtTitle": courseName})
+                    }, {"lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle": courseName})
                 })
+            },
+
+            async fetchSectionsFromCourse(courseName){
+                console.log("fetchSectionsFromCourse");
+                return new Promise((resolve, reject) => {
+                    let sectionObject = this.$smp.getBusinessObject("LrnPart");
+                    sectionObject.search(()=> {
+                        if(sectionObject.list){
+                            console.log(sectionObject.list);
+                            resolve(sectionObject.list)
+                        } else
+                            reject("Impossible to fetch sections")
+                    }, {'lrnPrtPlnId__lrnPlnTitle': courseName})
+                })
+            },
+            sortLessonsBySection(lessons){
+                let orderedLessons = [];
+                lessons.forEach(lesson => {
+                    lesson.lrnLsnPrtId.forEach(lesson => orderedLessons.push(parseInt(lesson.id)))
+                });
+                //treeViewItems.map((section) => {orderedItems.push(section.children.map(elt => elt))})
+                return orderedLessons;
+            },
+            async fetchTreeView(lessonId){
+              return new Promise((resolve, reject)=> {
+                 this.$smp.treeview((response)=> {
+                     console.log(response)
+                 },'lrnTreeView', {service: 'page', object: 'LrnLesson', rowid: lessonId})
+              });
             }
         },
         //LIFECYCLE HOOKS
         async mounted() {
-
+            this.fetchTreeView(1);
             if(this.$route.params.courseName){
                 console.log(this.$route.params.courseName);
                 document.getElementById("page-title").innerText = "All available lessons from : "+this.$route.params.courseName;
-                const lessons = await this.getLessonsFromCourse(this.$route.params.courseName)
+                /*const sections = await this.fetchSectionsFromCourse(this.$route.params.courseName);
+                let sectionIDs = await sections.map((elt) => elt.row_id)*/
+                const lessons = await this.fetchLessonsFromCourse(this.$route.params.courseName);
+                //console.log(lessons)
+                if (Array.isArray(lessons) && lessons.length > 0) {
+                    lessons.map((elt => {
+                        this.displayedLessons.push(elt);
+                    }));
+                } else {
+                    this.emptyList = true;
+                }
 
-                lessons.map((elt => {
-                    this.displayedLessons.push(elt);
-                }));
             }
              else {
-                const lessons = await this.getLesson();
+                let lessons = await this.fetchAllLessons();
                 console.log(lessons)
+                lessons = this.sortLessonsBySection(lessons);
                 lessons.map((elt => {
                     this.displayedLessons.push(elt);
                 }));
@@ -90,7 +142,7 @@
 
         },
         created() {
-            console.clear()
+            console.clear();
             console.log("Lessons CREATED");
         },
         destroyed() {
@@ -106,14 +158,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        /*background-color: plum;*/
     }
 
     #wrapper {
         width: 80%;
         display: flex;
         flex-direction: column;
-        /*background-color: green;*/
     }
 
     h1 {
@@ -124,9 +174,7 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-
         box-sizing: border-box;
-        /*background-color: aliceblue;*/
     }
 
     .lesson-item {
@@ -136,7 +184,14 @@
         flex-direction: column;
         box-sizing: border-box;
         margin-bottom: 24px;
+        transform: scale(1);
+        transition: transform 200ms;
     }
+    .lesson-item:hover {
+        transform: scale(1.05);
+        transition: transform 200ms;
+    }
+
     .lesson-item a {
         width: 100%;
         height: 100%;
@@ -144,8 +199,8 @@
         padding: 16px;
         text-decoration: none;
     }
+
     .lesson-item a:hover {
-        background-color: rgba(80, 75, 245, 0.2);
     }
 
     .content-wrapper {
@@ -172,32 +227,28 @@
         height: 30%;
     }
 
-    .lesson-course-name-purple, .lesson-course-name-red , .lesson-course-name-blue  {
+    .course-name-purple, .course-name-red , .course-name-blue  {
         font-weight: normal;
-        font-size: 1em;
+        font-size: 2em;
     }
-    .lesson-course-name-purple {
+    .course-name-purple {
         color: #7272FF;
     }
-    .lesson-course-name-red {
+    .course-name-red {
         color: red;
     }
-    .lesson-course-name-blue {
-        color: coral;
+    .course-name-blue {
+        color: #387ED1;
     }
 
     .lesson-name {
-        font-size: 1em;
-        color: #2B2B2B;
+        font-size: 2em;
+        color: #387ED1;
         font-weight: normal;
     }
 
-    .lesson-short-description {
-        color: #2B2B2B;
-        box-sizing: border-box;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
+    .redirect-button {
+        width: 20%;
+        align-self: center;
     }
-
 </style>

@@ -18,6 +18,7 @@
         <div id="content-wrapper">
             <div id="text-wrapper">
                 <h1 class="smp-purple">We built this site for you ! </h1>
+                <div id=""></div>
             </div>
         </div>
 
@@ -33,13 +34,6 @@
         name: 'HomePage',
         props: {},
         data: () => ({
-                colors: [
-                    'indigo',
-                    'warning',
-                    'pink darken-2',
-                    'red lighten-1',
-                    'deep-purple accent-4',
-                ],
                 slides: [
                     {
                         name: 'first',
@@ -143,7 +137,7 @@
             for your
             company. </p>
         <h2 class="homepage-subtitle">How are we going to achieve it ?</h2>
-        <p>Simplicité's team prepared several courses for you to become an expert, learning at your own pace.
+        <p>Simplicité's team prepared several sections for you to become an expert, learning at your own pace.
             You're also going to practice your new skills with the exercices we created, where you'll be guided
             step by step
             to make sure you understand the platform.</p>
