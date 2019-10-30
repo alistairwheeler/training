@@ -4,7 +4,7 @@
             <h1 id="page-title" class="smp-purple">All available lessons </h1>
 
             <v-btn v-if="emptyList"
-                   class="redirect-button"
+                   class="redirect-button ma-2"
                    outlined
                    color="#387ED1"
                    @click="redirectToCourses()">
@@ -220,7 +220,6 @@
     }
 
     .redirect-button {
-        width: 20%;
         align-self: center;
     }
 </style>

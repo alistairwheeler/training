@@ -1,6 +1,6 @@
 <template>
     <div id="homepage-container">
-        <div id="headline">
+        <!--<div id="headline">
             <v-carousel id="carousel" height="30vh" cycle interval="4000" hide-delimiters show-arrows-on-hover>
                 <v-carousel-item v-for="(slide, i) in slides" :key="i" >
                     <v-img :src="slides[i].pictureUrl" alt="carousel image"> </v-img>
@@ -26,8 +26,41 @@
                     <h1 class="section-title">find our documentation for developpers : </h1>
                 </div>
             </div>
-        </div>
+        </div>-->
+        <div id="outer-div">
+            <div class="row-1">
+                <div id="video-wrapper">
+                    <iframe src="https://player.vimeo.com/video/359243007"
+                            width="712" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
+                    </iframe>
+                </div>
+                <div id="text-container">
+                    <h1 class="promotion-title">Simplicite Software Training Platform</h1>
+                    <p class="promotion-text">Learn to master the Simplicite platform to help your
+                        company build powerful applications, at lightning speed.</p>
 
+                       <p class="promotion-text"> This training will help you understand the basics of how
+                        our platform works and teach you the good practices to
+                        become a great application designer </p>
+
+                    <v-btn class="try-button" x-large outlined link color="#387ED1" @click="redirectTo('/courses')">Try It </v-btn>
+
+                </div>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <v-btn x-large class="text-white" link color="#387ED1" @click="redirectTo('https://simplicite.fr/')">Discover our offers </v-btn>
+                    </li>
+                    <li>
+                        <v-btn x-large class="text-white" link color="#387ED1" @click="redirectTo('https://docs.simplicite.io/')"> Read the Documentation</v-btn>
+                    </li>
+                    <li>
+                        <v-btn x-large class="text-white" link color="#387ED1" @click="redirectTo('https://simplicite.fr/cas-clients/')">Watch Examples </v-btn>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </template>
 
@@ -56,8 +89,8 @@
                 ],
         }),
         methods: {
-            goToCourses() {
-                this.$router.push('/courses')
+            redirectTo(url) {
+                window.location.href = url;
             }
         }
     }
@@ -72,77 +105,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-
-    #headline {
-        position: relative;
-        width: 100%;
-        margin-bottom: 30px;
-    }
-
-    .additional-information {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 30%;
-        height: 100%;
-        background-color: rgba(255, 198, 60, .9);
-        display: flex;
-        align-content: center;
-        justify-content: center;
-    }
-
-    .additional-information-wrapper {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-content: flex-end;
-        height: 100%;
-        padding: 10px;
-    }
-
-    .additional-information-title {
-        font-size: 2em;
-        text-align: right;
-    }
-
-    #content-wrapper {
-        width: 80%;
-        display: flex;
-        flex-flow: column nowrap;
-    }
-
-    .button-container {
-        align-self: center;
-        position: absolute;
-        bottom: 20px;
-    }
-
-    .homepage-subtitle {
-        text-decoration-line: underline;
-    }
-
-    .action-btn {
-        color: orange;
-        font-size: 2em;
-    }
-
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        transform: translateY(0);
-    }
-
-    .card:hover + .text-to-reveal{
-        animation-name: text-reveal;
-        animation-duration: 2000ms;
-    }
-
-    .text-to-reveal {
-        display: none;
-    }
-
-    .card-title {
-
     }
 
     @keyframes text-reveal {
@@ -162,6 +124,64 @@
             opacity: 1;
             transform: translateY(100px);
         }
+    }
+
+    .try-button {
+        align-self: center;
+        outline: none;
+    }
+
+    #outer-div {
+        display: flex;
+        flex-flow: column nowrap;
+       /* background-color: pink;
+       */
+        margin-top: 5vh;
+    }
+
+    .row-1 {
+        display: flex;
+        flex-flow: row;
+       /* background-color: coral;
+       */
+    }
+
+    #video-wrapper, #text-container {
+        width: 50%;
+    }
+    #video-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+       /* background-color: cornflowerblue;
+
+        */
+    }
+    #text-container {
+        display: flex;
+        flex-direction: column;
+       /* background-color: mediumaquamarine;
+
+        */
+    }
+    
+
+    .promotion-title {
+        font-size: 6em;
+    }
+
+    .promotion-text {
+        font-size: 1.5em;
+    }
+
+    nav {
+        margin-top: 60px;
+        width: 60%;
+        align-self: center;
+    }
+    .nav-links {
+        display: flex;
+        flex-flow: row;justify-content: space-around;
     }
 </style>
 
