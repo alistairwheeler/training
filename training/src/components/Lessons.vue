@@ -7,7 +7,7 @@
                    class="redirect-button"
                    outlined
                    color="#387ED1"
-                   @click="pushToCourses()">
+                   @click="redirectToCourses()">
                 Return to courses
             </v-btn>
 
@@ -43,16 +43,73 @@
             emptyList: false,
         }),
         methods: {
+
+            //------------ COMPONENT FUNCTIONS ------------
             onLessonClicked(lessonId) {
                 this.$router.push('/lessonItem/'+lessonId);
             },
+
             getCourseColor() {
                     return 'course-name-blue'
-
             },
 
-            pushToCourses(){
+            redirectToCourses(){
                 this.$router.push('/courses')
+            },
+
+            //---------- SIMPLICITE DATA FETCHING ------------
+            async fetchTreeViewFromCourse(courseID){
+                return new Promise((resolve, reject)=> {
+                    this.$smp.treeview((treeView)=> {
+                        resolve(treeView.list)
+                    },'lrnTreeView', {service: 'page', object: 'LrnPlan', rowid: courseID, child: 'LrnPart'})
+                });
+            },
+
+            convertSmpTreeView(smpTreeView){
+
+                //Retrieve the sections :
+                let sections = smpTreeView.map(globalSection => globalSection.item); //item est réellement l'objet section, les sections sont donc récupérées
+                //Convert the sections to vuetify treeView objects
+                let tvSections = sections.map((elt) => ({id: elt.row_id, name: elt.lrnPrtTitle, children: []}));
+                //console.log("tvSections");
+                //console.log(tvSections);
+
+                //Retrieve the lessons :
+                let links = smpTreeView.map(globalSection => globalSection.links);
+                let arrayOfSectionFolder = links.map(link => link[0].list);
+                let lessons = [];
+                arrayOfSectionFolder.forEach(arraySection => {
+                    arraySection.forEach(lesson => lessons.push(lesson.item))
+                });
+
+                //Convert them to vuetify treeView objects and map them to the section
+                let tvLessons = lessons.map((elt) => ({id: elt.row_id, name: elt.lrnLsnTitle, sectionId: elt.lrnLsnPrtId}));
+                //console.log("tvLessons");
+                //console.log(tvLessons);
+                //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
+                for(let i = 0; i < tvLessons.length; i++){
+                    for (let j = 0; j < tvSections.length; j++) {
+                        if(tvLessons[i].sectionId === tvSections[j].id){
+                            tvSections[j].children.push(tvLessons[i])
+                        }
+                    }
+                }
+                this.$store.commit('updateTreeViewItems', tvSections);
+
+                //console.log("final treeView");
+                //console.log(tvSections);
+                return tvSections;
+            },
+
+            sortLessonIDs(treeViewItems){
+                let orderedIDs = [];
+                treeViewItems.forEach(section => {
+                    section.children.forEach(lesson => orderedIDs.push(parseInt(lesson.id)))
+                });
+                //console.log("orderedIDs");
+                //console.log(orderedIDs);
+                return orderedIDs;
             },
 
             async fetchAllLessons(){
@@ -69,80 +126,63 @@
                 })
             },
 
-            async fetchLessonsFromCourse(courseName){
+            async fetchLessonsFromCourseID(courseId){
                 return new Promise((resolve, reject) => {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
-                    lessonObject.search(()=> {
+                    lessonObject.search(() => {
                         if (lessonObject.list){
+                            console.log("lessonObject.list");
+                            console.log(lessonObject.list);
                             resolve(lessonObject.list);
                         }
                          else {
                             reject("Could not load the content")
                         }
-                    }, {"lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle": courseName})
+                    }, {"lrnLsnPrtId__lrnPrtPlnId": courseId});
                 })
             },
 
-            async fetchSectionsFromCourse(courseName){
-                console.log("fetchSectionsFromCourse");
-                return new Promise((resolve, reject) => {
-                    let sectionObject = this.$smp.getBusinessObject("LrnPart");
-                    sectionObject.search(()=> {
-                        if(sectionObject.list){
-                            console.log(sectionObject.list);
-                            resolve(sectionObject.list)
-                        } else
-                            reject("Impossible to fetch sections")
-                    }, {'lrnPrtPlnId__lrnPlnTitle': courseName})
-                })
-            },
-            sortLessonsBySection(lessons){
-                let orderedLessons = [];
-                lessons.forEach(lesson => {
-                    lesson.lrnLsnPrtId.forEach(lesson => orderedLessons.push(parseInt(lesson.id)))
-                });
-                //treeViewItems.map((section) => {orderedItems.push(section.children.map(elt => elt))})
-                return orderedLessons;
-            },
-            async fetchTreeView(lessonId){
-              return new Promise((resolve, reject)=> {
-                 this.$smp.treeview((response)=> {
-                     console.log(response)
-                 },'lrnTreeView', {service: 'page', object: 'LrnLesson', rowid: lessonId})
-              });
+            displayErrorMessage(){
+                alert('There was an error with the request');
             }
         },
         //LIFECYCLE HOOKS
         async mounted() {
-            this.fetchTreeView(1);
-            if(this.$route.params.courseName){
-                console.log(this.$route.params.courseName);
-                document.getElementById("page-title").innerText = "All available lessons from : "+this.$route.params.courseName;
-                /*const sections = await this.fetchSectionsFromCourse(this.$route.params.courseName);
-                let sectionIDs = await sections.map((elt) => elt.row_id)*/
-                const lessons = await this.fetchLessonsFromCourse(this.$route.params.courseName);
-                //console.log(lessons)
-                if (Array.isArray(lessons) && lessons.length > 0) {
-                    lessons.map((elt => {
-                        this.displayedLessons.push(elt);
-                    }));
-                } else {
-                    this.emptyList = true;
-                }
-
+            if(this.$route.params.courseId){
+                let courseId =  parseInt(this.$route.params.courseId);
+                await this.fetchTreeViewFromCourse(courseId)
+                    .then(smpTreeView=> this.convertSmpTreeView(smpTreeView))
+                    .then(treeView => this.sortLessonIDs(treeView))
+                    .then(orderedLessonIDs => this.$store.commit('setOtherLessonsIDs', orderedLessonIDs))
+                    .then(() => this.fetchLessonsFromCourseID(courseId))
+                    .then(lessons => {
+                        if (Array.isArray(lessons) && lessons.length > 0) {
+                            lessons.forEach((elt => {
+                                this.displayedLessons.push(elt);
+                            }));
+                        } else {
+                            this.emptyList = true;
+                        }
+                    })
+                    .then(() => {
+                        document.getElementById("page-title").innerText = "All available lessons for this course : ";
+                    })
+                    .catch(()=> this.displayErrorMessage());
             }
              else {
-                let lessons = await this.fetchAllLessons();
-                console.log(lessons)
-                lessons = this.sortLessonsBySection(lessons);
-                lessons.map((elt => {
-                    this.displayedLessons.push(elt);
-                }));
+                 console.log("FETCHING ALL LESSONS");
+                await this.fetchAllLessons()
+                    .then(lessons => {
+                        lessons.map((elt => {
+                            this.displayedLessons.push(elt);
+                        }));
+                    }).catch(() => this.displayErrorMessage())
+                //lessons = this.sortLessonsBySection(lessons);
+
             }
 
         },
         created() {
-            console.clear();
             console.log("Lessons CREATED");
         },
         destroyed() {
@@ -187,6 +227,7 @@
         transform: scale(1);
         transition: transform 200ms;
     }
+
     .lesson-item:hover {
         transform: scale(1.05);
         transition: transform 200ms;

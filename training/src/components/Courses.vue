@@ -4,7 +4,7 @@
             <h1 class="smp-purple">Available Courses :</h1>
 
             <div class="list-wrapper">
-                <v-card class="course-item" @click="onCourseClicked(course.lrnPlnTitle)" v-for="course in courses"
+                <v-card class="course-item" @click="onCourseClicked(course.row_id)" v-for="course in courses"
                         :key="course.row_id">
                     <div class="course-left">
                         <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
@@ -43,13 +43,11 @@
             }
         },
         methods: {
-            onCourseClicked(courseName) {
-                this.$router.push('/lessons/' + courseName);
-                //Fonctionne : ajoute un %20 à la place de l'espace dans l'url
-                //this.$router.push('/lessons/Simplicité Concept');
+            onCourseClicked(courseId) {
+                this.$router.push('/lessons/' + courseId);
             },
 
-            async getCourses() {
+            async fetchCourses() {
                 return new Promise((resolve, reject) => {
                     let course = this.$smp.getBusinessObject("LrnPlan");
                     course.search(() => {
@@ -73,23 +71,18 @@
         },
 
         //LIFECYCLE HOOKS
-        created() {
+        async created() {
             console.log("Courses CREATED");
-        },
-
-        async mounted() {
-            const responseCourses = await this.getCourses();
-            responseCourses.map((elt => {
-                console.log(elt);
-                this.courses.push(elt);
-            }));
-            console.log(this.courses.length);
+            await this.fetchCourses()
+                .then(responseCourses => responseCourses.map((elt => {
+                    console.log(elt)
+                    this.courses.push(elt);
+                })));
         },
 
         destroyed() {
-            //Empty the array of sections
+            //Empty the array of courses
             this.courses = [];
-            //console.clear();
             console.log("Courses DESTROYED");
         }
     }

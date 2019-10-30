@@ -17,8 +17,31 @@
 
         <div id="content-wrapper">
             <div id="text-wrapper">
-                <h1 class="smp-purple">We built this site for you ! </h1>
-                <div id=""></div>
+                <div id="courses-wrapper">
+                    <div class="card">
+                        <h1 class="card-title">Test the courses we built for you</h1>
+                        <p class="text-to-reveal">
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                            We created courses to make sure you could learn to use the simplicité platform in autonomy
+                        </p>
+                    </div>
+                </div>
+                <div id="documentation-wrapper">
+                    <h1 class="section-title">find our documentation for developpers : </h1>
+                </div>
             </div>
         </div>
 
@@ -63,6 +86,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
     #homepage-container {
         width: 100%;
         height: 100%;
@@ -76,6 +100,7 @@
         width: 100%;
         margin-bottom: 30px;
     }
+
     .additional-information {
         position: absolute;
         left: 0;
@@ -87,6 +112,7 @@
         align-content: center;
         justify-content: center;
     }
+
     .additional-information-wrapper {
         display: flex;
         flex-direction: column;
@@ -95,6 +121,7 @@
         height: 100%;
         padding: 10px;
     }
+
     .additional-information-title {
         font-size: 2em;
         text-align: right;
@@ -121,6 +148,43 @@
         font-size: 2em;
     }
 
+
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transform: translateY(0);
+    }
+
+    .card:hover + .text-to-reveal{
+        animation-name: text-reveal;
+        animation-duration: 2000ms;
+    }
+
+    .text-to-reveal {
+        display: none;
+    }
+
+    .card-title {
+
+    }
+
+    @keyframes text-reveal {
+        0% {
+            opacity: 0.2;
+            display: block;
+        }
+        25% {
+            opacity: 0.25;
+            transform: translateY(25px);
+        }
+        75% {
+            opacity: 0.75;
+            transform: translateY(75px);
+        }
+        100%{
+            opacity: 1;
+            transform: translateY(100px);
+        }
+    }
 </style>
 
 <!--<div>

@@ -82,8 +82,8 @@
                 })
             },
 
-            async fetchLessonsFromCourse(courseName){
-                console.log("fetchLessonsFromCourse");
+            async fetchLessonsFromCourseID(courseName){
+                console.log("fetchLessonsFromCourseID");
                 return new Promise((resolve, reject)=> {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
                     lessonObject.search(()=> {
@@ -105,29 +105,6 @@
                 //treeViewItems.map((section) => {orderedItems.push(section.children.map(elt => elt))})
                 return orderedItems;
             }
-
-            /*//UPDATE STORE DATA
-            /!**
-             * Updates the currentLessonID in the store
-             *!/
-            updateCurrentLessonID(){
-                console.log("updateCurrentLessonID");
-                this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id))
-            },
-
-            /!**
-             * Updates the otherLessonsIDs in the store with the array of IDs given in argument
-             * @param lessonsIds
-             * @returns {Promise<void>}
-             *!/
-            async updateOtherLessonsIDs(lessonsIds){
-                console.log("updateOtherLessonsIDs");
-                this.$store.commit('setOtherLessonsIDs', lessonsIds);
-            },
-
-            updateTreeViewItems(treeViewItems){
-                this.$store.commit('updateTreeViewItems', treeViewItems);
-            }*/
         },
         async created() {
             console.log("LessonItem CREATED");
@@ -136,12 +113,14 @@
             this.displayedLesson = Lesson.formatFromSimplicite(lesson);
             this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id))
 
+            /*
+
             //Get the sections from the same course
             let sections = await this.fetchSectionsFromCourse(this.displayedLesson.courseName);
             let tvSections = await sections.map((elt) => ({id: elt.row_id, name: elt.lrnPrtTitle, children: []}));
 
             //Get the other lessons from the same course
-            let lessons = await this.fetchLessonsFromCourse(this.displayedLesson.courseName);
+            let lessons = await this.fetchLessonsFromCourseID(this.displayedLesson.courseName);
             let tvLessons = await lessons.map((elt) => ({id: elt.row_id, name: elt.lrnLsnTitle, sectionId: elt.lrnLsnPrtId}));
 
             //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
@@ -158,6 +137,7 @@
             let orderedLessonIDs = this.sortLessonIDs(tvSections);
             console.log(orderedLessonIDs);
             this.$store.commit('setOtherLessonsIDs', orderedLessonIDs);
+*/
 
         },
 

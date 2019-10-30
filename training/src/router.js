@@ -10,7 +10,7 @@ const routes = [
     { path: '/home', component: HomePage },
     { path: '/courses', component: Courses },
     { path: '/lessons', component: Lessons },
-    { path: '/lessons/:courseName/', component: Lessons },
+    { path: '/lessons/:courseId/', component: Lessons },
     { path: '/lessonItem/:lessonId', component: LessonItem },
     //This route should be last in the list because it can overcome the other ones (because it matches all routes)
     { path: '/*', component: HomePage }
