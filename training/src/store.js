@@ -3,13 +3,16 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
+//Store pattern made with vuex
+
+//It serves as the unique source of truth for the application, to make easier to communicate information to other components
+//
+
 export default new Vuex.Store({
     state: {
         currentLessonId: 1,
         otherLessonsIDs: [],
         treeViewItems: [],
-        sections: [],
-
     },
     getters: {
         currentLessonId: state => {
@@ -17,9 +20,6 @@ export default new Vuex.Store({
         },
         otherLessonsIDs: state => {
             return state.otherLessonsIDs
-        },
-        sections: state => {
-            return state.sections
         },
         treeViewItems: state => {
             return state.treeViewItems;
@@ -31,9 +31,6 @@ export default new Vuex.Store({
         },
         setOtherLessonsIDs(state, lessons) {
             Vue.set(state, 'otherLessonsIDs', lessons)
-        },
-        updateSections(state, sections) {
-            Vue.set(state, 'sections', sections)
         },
         updateTreeViewItems(state, treeViewItems) {
             Vue.set(state, 'treeViewItems', treeViewItems)

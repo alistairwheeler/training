@@ -12,7 +12,7 @@
             </v-btn>
 
             <ul id="lesson-list">
-                <li class="lesson-item" @click="onLessonClicked(lesson.row_id)" v-for="lesson in displayedLessons" :key="lesson.row_id">
+                <li class="lesson-item" @click="redirectToLesson(lesson.row_id)" v-for="lesson in displayedLessons" :key="lesson.row_id">
                     <a href="">
                         <div class="content-wrapper">
                             <div class="image-wrapper">
@@ -44,8 +44,8 @@
         }),
         methods: {
 
-            //------------ COMPONENT FUNCTIONS ------------
-            onLessonClicked(lessonId) {
+            //---------- COMPONENT FUNCTIONS ----------
+            redirectToLesson(lessonId) {
                 this.$router.push('/lessonItem/'+lessonId);
             },
 
@@ -58,60 +58,6 @@
             },
 
             //---------- SIMPLICITE DATA FETCHING ------------
-            async fetchTreeViewFromCourse(courseID){
-                return new Promise((resolve, reject)=> {
-                    this.$smp.treeview((treeView)=> {
-                        resolve(treeView.list)
-                    },'lrnTreeView', {service: 'page', object: 'LrnPlan', rowid: courseID, child: 'LrnPart'})
-                });
-            },
-
-            convertSmpTreeView(smpTreeView){
-
-                //Retrieve the sections :
-                let sections = smpTreeView.map(globalSection => globalSection.item); //item est réellement l'objet section, les sections sont donc récupérées
-                //Convert the sections to vuetify treeView objects
-                let tvSections = sections.map((elt) => ({id: elt.row_id, name: elt.lrnPrtTitle, children: []}));
-                //console.log("tvSections");
-                //console.log(tvSections);
-
-                //Retrieve the lessons :
-                let links = smpTreeView.map(globalSection => globalSection.links);
-                let arrayOfSectionFolder = links.map(link => link[0].list);
-                let lessons = [];
-                arrayOfSectionFolder.forEach(arraySection => {
-                    arraySection.forEach(lesson => lessons.push(lesson.item))
-                });
-
-                //Convert them to vuetify treeView objects and map them to the section
-                let tvLessons = lessons.map((elt) => ({id: elt.row_id, name: elt.lrnLsnTitle, sectionId: elt.lrnLsnPrtId}));
-                //console.log("tvLessons");
-                //console.log(tvLessons);
-                //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
-                for(let i = 0; i < tvLessons.length; i++){
-                    for (let j = 0; j < tvSections.length; j++) {
-                        if(tvLessons[i].sectionId === tvSections[j].id){
-                            tvSections[j].children.push(tvLessons[i])
-                        }
-                    }
-                }
-                this.$store.commit('updateTreeViewItems', tvSections);
-
-                //console.log("final treeView");
-                //console.log(tvSections);
-                return tvSections;
-            },
-
-            sortLessonIDs(treeViewItems){
-                let orderedIDs = [];
-                treeViewItems.forEach(section => {
-                    section.children.forEach(lesson => orderedIDs.push(parseInt(lesson.id)))
-                });
-                //console.log("orderedIDs");
-                //console.log(orderedIDs);
-                return orderedIDs;
-            },
-
             async fetchAllLessons(){
                 console.log("fetchAllLessons");
                 return new Promise((resolve, reject)=> {
@@ -142,19 +88,17 @@
                 })
             },
 
+            //---------- UTILITY ----------
             displayErrorMessage(){
-                alert('There was an error with the request');
+                console.log('There was an error with the request');
             }
         },
         //LIFECYCLE HOOKS
         async mounted() {
+            //If the user wants the lessons from a specific course
             if(this.$route.params.courseId){
                 let courseId =  parseInt(this.$route.params.courseId);
-                await this.fetchTreeViewFromCourse(courseId)
-                    .then(smpTreeView=> this.convertSmpTreeView(smpTreeView))
-                    .then(treeView => this.sortLessonIDs(treeView))
-                    .then(orderedLessonIDs => this.$store.commit('setOtherLessonsIDs', orderedLessonIDs))
-                    .then(() => this.fetchLessonsFromCourseID(courseId))
+                await this.fetchLessonsFromCourseID(courseId)
                     .then(lessons => {
                         if (Array.isArray(lessons) && lessons.length > 0) {
                             lessons.forEach((elt => {
@@ -167,27 +111,14 @@
                     .then(() => {
                         document.getElementById("page-title").innerText = "All available lessons for this course : ";
                     })
-                    .catch(()=> this.displayErrorMessage());
+                    .catch(() => this.displayErrorMessage());
             }
-             else {
-                 console.log("FETCHING ALL LESSONS");
+             else { //If the user is wants to look at all the lessons
                 await this.fetchAllLessons()
-                    .then(lessons => {
-                        lessons.map((elt => {
-                            this.displayedLessons.push(elt);
-                        }));
-                    }).catch(() => this.displayErrorMessage())
-                //lessons = this.sortLessonsBySection(lessons);
-
+                    .then(lessons => lessons.map(elt => this.displayedLessons.push(elt)))
+                    .catch(() => this.displayErrorMessage())
             }
-
         },
-        created() {
-            console.log("Lessons CREATED");
-        },
-        destroyed() {
-            console.info("Lessons DESTROYED");
-        }
     }
 </script>
 

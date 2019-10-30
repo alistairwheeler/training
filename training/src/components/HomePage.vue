@@ -18,36 +18,15 @@
         <div id="content-wrapper">
             <div id="text-wrapper">
                 <div id="courses-wrapper">
-                    <div class="card">
-                        <h1 class="card-title">Test the courses we built for you</h1>
-                        <p class="text-to-reveal">
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                            We created courses to make sure you could learn to use the simplicité platform in autonomy
-                        </p>
-                    </div>
+                    <v-card>
+                        <v-card-text>Follow our courses</v-card-text>
+                    </v-card>
                 </div>
                 <div id="documentation-wrapper">
                     <h1 class="section-title">find our documentation for developpers : </h1>
                 </div>
             </div>
         </div>
-
-        <!--<div class="button-container">
-            <v-btn id="header-btn"  color="deep-purple" x-large @click="goToCourses()" >LET'S GO</v-btn>
-        </div>-->
 
     </div>
 </template>
@@ -148,7 +127,6 @@
         font-size: 2em;
     }
 
-
     .card {
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transform: translateY(0);
@@ -187,26 +165,3 @@
     }
 </style>
 
-<!--<div>
-                <p>Discover Simplicité through the training platform</p>
-            </div>-->
-
-<!--<div class="button-container">
-    <v-btn id="header-btn"  color="deep-purple" x-large @click="goToCourses()" >LET'S GO</v-btn>
-</div>
-
-<div id="site-description-container">
-        <h2 class="homepage-subtitle">What's the purpose of this platform ?</h2>
-        <p>To help you train in complete autonomy, so you can master Simplicité and build powerful applications
-            for your
-            company. </p>
-        <h2 class="homepage-subtitle">How are we going to achieve it ?</h2>
-        <p>Simplicité's team prepared several sections for you to become an expert, learning at your own pace.
-            You're also going to practice your new skills with the exercices we created, where you'll be guided
-            step by step
-            to make sure you understand the platform.</p>
-        <div class="button-container">
-            <v-btn text class="action-btn" @click="goToCourses()">LET'S GO</v-btn>
-        </div>
-    </div>
--->

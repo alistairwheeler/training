@@ -4,7 +4,7 @@
             <h1 class="smp-purple">Available Courses :</h1>
 
             <div class="list-wrapper">
-                <v-card class="course-item" @click="onCourseClicked(course.row_id)" v-for="course in courses"
+                <v-card class="course-item" @click="redirectToLessons(course.row_id)" v-for="course in courses"
                         :key="course.row_id">
                     <div class="course-left">
                         <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
@@ -17,7 +17,7 @@
                         <p class="course-long-description">{{getDescription(course.lrnPlnLongDescription)}}</p>
                         <v-card-actions>
                             <div class="flex-grow-1"></div>
-                            <v-btn @click.stop="onCourseClicked(course.lrnPlnTitle)"
+                            <v-btn @click.stop="redirectToLessons(course.lrnPlnTitle)"
                                    text
                                    class="action-btn">
                                 Discover
@@ -43,10 +43,20 @@
             }
         },
         methods: {
-            onCourseClicked(courseId) {
+            //------- COMPONENT FUNCTIONS -------
+            redirectToLessons(courseId) {
                 this.$router.push('/lessons/' + courseId);
             },
 
+            getDescription(description) {
+                if (typeof (description) === 'undefined' || description === null)
+                    return ("There is no description for this course")
+                else if (description.length > 0) {
+                    return description;
+                }
+            },
+
+            //------- SIMPLICITE DATA FETCHING -------
             async fetchCourses() {
                 return new Promise((resolve, reject) => {
                     let course = this.$smp.getBusinessObject("LrnPlan");
@@ -60,13 +70,10 @@
                 });
             },
 
-            getDescription(description) {
-                if (typeof (description) === 'undefined' || description === null)
-                    return ("There is no description for this course")
-                else if (description.length > 0) {
-                    return description;
-                }
-            }
+            //------- UTILITY --------
+            displayErrorMessage(){
+
+            },
 
         },
 
@@ -74,10 +81,8 @@
         async created() {
             console.log("Courses CREATED");
             await this.fetchCourses()
-                .then(responseCourses => responseCourses.map((elt => {
-                    console.log(elt)
-                    this.courses.push(elt);
-                })));
+                .then(responseCourses => responseCourses.map(elt => this.courses.push(elt)))
+                .catch(() => this.displayErrorMessage());
         },
 
         destroyed() {

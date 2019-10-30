@@ -43,107 +43,110 @@
 
     export default {
         name: 'LessonItem',
-        data: function() {
+        data: function () {
             return {
                 displayedLesson: {},
             }
         },
         methods: {
+            //---------- SIMPLICITE DATA FETCHING & TREATMENTS ------------
             /**
              * Fetches the lesson with id given as argument
              * @returns {Promise<*>}
              */
             async fetchLesson(lessonId) {
-                console.log('fetchLesson')
                 return new Promise((resolve, reject) => {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
                     lessonObject.get((response) => {
-                        if (response){
-                            console.log(response)
+                        if (response) {
                             resolve(response);
-                        }
-                        else
+                        } else
                             reject("Could not load the lesson");
                     }, lessonId)
                 })
             },
 
-            async fetchSectionsFromCourse(courseName){
-                console.log("fetchSectionsFromCourse");
+            async fetchTreeViewFromCourse(courseID) {
+                console.log("fetchTreeViewFromCourse");
                 return new Promise((resolve, reject) => {
-                    let sectionObject = this.$smp.getBusinessObject("LrnPart");
-                    sectionObject.search(()=> {
-                        if(sectionObject.list){
-                            console.log(sectionObject.list)
-                            resolve(sectionObject.list)
-                        } else
-                            reject("Impossible to fetch sections")
-                    }, {"lrnPrtPlnId__lrnPlnTitle": courseName})
-                })
-            },
-
-            async fetchLessonsFromCourseID(courseName){
-                console.log("fetchLessonsFromCourseID");
-                return new Promise((resolve, reject)=> {
-                    let lessonObject = this.$smp.getBusinessObject("LrnLesson");
-                    lessonObject.search(()=> {
-                        if(lessonObject.list){
-                            console.log(lessonObject.list)
-                            resolve(lessonObject.list)
-                        } else {
-                            resolve('Could not load the content')
-                        }
-                    }, {'lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle': courseName})
-                })
-            },
-
-            sortLessonIDs(treeViewItems){
-                let orderedItems = [];
-                treeViewItems.forEach(section => {
-                   section.children.forEach(lesson => orderedItems.push(parseInt(lesson.id)))
+                    this.$smp.treeview((treeView) => {
+                        console.log("treeView.list");
+                        console.log(treeView.list);
+                        resolve(treeView.list)
+                    }, 'lrnTreeView', {service: 'page', object: 'LrnPlan', rowid: courseID, child: 'LrnPart'})
                 });
-                //treeViewItems.map((section) => {orderedItems.push(section.children.map(elt => elt))})
-                return orderedItems;
+            },
+
+            convertSmpTreeView(smpTreeView) {
+                console.log("convertSmpTreeView");
+                //Retrieve the sections :
+                let sections = smpTreeView.map(globalSection => globalSection.item); //item est réellement l'objet section, les sections sont donc récupérées
+                //Convert the sections to vuetify treeView objects
+                let tvSections = sections.map((elt) => ({id: elt.row_id, name: elt.lrnPrtTitle, children: []}));
+                console.log("tvSections");
+                console.log(tvSections);
+
+                //Retrieve the lessons :
+                let links = smpTreeView.map(globalSection => globalSection.links);
+                let arrayOfSectionFolder = links.map(link => link[0].list);
+                let lessons = [];
+                arrayOfSectionFolder.forEach(arraySection => {
+                    arraySection.forEach(lesson => lessons.push(lesson.item))
+                });
+
+                //Convert them to vuetify treeView objects and map them to the section
+                let tvLessons = lessons.map((elt) => ({
+                    id: elt.row_id,
+                    name: elt.lrnLsnTitle,
+                    sectionId: elt.lrnLsnPrtId
+                }));
+                console.log("tvLessons");
+                console.log(tvLessons);
+                //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
+                for (let i = 0; i < tvLessons.length; i++) {
+                    for (let j = 0; j < tvSections.length; j++) {
+                        if (tvLessons[i].sectionId === tvSections[j].id) {
+                            tvSections[j].children.push(tvLessons[i])
+                        }
+                    }
+                }
+                this.$store.commit('updateTreeViewItems', tvSections);
+
+                console.log("final treeView");
+                console.log(tvSections);
+                return tvSections;
+            },
+
+            sortLessonIDs(treeViewItems) {
+                console.log("sortLessonIDs");
+                let orderedIDs = [];
+                treeViewItems.forEach(section => {
+                    section.children.forEach(lesson => orderedIDs.push(parseInt(lesson.id)))
+                });
+                console.log("orderedIDs");
+                console.log(orderedIDs);
+                return orderedIDs;
+            },
+
+            // -------- UTILITY ---------
+            displayErrorMessage() {
+                console.error('There was an error with the request');
             }
         },
         async created() {
-            console.log("LessonItem CREATED");
-            //Get the lesson to display on the page
-            let lesson = await this.fetchLesson(this.$route.params.lessonId);
-            this.displayedLesson = Lesson.formatFromSimplicite(lesson);
-            this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id))
+            let lessonId = this.$route.params.lessonId;
 
-            /*
-
-            //Get the sections from the same course
-            let sections = await this.fetchSectionsFromCourse(this.displayedLesson.courseName);
-            let tvSections = await sections.map((elt) => ({id: elt.row_id, name: elt.lrnPrtTitle, children: []}));
-
-            //Get the other lessons from the same course
-            let lessons = await this.fetchLessonsFromCourseID(this.displayedLesson.courseName);
-            let tvLessons = await lessons.map((elt) => ({id: elt.row_id, name: elt.lrnLsnTitle, sectionId: elt.lrnLsnPrtId}));
-
-            //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
-            for(let i = 0; i < tvLessons.length; i++){
-                for (let j = 0; j < tvSections.length; j++) {
-                    if(tvLessons[i].sectionId === tvSections[j].id){
-                        tvSections[j].children.push(tvLessons[i])
-                    }
-                }
-            }
-            this.$store.commit('updateTreeViewItems', tvSections);
-
-            //Get the other lessons IDs from the same course
-            let orderedLessonIDs = this.sortLessonIDs(tvSections);
-            console.log(orderedLessonIDs);
-            this.$store.commit('setOtherLessonsIDs', orderedLessonIDs);
-*/
-
-        },
-
-
-        async mounted() {
-            console.log("LessonItem MOUNTED");
+            await this.fetchLesson(lessonId)
+                .then(lesson => {
+                    this.displayedLesson = Lesson.formatFromSimplicite(lesson);
+                    return lesson; //Doesn't work with resolve(lesson); see : https://stackoverflow.com/questions/27715275/whats-the-difference-between-returning-value-or-promise-resolve-from-then
+                }, err => console.log("error fetching lesson"))
+                .then(lesson => this.fetchTreeViewFromCourse(parseInt(lesson.lrnLsnPrtId__lrnPrtPlnId)), err => console.log("error fetching treeView"))
+                .then(smpTreeView => this.convertSmpTreeView(smpTreeView), err => console.log("error converting smpTreeView"))
+                .then(treeView => this.sortLessonIDs(treeView), err => console.log("error sorting IDs"))
+                .then(orderedLessonIDs => this.$store.commit('setOtherLessonsIDs', orderedLessonIDs), err => console.log("error updating store IDs"))
+                .then(() => this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id)), err => console.log("error updating store current id"))
+                .catch(err => this.displayErrorMessage());
         },
     }
 
