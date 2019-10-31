@@ -36,14 +36,15 @@
                 </div>
                 <div id="text-container">
                     <h1 class="promotion-title">Simplicite Software Training Platform</h1>
-                    <p class="promotion-text">Learn to master the Simplicite platform to help your
+                    <p class="promotion-text">
+                        Learn to master the Simplicite platform to help your
                         company build powerful applications, at lightning speed.</p>
 
                        <p class="promotion-text"> This training will help you understand the basics of how
                         our platform works and teach you the good practices to
                         become a great application designer </p>
 
-                    <v-btn class="try-button" x-large outlined link color="#387ED1" @click="redirectTo('/courses')">Try It </v-btn>
+                    <v-btn class="try-button" x-large outlined link color="white" @click="redirectTo('/courses')">Try It </v-btn>
 
                 </div>
             </div>
@@ -107,28 +108,10 @@
         align-items: center;
     }
 
-    @keyframes text-reveal {
-        0% {
-            opacity: 0.2;
-            display: block;
-        }
-        25% {
-            opacity: 0.25;
-            transform: translateY(25px);
-        }
-        75% {
-            opacity: 0.75;
-            transform: translateY(75px);
-        }
-        100%{
-            opacity: 1;
-            transform: translateY(100px);
-        }
-    }
-
     .try-button {
         align-self: center;
         outline: none;
+        margin-bottom: 15px;
     }
 
     #outer-div {
@@ -142,8 +125,8 @@
     .row-1 {
         display: flex;
         flex-flow: row;
-       /* background-color: coral;
-       */
+       background-color: #168CFF;
+
     }
 
     #video-wrapper, #text-container {
@@ -160,12 +143,11 @@
     #text-container {
         display: flex;
         flex-direction: column;
+        color: white;
        /* background-color: mediumaquamarine;
 
         */
     }
-    
-
     .promotion-title {
         font-size: 6em;
     }
