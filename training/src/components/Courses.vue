@@ -1,27 +1,23 @@
 <template>
     <div id="lesson-item-wrapper">
         <div id="wrapper">
-            <h1 class="smp-purple">Available Courses :</h1>
+            <h1 class="smp-blue">Tous les cours disponibles :</h1>
 
-            <div class="list-wrapper">
-                <v-card class="course-item" @click="redirectToLessons(course.row_id)" v-for="course in courses"
+            <div class="course-list-wrapper">
+                <v-card class="course-prev" @click="redirectToLessons(course.row_id)" v-for="course in courses"
                         :key="course.row_id">
-                    <div class="course-left">
-                        <img class="course-picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
+                    <div class="course-prev__picture-container">
+                        <img class="course-prev__picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
                              alt="course logo"/>
                     </div>
 
-                    <div class="course-right">
-                        <h2 class="course-level smp-coral">{{course.lrnPlnTitle}}</h2>
-                        <h3 class="course-short-description">{{getDescription(course.lrnPlnShortDescription)}}</h3>
-                        <p class="course-long-description">{{getDescription(course.lrnPlnLongDescription)}}</p>
+                    <div class="course-prev__info-container">
+                        <h2 class="course-prev__name smp-coral">{{course.lrnPlnTitle}}</h2>
+                        <h3 class="course-prev__short-description">{{getDescription(course.lrnPlnShortDescription)}}</h3>
+                        <p class="course-prev__long-description">{{getDescription(course.lrnPlnLongDescription)}}</p>
                         <v-card-actions>
                             <div class="flex-grow-1"></div>
-                            <v-btn @click.stop="redirectToLessons(course.lrnPlnTitle)"
-                                   text
-                                   class="action-btn">
-                                Discover
-                            </v-btn>
+                            <v-btn @click.stop="redirectToLessons(course.lrnPlnTitle)" text class="action-btn"> Discover </v-btn>
                         </v-card-actions>
                     </div>
                 </v-card>
@@ -100,12 +96,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        /*background-color: plum;*/
     }
 
     #wrapper {
         width: 80%;
-        /*background-color: green;*/
         display: flex;
         flex-direction: column;
     }
@@ -114,51 +108,50 @@
         margin-top: 20px;
     }
 
-    .list-wrapper {
+    .course-list-wrapper {
         display: flex;
         flex-direction: column;
     }
 
-    .course-item {
+    .course-prev {
         width: 100%;
         min-height: 200px;
         display: flex;
         margin-bottom: 30px;
-        /*background-color: plum;*/
         position: relative;
         transform: scale(1);
         transition: transform 400ms;
 
     }
 
-    .course-item:hover {
+    .course-prev:hover {
         transform: scale(1.01);
         transition: transform 200ms;
     }
 
-    .course-left {
+    .course-prev__picture-container {
         width: 30%;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .course-picture {
+    .course-prev__picture {
         height: 70%;
         width: 80%;
         border: solid black 0.3px;
     }
 
-    .course-right {
+    .course-prev__info-container {
         width: 70%;
         padding-top: 25px;
     }
 
-    .course-level {
+    .course-prev__name {
         font-size: 1em;
     }
 
-    .course-short-description {
+    .course-prev__short-description {
         font-size: 1.4em;
     }
 
@@ -169,7 +162,7 @@
         right: 10px;
     }
 
-    .course-long-description {
+    .course-prev__long-description {
         padding-right: 10px;
     }
 </style>

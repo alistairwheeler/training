@@ -38,8 +38,8 @@
             </v-btn>
 
             <v-toolbar-items>
-                <v-btn text to="/courses"> Courses</v-btn>
-                <v-btn text to="/lessons">Lessons</v-btn>
+                <v-btn text to="/courses">Cours</v-btn>
+                <v-btn text to="/lessons">Leçons</v-btn>
             </v-toolbar-items>
 
         </v-app-bar>
@@ -52,7 +52,7 @@
                 <!-- This makes the page reload when the url changes(check api doc for more info) -->
                 <v-snackbar id="snackbar" v-model="snackBar" :timeout="snbTimeOut">
                     <span id="snb-text"> {{snbText}} </span>
-                    <v-btn color="#F08A7B" text @click="snackBar = false">CLOSE</v-btn>
+                    <v-btn color="#F08A7B" text @click="snackBar = false">FERMER</v-btn>
                 </v-snackbar>
             </v-container>
         </v-content>
@@ -74,78 +74,6 @@
             treeview: [],
             sections: [],
             lessons: [],
-            items: [
-                {
-                    id: 1,
-                    name: 'Applications :',
-                    children: [
-                        {id: 2, name: 'Calendar : app'},
-                        {id: 3, name: 'Chrome : app'},
-                        {id: 4, name: 'Webstorm : app'},
-                    ],
-                },
-                {
-                    id: 5,
-                    name: 'Documents :',
-                    children: [
-                        {
-                            id: 6,
-                            name: 'vuetify :',
-                            children: [
-                                {
-                                    id: 7,
-                                    name: 'src :',
-                                    children: [
-                                        {id: 8, name: 'index : ts'},
-                                        {id: 9, name: 'bootstrap : ts'},
-                                    ],
-                                },
-                            ],
-                        },
-                        {
-                            id: 10,
-                            name: 'material2 :',
-                            children: [
-                                {
-                                    id: 11,
-                                    name: 'src :',
-                                    children: [
-                                        {id: 12, name: 'v-btn : ts'},
-                                        {id: 13, name: 'v-card : ts'},
-                                        {id: 14, name: 'v-window : ts'},
-                                    ],
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    id: 15,
-                    name: 'Downloads :',
-                    children: [
-                        {id: 16, name: 'October : pdf'},
-                        {id: 17, name: 'November : pdf'},
-                        {id: 18, name: 'Tutorial : html'},
-                    ],
-                },
-                {
-                    id: 19,
-                    name: 'Videos :',
-                    children: [
-                        {
-                            id: 20,
-                            name: 'Tutorials :',
-                            children: [
-                                {id: 21, name: 'Basic layouts : mp4'},
-                                {id: 22, name: 'Advanced techniques : mp4'},
-                                {id: 23, name: 'All about app : dir'},
-                            ],
-                        },
-                        {id: 24, name: 'Intro : mov'},
-                        {id: 25, name: 'Conference introduction : avi'},
-                    ],
-                },
-            ],
         }),
         created() {
 
@@ -168,11 +96,11 @@
                         this.$router.push("/lessonItem/" + lessonsIDs[indexOfLesson - 1]);
                     else {
                         this.shakeElement("previous-button");
-                        this.showSnackBar("There is no previous lesson in this course");
+                        this.showSnackBar("Il n'y a plus de leçons dans ce cours")
                     }
                 } else {
                     this.shakeElement("previous-button");
-                    this.showSnackBar("There is only one lesson in this course")
+                    this.showSnackBar("Il n'y a qu'une seule leçon dans ce cours")
                 }
 
             },
@@ -187,11 +115,11 @@
                         this.$router.push("/lessonItem/" + lessonsIDs[indexOfLesson + 1]);
                     else {
                         this.shakeElement("next-button");
-                        this.showSnackBar("There is no next lesson in this course")
+                        this.showSnackBar("Il n'y a plus de leçons dans ce cours")
                     }
                 } else {
                     this.shakeElement("next-button");
-                    this.showSnackBar("There is only one lesson in this course")
+                    this.showSnackBar("Il n'y a qu'une seule leçon dans ce cours")
                 }
 
             },
@@ -231,10 +159,10 @@
         list-style-type: none;
         outline: 0;
         font-family: 'Source Sans Pro', sans-serif;
+
     }
 
     .app {
-        background-color: green;
     }
 
     .content {

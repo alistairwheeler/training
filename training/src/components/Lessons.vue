@@ -1,7 +1,7 @@
 <template>
     <div id="lessons-wrapper">
         <div id="wrapper">
-            <h1 id="page-title" class="smp-purple">All available lessons </h1>
+            <h1 id="page-title" class="smp-blue">Toutes les leçons disponibles :</h1>
 
             <v-btn v-if="emptyList"
                    class="redirect-button ma-2"
@@ -12,17 +12,18 @@
             </v-btn>
 
             <ul id="lesson-list">
-                <li class="lesson-item" @click="redirectToLesson(lesson.row_id)" v-for="lesson in displayedLessons" :key="lesson.row_id">
+                <li class="lesson-prev" @click="redirectToLesson(lesson.row_id)" v-for="lesson in displayedLessons" :key="lesson.row_id">
                     <a href="">
                         <div class="content-wrapper">
                             <div class="image-wrapper">
-                                <img class="lesson-image"
+                                <img class="lesson-prev__image"
                                      src="https://picsum.photos/510/300?random"
                                      alt="lesson image">
                             </div>
+
                             <div class="information-wrapper">
-                                <h2 class="lesson-name course-name-blue">{{lesson.lrnLsnTitle}}</h2>
-                                <h3 class="course-name">{{lesson.lrnLsnPrtId__lrnPrtTitle}}</h3>
+                                <h2 class="lesson-prev__name">{{lesson.lrnLsnTitle}}</h2>
+                                <h3 class="lesson-prev__course-name">{{lesson.lrnLsnPrtId__lrnPrtTitle}}</h3>
                             </div>
                         </div>
                     </a>
@@ -143,12 +144,11 @@
 
     #lesson-list {
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-flow: row wrap;
         box-sizing: border-box;
     }
 
-    .lesson-item {
+    .lesson-prev {
         width: 33%;
         height: 18vw;
         display: flex;
@@ -159,20 +159,17 @@
         transition: transform 200ms;
     }
 
-    .lesson-item:hover {
+    .lesson-prev:hover {
         transform: scale(1.05);
         transition: transform 200ms;
     }
 
-    .lesson-item a {
+    .lesson-prev a {
         width: 100%;
         height: 100%;
         display: flex; /*Pas besoin de préciser la flex direction pcq le lien n'a qu'un enfant qui est .content-wrapper*/
         padding: 16px;
         text-decoration: none;
-    }
-
-    .lesson-item a:hover {
     }
 
     .content-wrapper {
@@ -190,7 +187,7 @@
         margin-bottom: 8px;
     }
 
-    .lesson-image {
+    .lesson-prev__image {
         width: 100%;
         height: 100%;
     }
@@ -199,24 +196,14 @@
         height: 30%;
     }
 
-    .course-name-purple, .course-name-red , .course-name-blue  {
+    .lesson-prev__course-name  {
         font-weight: normal;
         font-size: 2em;
-    }
-    .course-name-purple {
-        color: #7272FF;
-    }
-    .course-name-red {
-        color: red;
-    }
-    .course-name-blue {
-        color: #387ED1;
     }
 
-    .lesson-name {
+    .lesson-prev__name {
         font-size: 2em;
-        color: #387ED1;
-        font-weight: normal;
+        color: black;
     }
 
     .redirect-button {

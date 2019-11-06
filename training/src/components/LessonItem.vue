@@ -1,21 +1,15 @@
 <template>
     <div id="lesson-item-wrapper" v-cloak>
-        <div id="textual-content" class="col-6">
-            <h1 id="lesson-title" class="lesson-title smp-purple" v-html="displayedLesson.title"></h1>
-            <div id="learning-outcomes">
-                <h2 class="sub-part-title smp-coral">Learning Outcomes</h2>
-                <div id="learning-outcomes-wrapper" v-html="displayedLesson.learningOutcomes"></div>
+        <div class="lesson-content col-6">
+            <h1 class="lesson-content__title smp-blue" v-html="displayedLesson.title"></h1>
+            <div class="lesson-content__lrn-outcomes">
+                <h2 class="section-title">Objectifs Pédagogiques</h2>
+                <div id="learning-outcomes-container" v-html="displayedLesson.learningOutcomes"></div>
             </div>
 
-            <div id="general-concepts">
-                <h2 class="sub-part-title smp-coral">General Concepts : </h2>
-                <div id="concepts-wrapper" v-html="displayedLesson.genConcepts"></div>
+            <div class="lesson-concepts">
+                <div id="concepts-container" v-html="displayedLesson.genConcepts"></div>
 
-            </div>
-
-            <div id="exercise" @click="updateCurrentLessonID()">
-                <h2 class="sub-part-title smp-coral">Exercise : </h2>
-                <div id="exercise-wrapper" v-html="displayedLesson.exercise"></div>
             </div>
         </div>
 
@@ -31,6 +25,8 @@
                 </iframe>
             </div>
         </div>
+
+        <h1 id="error-message">Sorry, we could not load this lesson</h1>
 
     </div>
 
@@ -50,10 +46,6 @@
         },
         methods: {
             //---------- SIMPLICITE DATA FETCHING & TREATMENTS ------------
-            /**
-             * Fetches the lesson with id given as argument
-             * @returns {Promise<*>}
-             */
             async fetchLesson(lessonId) {
                 return new Promise((resolve, reject) => {
                     let lessonObject = this.$smp.getBusinessObject("LrnLesson");
@@ -130,7 +122,7 @@
 
             // -------- UTILITY ---------
             displayErrorMessage() {
-                console.error('There was an error with the request');
+                document.getElementById("error-message").style.visibility = "visible";
             }
         },
         async created() {
@@ -146,6 +138,7 @@
                 .then(treeView => this.sortLessonIDs(treeView), err => console.log("error sorting IDs"))
                 .then(orderedLessonIDs => this.$store.commit('setOtherLessonsIDs', orderedLessonIDs), err => console.log("error updating store IDs"))
                 .then(() => this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id)), err => console.log("error updating store current id"))
+                .then(() => document.getElementById("lesson-item-wrapper").style.visibility="visible")
                 .catch(err => this.displayErrorMessage());
         },
     }
@@ -162,14 +155,16 @@
     /*PAGE */
     #lesson-item-wrapper {
         display: flex;
+        visibility: hidden;
+
     }
 
-    #learning-outcomes, #general-concepts, #exercise {
+    .lesson-content__lrn-outcomes, .lesson-concepts, #exercise {
         display: flex;
         flex-flow: column nowrap;
     }
 
-    #textual-content {
+    .lesson-content {
         display: flex;
         flex-flow: column nowrap;
         overflow: hidden;
@@ -195,28 +190,31 @@
         margin-bottom: 3%;
     }
 
-    .lesson-title {
+    .lesson-content__title {
         font-size: 2em;
+        font-weight: bold;
+        border-bottom: solid #387ED1;
     }
 
-    .sub-part-title {
-        font-size: 2em;
+    div >>> h3, .section-title {  /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+        font-size: 2rem;
+        font-weight: bold;
+        padding-bottom: 3px;
+        border-bottom: solid #d2d2d2 1px;
     }
 
-    .gen-concept-subtitle {
-        font-size: 0.8em;
+    >>> h4 {
+        font-size: 1.8rem;
+        text-transform: capitalize;
+        font-weight: bold;
     }
 
-    .step-title {
-        color: black;
-        font-size: 1em;
+    >>> p {
+        text-align: justify;
     }
 
-    .sl-number {
-        font-size: 1em;
-        color: black;
+    #error-message {
+        visibility: hidden;
     }
-
-
 </style>
 

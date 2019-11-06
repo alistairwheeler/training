@@ -1,32 +1,5 @@
 <template>
     <div id="homepage-container">
-        <!--<div id="headline">
-            <v-carousel id="carousel" height="30vh" cycle interval="4000" hide-delimiters show-arrows-on-hover>
-                <v-carousel-item v-for="(slide, i) in slides" :key="i" >
-                    <v-img :src="slides[i].pictureUrl" alt="carousel image"> </v-img>
-                </v-carousel-item>
-            </v-carousel>
-
-            <div class="additional-information">
-                <div class="additional-information-wrapper">
-                    <h2 class="additional-information-title text-white ">Welcome To</h2>
-                    <h2 class="font-weight-bold text-white">Simplicité's Learning Center</h2>
-                </div>
-            </div>
-        </div>
-
-        <div id="content-wrapper">
-            <div id="text-wrapper">
-                <div id="courses-wrapper">
-                    <v-card>
-                        <v-card-text>Follow our courses</v-card-text>
-                    </v-card>
-                </div>
-                <div id="documentation-wrapper">
-                    <h1 class="section-title">find our documentation for developpers : </h1>
-                </div>
-            </div>
-        </div>-->
         <div id="outer-div">
             <div class="row-1">
                 <div id="video-wrapper">
@@ -34,15 +7,13 @@
                             width="712" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
                     </iframe>
                 </div>
-                <div id="text-container">
-                    <h1 class="promotion-title">Simplicite Software Training Platform</h1>
-                    <p class="promotion-text">
-                        Learn to master the Simplicite platform to help your
-                        company build powerful applications, at lightning speed.</p>
+                <div id="heading">
+                    <h1 class="heading__title">Simplicite Software Training Platform</h1>
+                    <p class="heading__promotion">
+                        Learn to master the Simplicite platform to help your company build powerful applications, at lightning speed.</p>
 
-                       <p class="promotion-text"> This training will help you understand the basics of how
-                        our platform works and teach you the good practices to
-                        become a great application designer </p>
+                       <p class="heading__promotion"> This training will help you understand the basics of how
+                        our platform works and teach you the good practices to become a great application designer </p>
 
                     <v-btn class="try-button" x-large outlined link color="white" @click="redirectTo('/courses')">Try It </v-btn>
 
@@ -50,7 +21,7 @@
             </div>
             <nav>
                 <ul class="nav-links">
-                    <li class="nav-item">
+                    <li>
                         <v-btn x-large class="text-white" link color="#387ED1" @click="redirectTo('https://simplicite.fr/')">Discover our offers </v-btn>
                     </li>
                     <li>
@@ -70,24 +41,7 @@
         name: 'HomePage',
         props: {},
         data: () => ({
-                slides: [
-                    {
-                        name: 'first',
-                        pictureUrl:'https://picsum.photos/510/300?random',
-                    },
-                    {
-                        name: 'second',
-                        pictureUrl:'https://picsum.photos/510/300?random',
-                    },
-                    {
-                        name: 'third',
-                        pictureUrl:'https://picsum.photos/510/300?random',
-                    },
-                    {
-                        name: 'fourth',
-                        pictureUrl:'https://picsum.photos/510/300?random',
-                    },
-                ],
+
         }),
         methods: {
             redirectTo(url) {
@@ -129,7 +83,7 @@
 
     }
 
-    #video-wrapper, #text-container {
+    #video-wrapper, #heading {
         width: 50%;
     }
     #video-wrapper {
@@ -140,7 +94,7 @@
 
         */
     }
-    #text-container {
+    #heading {
         display: flex;
         flex-direction: column;
         color: white;
@@ -148,11 +102,11 @@
 
         */
     }
-    .promotion-title {
+    .heading__title {
         font-size: 6em;
     }
 
-    .promotion-text {
+    .heading__promotion {
         font-size: 1.5em;
     }
 
