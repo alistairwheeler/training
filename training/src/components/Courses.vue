@@ -12,7 +12,7 @@
                     </div>
 
                     <div class="course-prev__info-container">
-                        <h2 class="course-prev__name smp-coral">{{course.lrnPlnTitle}}</h2>
+                        <h2 class="course-prev__name ">{{course.lrnPlnTitle}}</h2>
                         <h3 class="course-prev__short-description">{{getDescription(course.lrnPlnShortDescription)}}</h3>
                         <p class="course-prev__long-description">{{getDescription(course.lrnPlnLongDescription)}}</p>
                         <v-card-actions>
@@ -46,7 +46,8 @@
 
             getDescription(description) {
                 if (typeof (description) === 'undefined' || description === null)
-                    return ("There is no description for this course")
+                    return ("")
+                    //return ("There is no description for this course")
                 else if (description.length > 0) {
                     return description;
                 }
@@ -148,11 +149,12 @@
     }
 
     .course-prev__name {
-        font-size: 1em;
+        font-size: 1.3rem;
+        color: #387ED1;
     }
 
     .course-prev__short-description {
-        font-size: 1.4em;
+        font-size: 1.4rem;
     }
 
     .action-btn {

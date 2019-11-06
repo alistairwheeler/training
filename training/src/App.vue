@@ -69,7 +69,7 @@
         data: () => ({
             drawer: false,
             snackBar: false,
-            snbTimeOut: 4000,
+            snbTimeOut: 1200,
             snbText: '',
             treeview: [],
             sections: [],
@@ -124,9 +124,11 @@
 
             },
             redirectToLesson(item) {
-                console.log("redirecting !");
-                console.log(item);
-                this.$router.push('/lessonItem/'+item.id)
+                if (!item.children) { //Si l'item est bien une leçon et pas une section
+                    console.log("redirecting !");
+                    console.log(item);
+                    this.$router.push('/lessonItem/'+item.id)
+                }
             },
             shakeElement(elementId) {
                 document.getElementById(elementId).classList.add("animated");
@@ -158,7 +160,7 @@
         padding: 0;
         list-style-type: none;
         outline: 0;
-        font-family: 'Source Sans Pro', sans-serif;
+        font-family: 'Montserrat', sans-serif;
 
     }
 

@@ -1,19 +1,24 @@
 <template>
     <div id="lesson-item-wrapper" v-cloak>
         <div class="lesson-content col-6">
-            <h1 class="lesson-content__title smp-blue" v-html="displayedLesson.title"></h1>
-            <div class="lesson-content__lrn-outcomes">
+            <h1 class="lesson-title smp-blue" > <span class="underlined">{{displayedLesson.title}}</span></h1>
+
+            <div class="lesson-content__lrn-outcomes" v-if="displayedLesson.learningOutcomes">
                 <h2 class="section-title">Objectifs Pédagogiques</h2>
                 <div id="learning-outcomes-container" v-html="displayedLesson.learningOutcomes"></div>
             </div>
 
-            <div class="lesson-concepts">
+            <div class="lesson-concepts" v-if="displayedLesson.genConcepts">
                 <div id="concepts-container" v-html="displayedLesson.genConcepts"></div>
+            </div>
 
+            <div class="exercise" v-if="displayedLesson.exercise">
+                <h2>Pratiquez !</h2>
+                <div id="exercise-displayer" v-html="displayedLesson.exercise"></div>
             </div>
         </div>
 
-        <div id="support-content" class="col-6">
+        <div id="aside-content" class="col-6">
             <div id="pdf-container">
                 <embed :src="displayedLesson.pdfUrl" type="application/pdf" width="100%" height="100%">
             </div>
@@ -128,7 +133,7 @@
         async created() {
             let lessonId = this.$route.params.lessonId;
 
-            await this.fetchLesson(lessonId)
+            let lessonPromise =  await this.fetchLesson(lessonId)
                 .then(lesson => {
                     this.displayedLesson = Lesson.formatFromSimplicite(lesson);
                     return lesson; //Doesn't work with resolve(lesson); see : https://stackoverflow.com/questions/27715275/whats-the-difference-between-returning-value-or-promise-resolve-from-then
@@ -140,6 +145,8 @@
                 .then(() => this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id)), err => console.log("error updating store current id"))
                 .then(() => document.getElementById("lesson-item-wrapper").style.visibility="visible")
                 .catch(err => this.displayErrorMessage());
+
+
         },
     }
 
@@ -152,14 +159,17 @@
         display: none;
     }
 
-    /*PAGE */
+    #error-message {
+        visibility: hidden;
+    }
+
+    /* ----- LESSON CONTENT ----- */
     #lesson-item-wrapper {
         display: flex;
         visibility: hidden;
-
     }
 
-    .lesson-content__lrn-outcomes, .lesson-concepts, #exercise {
+    .lesson-content__lrn-outcomes, .lesson-concepts {
         display: flex;
         flex-flow: column nowrap;
     }
@@ -170,7 +180,45 @@
         overflow: hidden;
     }
 
-    #support-content {
+    .lesson-title {
+        font-size: 3rem;
+        font-weight: bold;
+        text-decoration: underline;
+        text-underline-position: under;
+        margin-bottom: 20px;
+    }
+
+
+    .lesson-content >>> h2, .exercise >>> h2{  /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+        font-size: 2.2rem;
+        font-weight: bold;
+        padding-bottom: 3px;
+        border-bottom: solid #d2d2d2 1px;
+    }
+
+    .lesson-content >>> h3, .section-title {  /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+        font-size: 1.7rem;
+        font-weight: bold;
+    }
+
+    .lesson-content >>> h4 {
+        font-size: 1.8rem;
+        font-style: italic;
+    }
+
+    .lesson-content >>> p {
+        text-align: justify;
+    }
+
+    .exercise >>> h3 {
+        font-size: 1.8rem;
+    }
+    .exercise >>> h4 {
+        font-size: 1.8rem;
+    }
+
+    /* ----- VIDEO & PDF -----*/
+    #aside-content {
         position: fixed;
         right: 0;
         display: flex;
@@ -190,31 +238,5 @@
         margin-bottom: 3%;
     }
 
-    .lesson-content__title {
-        font-size: 2em;
-        font-weight: bold;
-        border-bottom: solid #387ED1;
-    }
-
-    div >>> h3, .section-title {  /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
-        font-size: 2rem;
-        font-weight: bold;
-        padding-bottom: 3px;
-        border-bottom: solid #d2d2d2 1px;
-    }
-
-    >>> h4 {
-        font-size: 1.8rem;
-        text-transform: capitalize;
-        font-weight: bold;
-    }
-
-    >>> p {
-        text-align: justify;
-    }
-
-    #error-message {
-        visibility: hidden;
-    }
 </style>
 

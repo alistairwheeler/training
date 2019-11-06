@@ -103,11 +103,11 @@
         */
     }
     .heading__title {
-        font-size: 6em;
+        font-size: 4rem;
     }
 
     .heading__promotion {
-        font-size: 1.5em;
+        font-size: 1.5rem;
     }
 
     nav {

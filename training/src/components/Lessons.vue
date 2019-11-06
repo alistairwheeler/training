@@ -23,7 +23,7 @@
 
                             <div class="information-wrapper">
                                 <h2 class="lesson-prev__name">{{lesson.lrnLsnTitle}}</h2>
-                                <h3 class="lesson-prev__course-name">{{lesson.lrnLsnPrtId__lrnPrtTitle}}</h3>
+                                <h3 class="lesson-prev__section-name">{{lesson.lrnLsnPrtId__lrnPrtTitle}}</h3>
                             </div>
                         </div>
                     </a>
@@ -110,7 +110,7 @@
                         }
                     })
                     .then(() => {
-                        document.getElementById("page-title").innerText = "All available lessons for this course : ";
+                        document.getElementById("page-title").innerText = "Toutes les leçons disponibles du cours : " + this.displayedLessons[0].lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle;
                     })
                     .catch(() => this.displayErrorMessage());
             }
@@ -196,13 +196,13 @@
         height: 30%;
     }
 
-    .lesson-prev__course-name  {
+    .lesson-prev__section-name  {
         font-weight: normal;
-        font-size: 2em;
+        font-size: 1.5rem;
     }
 
     .lesson-prev__name {
-        font-size: 2em;
+        font-size: 1.9rem;
         color: black;
     }
 
