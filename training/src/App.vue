@@ -161,7 +161,6 @@
         list-style-type: none;
         outline: 0;
         font-family: 'Montserrat', sans-serif;
-
     }
 
     .app {

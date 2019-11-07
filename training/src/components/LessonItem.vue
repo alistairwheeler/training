@@ -1,6 +1,9 @@
 <template>
     <div id="lesson-item-wrapper" v-cloak>
         <div class="lesson-content col-6">
+
+            <v-breadcrumbs :items="items" divider=">"></v-breadcrumbs>
+
             <h1 class="lesson-title smp-blue" > <span class="underlined">{{displayedLesson.title}}</span></h1>
 
             <div class="lesson-content__lrn-outcomes" v-if="displayedLesson.learningOutcomes">
@@ -47,6 +50,7 @@
         data: function () {
             return {
                 displayedLesson: {},
+                items: []
             }
         },
         methods: {
@@ -75,13 +79,10 @@
             },
 
             convertSmpTreeView(smpTreeView) {
-                console.log("convertSmpTreeView");
                 //Retrieve the sections :
                 let sections = smpTreeView.map(globalSection => globalSection.item); //item est réellement l'objet section, les sections sont donc récupérées
                 //Convert the sections to vuetify treeView objects
                 let tvSections = sections.map((elt) => ({id: elt.row_id, name: elt.lrnPrtTitle, children: []}));
-                console.log("tvSections");
-                console.log(tvSections);
 
                 //Retrieve the lessons :
                 let links = smpTreeView.map(globalSection => globalSection.links);
@@ -97,8 +98,6 @@
                     name: elt.lrnLsnTitle,
                     sectionId: elt.lrnLsnPrtId
                 }));
-                console.log("tvLessons");
-                console.log(tvLessons);
                 //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
                 for (let i = 0; i < tvLessons.length; i++) {
                     for (let j = 0; j < tvSections.length; j++) {
@@ -109,19 +108,18 @@
                 }
                 this.$store.commit('updateTreeViewItems', tvSections);
 
-                console.log("final treeView");
-                console.log(tvSections);
                 return tvSections;
             },
 
+
+            // Maybe think about adding a field in the lesson object in Simplicité, so that the lesson writers can decide the display order of the lessons
+            // Exactly the same idea as the order value for business fields in Simplicité
+            // This way, if a lesson that is supposed to be at the beginning is added later as it should, it's not a problem;
             sortLessonIDs(treeViewItems) {
-                console.log("sortLessonIDs");
                 let orderedIDs = [];
                 treeViewItems.forEach(section => {
                     section.children.forEach(lesson => orderedIDs.push(parseInt(lesson.id)))
                 });
-                console.log("orderedIDs");
-                console.log(orderedIDs);
                 return orderedIDs;
             },
 
@@ -133,9 +131,12 @@
         async created() {
             let lessonId = this.$route.params.lessonId;
 
-            let lessonPromise =  await this.fetchLesson(lessonId)
+            await this.fetchLesson(lessonId)
                 .then(lesson => {
                     this.displayedLesson = Lesson.formatFromSimplicite(lesson);
+                    this.items.push({text: lesson.lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle, disabled: false, href: '/lessons/'+lesson.lrnLsnPrtId__lrnPrtPlnId})
+                    this.items.push({text: lesson.lrnLsnPrtId__lrnPrtTitle, disabled: false, href: '/lessons/'+lesson.lrnLsnPrtId__lrnPrtPlnId})
+                    this.items.push({text: lesson.lrnLsnTitle, disabled: false})
                     return lesson; //Doesn't work with resolve(lesson); see : https://stackoverflow.com/questions/27715275/whats-the-difference-between-returning-value-or-promise-resolve-from-then
                 }, err => console.log("error fetching lesson"))
                 .then(lesson => this.fetchTreeViewFromCourse(parseInt(lesson.lrnLsnPrtId__lrnPrtPlnId)), err => console.log("error fetching treeView"))
@@ -145,8 +146,6 @@
                 .then(() => this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id)), err => console.log("error updating store current id"))
                 .then(() => document.getElementById("lesson-item-wrapper").style.visibility="visible")
                 .catch(err => this.displayErrorMessage());
-
-
         },
     }
 
@@ -197,13 +196,12 @@
     }
 
     .lesson-content >>> h3, .section-title {  /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
-        font-size: 1.7rem;
+        font-size: 1.8rem;
         font-weight: bold;
     }
 
     .lesson-content >>> h4 {
-        font-size: 1.8rem;
-        font-style: italic;
+        font-size: 1.5rem;
     }
 
     .lesson-content >>> p {
@@ -214,7 +212,7 @@
         font-size: 1.8rem;
     }
     .exercise >>> h4 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
 
     /* ----- VIDEO & PDF -----*/
