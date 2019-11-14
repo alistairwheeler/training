@@ -100,6 +100,7 @@
             if(this.$route.params.courseId){
                 let courseId =  parseInt(this.$route.params.courseId);
                 await this.fetchLessonsFromCourseID(courseId)
+                    .then(lessons => lessons.sort((les1, les2) => les1.lrnLsnOrder - les2.lrnLsnOrder))
                     .then(lessons => {
                         if (Array.isArray(lessons) && lessons.length > 0) {
                             lessons.forEach((elt => {
@@ -116,6 +117,7 @@
             }
              else { //If the user is wants to look at all the lessons
                 await this.fetchAllLessons()
+                    .then(lessons => lessons.sort((les1, les2) => les1.lrnLsnOrder - les2.lrnLsnOrder))
                     .then(lessons => lessons.map(elt => this.displayedLessons.push(elt)))
                     .catch(() => this.displayErrorMessage())
             }

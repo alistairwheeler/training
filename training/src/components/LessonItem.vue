@@ -2,9 +2,9 @@
     <div id="lesson-item-wrapper" v-cloak>
         <div class="lesson-content col-6">
 
-            <v-breadcrumbs :items="items" divider=">"></v-breadcrumbs>
-
             <h1 class="lesson-title smp-blue" > <span class="underlined">{{displayedLesson.title}}</span></h1>
+
+            <v-breadcrumbs :items="breadCrumbItems" divider=">"></v-breadcrumbs>
 
             <div class="lesson-content__lrn-outcomes" v-if="displayedLesson.learningOutcomes">
                 <h2 class="section-title">Objectifs Pédagogiques</h2>
@@ -50,7 +50,7 @@
         data: function () {
             return {
                 displayedLesson: {},
-                items: []
+                breadCrumbItems: []
             }
         },
         methods: {
@@ -71,8 +71,6 @@
                 console.log("fetchTreeViewFromCourse");
                 return new Promise((resolve, reject) => {
                     this.$smp.treeview((treeView) => {
-                        console.log("treeView.list");
-                        console.log(treeView.list);
                         resolve(treeView.list)
                     }, 'lrnTreeView', {service: 'page', object: 'LrnPlan', rowid: courseID, child: 'LrnPart'})
                 });
@@ -96,7 +94,8 @@
                 let tvLessons = lessons.map((elt) => ({
                     id: elt.row_id,
                     name: elt.lrnLsnTitle,
-                    sectionId: elt.lrnLsnPrtId
+                    sectionId: elt.lrnLsnPrtId,
+                    order: elt.lrnLsnOrder,
                 }));
                 //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
                 for (let i = 0; i < tvLessons.length; i++) {
@@ -106,15 +105,15 @@
                         }
                     }
                 }
+                //Now, for each section, we take the lessons in it (children) and order them by their order field
+                for (let j = 0; j < tvSections.length; j++) {
+                        tvSections[j].children.sort((les1, les2) => les1.order - les2.order);
+                }
                 this.$store.commit('updateTreeViewItems', tvSections);
 
                 return tvSections;
             },
 
-
-            // Maybe think about adding a field in the lesson object in Simplicité, so that the lesson writers can decide the display order of the lessons
-            // Exactly the same idea as the order value for business fields in Simplicité
-            // This way, if a lesson that is supposed to be at the beginning is added later as it should, it's not a problem;
             sortLessonIDs(treeViewItems) {
                 let orderedIDs = [];
                 treeViewItems.forEach(section => {
@@ -134,16 +133,22 @@
             await this.fetchLesson(lessonId)
                 .then(lesson => {
                     this.displayedLesson = Lesson.formatFromSimplicite(lesson);
-                    this.items.push({text: lesson.lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle, disabled: false, href: '/lessons/'+lesson.lrnLsnPrtId__lrnPrtPlnId})
-                    this.items.push({text: lesson.lrnLsnPrtId__lrnPrtTitle, disabled: false, href: '/lessons/'+lesson.lrnLsnPrtId__lrnPrtPlnId})
-                    this.items.push({text: lesson.lrnLsnTitle, disabled: false})
+                    // Populate the breadcrumb (fil d'Arianne)
+                    this.breadCrumbItems.push({text: lesson.lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle, disabled: false, href: '/lessons/'+lesson.lrnLsnPrtId__lrnPrtPlnId})
+                    this.breadCrumbItems.push({text: lesson.lrnLsnPrtId__lrnPrtTitle, disabled: false, href: '/lessons/'+lesson.lrnLsnPrtId__lrnPrtPlnId})
+                    this.breadCrumbItems.push({text: lesson.lrnLsnTitle, disabled: false})
                     return lesson; //Doesn't work with resolve(lesson); see : https://stackoverflow.com/questions/27715275/whats-the-difference-between-returning-value-or-promise-resolve-from-then
                 }, err => console.log("error fetching lesson"))
-                .then(lesson => this.fetchTreeViewFromCourse(parseInt(lesson.lrnLsnPrtId__lrnPrtPlnId)), err => console.log("error fetching treeView"))
-                .then(smpTreeView => this.convertSmpTreeView(smpTreeView), err => console.log("error converting smpTreeView"))
-                .then(treeView => this.sortLessonIDs(treeView), err => console.log("error sorting IDs"))
-                .then(orderedLessonIDs => this.$store.commit('setOtherLessonsIDs', orderedLessonIDs), err => console.log("error updating store IDs"))
-                .then(() => this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id)), err => console.log("error updating store current id"))
+                .then(lesson => this.fetchTreeViewFromCourse(parseInt(lesson.lrnLsnPrtId__lrnPrtPlnId)),
+                    err => console.log("error fetching treeView"))
+                .then(smpTreeView => this.convertSmpTreeView(smpTreeView),
+                    err => console.log("error converting smpTreeView"))
+                .then(treeView => this.sortLessonIDs(treeView),
+                    err => console.log("error sorting IDs"))
+                .then(orderedLessonIDs => this.$store.commit('setOtherLessonsIDs', orderedLessonIDs),
+                    err => console.log("error updating store IDs"))
+                .then(() => this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id)),
+                    err => console.log("error updating store current id"))
                 .then(() => document.getElementById("lesson-item-wrapper").style.visibility="visible")
                 .catch(err => this.displayErrorMessage());
         },
@@ -199,20 +204,18 @@
         font-size: 1.8rem;
         font-weight: bold;
     }
-
     .lesson-content >>> h4 {
         font-size: 1.5rem;
+    }
+    .lesson-content >>> h5 {
+        font-size: 1.2rem;
+    }
+    .lesson-content >>> h6 {
+        font-size: 1.1rem;
     }
 
     .lesson-content >>> p {
         text-align: justify;
-    }
-
-    .exercise >>> h3 {
-        font-size: 1.8rem;
-    }
-    .exercise >>> h4 {
-        font-size: 1.5rem;
     }
 
     /* ----- VIDEO & PDF -----*/
