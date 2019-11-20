@@ -18,6 +18,5 @@ const routes = [
 
 //2. Exporting the router instance
 export default  new VueRouter({
-    base: '/front/',
     mode: 'history',
     routes});
