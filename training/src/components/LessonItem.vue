@@ -14,11 +14,6 @@
             <div class="lesson-concepts" v-if="displayedLesson.genConcepts">
                 <div id="concepts-container" v-html="displayedLesson.genConcepts"></div>
             </div>
-
-            <div class="exercise" v-if="displayedLesson.exercise">
-                <h2>Pratiquez !</h2>
-                <div id="exercise-displayer" v-html="displayedLesson.exercise"></div>
-            </div>
         </div>
 
         <div id="aside-content" class="col-6">
