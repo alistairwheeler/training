@@ -17,7 +17,7 @@ import router from './router'
 import store from './store'
 
 //4. Use the simplicite API :
-Vue.prototype.$smp = new Simplicite.Ajax('https://maxime.dev.simplicite.io', 'api', 'designer', 'simplicite');
+Vue.prototype.$smp = new Simplicite.Ajax('https://maxime2.dev.simplicite.io', 'api', 'designer', 'simplicite');
 
 //5. Creating the Vue instance with the router, the store and el:'#app' as the root instance of vue
 new Vue({
