@@ -7,28 +7,12 @@
                    class="redirect-button ma-2"
                    outlined
                    color="#387ED1"
-                   @click="redirectToCourses()">
+                   @click="this.$router.push('/courses')">
                 Return to courses
             </v-btn>
 
-            <ul id="lesson-list">
-                <li class="lesson-prev" @click="redirectToLesson(lesson.row_id)" v-for="lesson in displayedLessons" :key="lesson.row_id">
-                    <a href="">
-                        <div class="content-wrapper">
-                            <div class="image-wrapper">
-                                <img class="lesson-prev__image"
-                                     src="https://picsum.photos/510/300?random"
-                                     alt="lesson image">
-                            </div>
+            <ItemList itemType="lessons" :course-id="courseID"></ItemList>
 
-                            <div class="information-wrapper">
-                                <h2 class="lesson-prev__name">{{lesson.lrnLsnTitle}}</h2>
-                                <h3 class="lesson-prev__section-name">{{lesson.lrnLsnPrtId__lrnPrtTitle}}</h3>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
         </div>
     </div>
 </template>
@@ -36,90 +20,27 @@
 <script>
     /* eslint-disable no-unused-vars,no-console */
 
+    import ItemList from "./ItemList";
+
     export default {
         name: 'Lessons',
-        props: {},
+        components: {ItemList},
         data: () => ({
             displayedLessons: [],
+            courseID: 0,
             emptyList: false,
         }),
         methods: {
-
-            //---------- COMPONENT FUNCTIONS ----------
             redirectToLesson(lessonId) {
-                this.$router.push('/lessonItem/'+lessonId);
+                this.$router.push('/lessonItem/' + lessonId);
             },
-
-            getCourseColor() {
-                    return 'course-name-blue'
-            },
-
-            redirectToCourses(){
-                this.$router.push('/courses')
-            },
-
-            //---------- SIMPLICITE DATA FETCHING ------------
-            async fetchAllLessons(){
-                console.log("fetchAllLessons");
-                return new Promise((resolve, reject)=> {
-                    let lessonObject = this.$smp.getBusinessObject("LrnLesson");
-                    lessonObject.search(()=> {
-                        if(lessonObject.list){
-                            resolve(lessonObject.list)
-                        } else {
-                            resolve('Could not load the content')
-                        }
-                    }, {})
-                })
-            },
-
-            async fetchLessonsFromCourseID(courseId){
-                return new Promise((resolve, reject) => {
-                    let lessonObject = this.$smp.getBusinessObject("LrnLesson");
-                    lessonObject.search(() => {
-                        if (lessonObject.list){
-                            console.log("lessonObject.list");
-                            console.log(lessonObject.list);
-                            resolve(lessonObject.list);
-                        }
-                         else {
-                            reject("Could not load the content")
-                        }
-                    }, {"lrnLsnPrtId__lrnPrtPlnId": courseId});
-                })
-            },
-
-            //---------- UTILITY ----------
-            displayErrorMessage(){
-                console.log('There was an error with the request');
-            }
         },
-        //LIFECYCLE HOOKS
-        async mounted() {
+        async created() {
             //If the user wants the lessons from a specific course
-            if(this.$route.params.courseId){
-                let courseId =  parseInt(this.$route.params.courseId);
-                await this.fetchLessonsFromCourseID(courseId)
-                    .then(lessons => lessons.sort((les1, les2) => les1.lrnLsnOrder - les2.lrnLsnOrder))
-                    .then(lessons => {
-                        if (Array.isArray(lessons) && lessons.length > 0) {
-                            lessons.forEach((elt => {
-                                this.displayedLessons.push(elt);
-                            }));
-                        } else {
-                            this.emptyList = true;
-                        }
-                    })
-                    .then(() => {
-                        document.getElementById("page-title").innerText = "Toutes les leçons disponibles du cours : " + this.displayedLessons[0].lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle;
-                    })
-                    .catch(() => this.displayErrorMessage());
-            }
-             else { //If the user is wants to look at all the lessons
-                await this.fetchAllLessons()
-                    .then(lessons => lessons.sort((les1, les2) => les1.lrnLsnOrder - les2.lrnLsnOrder))
-                    .then(lessons => lessons.map(elt => this.displayedLessons.push(elt)))
-                    .catch(() => this.displayErrorMessage())
+            if (this.$route.params.courseId) {
+                this.courseID = parseInt(this.$route.params.courseId);
+            } else { //If the user is wants to look at all the lessons
+                this.courseID = 0;
             }
         },
     }
@@ -150,7 +71,7 @@
         box-sizing: border-box;
     }
 
-    .lesson-prev {
+    .item-prev {
         width: 33%;
         height: 18vw;
         display: flex;
@@ -161,12 +82,12 @@
         transition: transform 200ms;
     }
 
-    .lesson-prev:hover {
+    .item-prev:hover {
         transform: scale(1.05);
         transition: transform 200ms;
     }
 
-    .lesson-prev a {
+    .item-prev a {
         width: 100%;
         height: 100%;
         display: flex; /*Pas besoin de préciser la flex direction pcq le lien n'a qu'un enfant qui est .content-wrapper*/
@@ -198,12 +119,12 @@
         height: 30%;
     }
 
-    .lesson-prev__section-name  {
+    .lesson-prev__section-name {
         font-weight: normal;
         font-size: 1.5rem;
     }
 
-    .lesson-prev__name {
+    .item-prev__name {
         font-size: 1.9rem;
         color: black;
     }

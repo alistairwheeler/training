@@ -104,7 +104,7 @@
                 for (let j = 0; j < tvSections.length; j++) {
                         tvSections[j].children.sort((les1, les2) => les1.order - les2.order);
                 }
-                this.$store.commit('updateTreeViewItems', tvSections);
+                this.$store.commit('UPDATE_TREEVIEW_ITEMS', tvSections);
 
                 return tvSections;
             },
@@ -140,9 +140,9 @@
                     err => console.log("error converting smpTreeView"))
                 .then(treeView => this.sortLessonIDs(treeView),
                     err => console.log("error sorting IDs"))
-                .then(orderedLessonIDs => this.$store.commit('setOtherLessonsIDs', orderedLessonIDs),
+                .then(orderedLessonIDs => this.$store.commit('SET_OTHER_LESSONS_IDs', orderedLessonIDs),
                     err => console.log("error updating store IDs"))
-                .then(() => this.$store.commit('updateCurrentLessonId', parseInt(this.displayedLesson.row_id)),
+                .then(() => this.$store.commit('UPDATE_CURRENT_LESSON_ID', parseInt(this.displayedLesson.row_id)),
                     err => console.log("error updating store current id"))
                 .then(() => document.getElementById("lesson-item-wrapper").style.visibility="visible")
                 .catch(err => this.displayErrorMessage());

@@ -125,9 +125,10 @@
             },
             redirectToLesson(item) {
                 if (!item.children) { //Si l'item est bien une leçon et pas une section
-                    console.log("redirecting !");
                     console.log(item);
                     this.$router.push('/lessonItem/'+item.id)
+                } else if (item.children){ //si l'item est une section (pcq il a des enfants).
+                    this.$router.push('/courses/section/'+item.id)
                 }
             },
             shakeElement(elementId) {
