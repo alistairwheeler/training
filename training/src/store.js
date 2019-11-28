@@ -85,7 +85,6 @@ export default new Vuex.Store({
         },
 
         PUSH_COURSES(state, course) {
-            console.log("PUSH_COURSES : ");
             if(state.courses.find(elt => elt.row_id === course.row_id) === undefined){
                 state.courses.push(course);
             } else{
@@ -94,7 +93,6 @@ export default new Vuex.Store({
         },
 
         PUSH_LESSON(state, lesson) {
-            console.log("PUSH_LESSON : ");
             if( state.lessons.find(elt => elt.row_id === lesson.row_id) === undefined){
                 state.lessons.push(lesson);
             } else {
@@ -119,7 +117,6 @@ export default new Vuex.Store({
         },
 
         UPDATE_COURSES(state, courses) {
-            console.log("UPDATE_COURSES");
             state.courses = courses;
         },
 
@@ -129,13 +126,11 @@ export default new Vuex.Store({
     },
     actions: {
         updateDisplayedLesson({commit}, lesson) {
-            console.log("updating displayedLesson with this object : ");
             console.log(lesson);
             commit('UPDATE_DISPLAYED_LESSON', lesson);
         },
 
         async fetchCourses({commit}, smp) {
-            console.log("fetchCourses");
             return new Promise((resolve, reject) => {
                 let course = smp.getBusinessObject("LrnPlan");
                 course.search(() => {
@@ -150,7 +145,6 @@ export default new Vuex.Store({
         },
 
         async fetchLesson(context, payload) {
-            console.log("fetchLesson");
             return new Promise((resolve, reject) => {
                 let lessonObject = payload.smp.getBusinessObject("LrnLesson");
                 lessonObject.get((response) => {
@@ -166,7 +160,6 @@ export default new Vuex.Store({
         },
 
         async fetchAllLessons({commit}, smp) {
-            console.log("fetchAllLessons");
             return new Promise((resolve, reject) => {
                 let lessonObject = smp.getBusinessObject("LrnLesson");
                 lessonObject.search(() => {
@@ -182,7 +175,6 @@ export default new Vuex.Store({
         },
 
         async fetchLessonsFromCourseID(context, payload) {
-            console.log("fetchLessonsFromCourseID");
             return new Promise((resolve, reject) => {
                 let lessonObject = payload.smp.getBusinessObject("LrnLesson");
                 lessonObject.search(() => {
@@ -201,7 +193,6 @@ export default new Vuex.Store({
         },
 
         async fetchLessonsFromSection(context, payload) {
-            console.log("fetchLessonsFromSection");
             return new Promise((resolve, reject) => {
                 let lessonObject = payload.smp.getBusinessObject("LrnLesson");
                 lessonObject.search(() => {
@@ -216,7 +207,6 @@ export default new Vuex.Store({
         },
 
         async fetchTreeViewFromCourse(context, payload) {
-            console.log("fetchTreeViewFromCourse");
             return new Promise((resolve, reject) => {
                 payload.smp.treeview((treeView) => {
                     console.log(treeView);

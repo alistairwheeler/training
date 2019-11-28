@@ -165,6 +165,18 @@
             };
             this.$store.dispatch('fetchTreeViewFromCourse', payload)
 
+            this.breadCrumbItems.push({
+                text: this.lessonToDisplay.courseName,
+                disabled: false,
+                href: '/lessons/' + this.lessonToDisplay.courseId,
+            })
+            this.breadCrumbItems.push({
+                text: this.lessonToDisplay.sectionName,
+                disabled: false,
+                href: '/lessons/' + this.lessonToDisplay.sectionId
+            })
+            this.breadCrumbItems.push({text: this.lessonToDisplay.title, disabled: false})
+
             /*
                         //TODO : modify this component to match the new way of working of the store
 

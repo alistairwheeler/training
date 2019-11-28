@@ -7,9 +7,9 @@
                         color="warning"
                         open-on-click
                         transition
-                        @update:active="redirectToLesson()">
+                        @update:active="isItemSelected()">
                 <template slot="label" slot-scope="{ item }">
-                    <a @click="redirectToLesson(item)">{{ item.name }}</a>
+                    <a @click="redirectToLesson(item)" >{{ item.name }}</a>
                 </template>
             </v-treeview>
         </v-navigation-drawer>
@@ -122,10 +122,12 @@
             },
 
             redirectToLesson(item) {
+                console.log("item.id : ");
+                console.log(item.id);
                 if (!item.children) { //Si l'item est bien une leçon et pas une section
-                    console.log(item);
                     this.$router.push('/lessonItem/'+item.id)
                 } else if (item.children){ //si l'item est une section (pcq il a des enfants).
+                    console.log("item has children");
                     this.$router.push('/lessons/section/'+item.id)
                 }
             },
@@ -150,6 +152,14 @@
                 this.snackBar = true;
             },
         },
+        created() {
+            this.treeview.forEach(section => {
+                section.forEach(children => {
+                    if (children.id === 7 || children.id === 5 || children.id === 8)
+                        children.active = true;
+                })
+            })
+        }
     };
 </script>
 

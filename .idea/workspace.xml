@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="80f40282-68d4-4648-82bb-1a518a76a849" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/training/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/training/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/training/src/components/LessonItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/training/src/components/LessonItem.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/training/src/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/training/src/store.js" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/training/src/store.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="124" column="10" selection-start-line="124" selection-start-column="10" selection-end-line="124" selection-end-column="10" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#21#42#0" expanded="true" />
+                <element signature="e#677#731#0" />
+                <element signature="e#768#820#0" />
+                <element signature="e#857#909#0" />
+                <element signature="e#944#995#0" />
+                <element signature="e#1032#1084#0" />
+                <element signature="e#1113#1158#0" />
+                <element signature="e#1198#1292#0" />
+                <element signature="e#1321#1366#0" />
+                <element signature="e#1416#1723#0" />
+                <element signature="e#1789#2165#0" />
+                <element signature="e#2233#2597#0" />
+                <element signature="e#2637#2771#0" />
+                <element signature="e#2840#2896#0" />
+                <element signature="e#2935#3214#0" />
+                <element signature="e#3252#3532#0" />
+                <element signature="e#3579#3640#0" />
+                <element signature="e#3692#3758#0" />
+                <element signature="e#3814#3884#0" />
+                <element signature="e#3934#4000#0" />
+                <element signature="e#4042#4133#0" />
+                <element signature="e#4175#4223#0" />
+                <element signature="e#4295#4467#0" />
+                <element signature="e#4512#5120#0" />
+                <element signature="e#5167#5808#0" />
+                <element signature="e#5856#6474#0" />
+                <element signature="e#6534#7445#0" />
+                <element signature="e#7504#8119#0" />
+                <element signature="e#8178#8732#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/training/src/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="111">
+              <caret line="18" column="20" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="20" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/training/src/Helper.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+              <folding>
+                <element signature="n#!!block;n#convertSmpTreeView#0" />
+                <element signature="n#!!block;n#sortLessonIDs#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/training/src/Models/Lesson.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="22" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/training/src/components/LessonItem.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="177" column="71" selection-start-line="177" selection-start-column="71" selection-end-line="177" selection-end-column="71" />
+              <folding>
+                <element signature="e#2409#2851#0" />
+                <element signature="e#3315#5333#0" />
+                <element signature="e#5377#5628#0" />
+                <element signature="e#7399#8948#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/training/src/App.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-212">
+              <caret line="66" column="20" lean-forward="true" selection-start-line="66" selection-start-column="20" selection-end-line="66" selection-end-column="20" />
+              <folding>
+                <element signature="n#v-app-bar#0;n#v-app#0;n#template#0;n#!!top" />
+                <element signature="n#v-text-field#0;n#v-app-bar#0;n#v-app#0;n#template#0;n#!!top" />
+                <element signature="n#v-content#0;n#v-app#0;n#template#0;n#!!top" />
+                <element signature="e#2755#2954#0" />
+                <element signature="e#3008#3067#0" />
+                <element signature="e#3090#3188#0" />
+                <element signature="e#3223#4062#0" />
+                <element signature="e#4094#4909#0" />
+                <element signature="e#4971#5716#0" />
+                <element signature="e#5090#5486#0" />
+                <element signature="e#5393#5638#0" />
+                <element signature="e#5666#5732#0" />
+                <element signature="e#5774#5840#0" />
+                <element signature="n#style#0;n#!!top" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>computed</find>
+      <find>UPDATE_TREEVIEW_ITEMS</find>
+      <find>title</find>
+      <find>lessons</find>
+      <find>fetchLessonsFrom</find>
+      <find>lrnLsnPrtId__lrnPrtPlnId</find>
+      <find>row_id</find>
+      <find>parseInt</find>
+      <find>convert</find>
+      <find>formatted</find>
+      <find>coursesAsList</find>
+      <find>displayE</find>
+      <find>displayError</find>
+      <find>sectionId :</find>
+      <find>sectionId</find>
+      <find>UPDATE_LESS</find>
+      <find>displa</find>
+      <find>displayed</find>
+      <find>les</find>
+      <find>smpTreeview.map</find>
+      <find>hidden</find>
+      <find>currentLessonId</find>
+      <find>redirectToLesson</find>
+      <find>UPDATE_CURRENT</find>
+      <find>UPDATE_current</find>
+      <find>maxime.dev</find>
+      <find>UPDATE</find>
+      <find>maxime</find>
+      <find>smp</find>
+      <find>child.id</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>courseId</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/training/src/components/HomePage.vue" />
+        <option value="$PROJECT_DIR$/training/src/components/List.vue" />
+        <option value="$PROJECT_DIR$/training/src/router.js" />
+        <option value="$PROJECT_DIR$/training/src/main.js" />
+        <option value="$PROJECT_DIR$/training/src/components/Courses.vue" />
+        <option value="$PROJECT_DIR$/training/src/components/Lessons.vue" />
+        <option value="$PROJECT_DIR$/training/src/Models/ListItem.js" />
+        <option value="$PROJECT_DIR$/training/src/components/ItemList.vue" />
+        <option value="$PROJECT_DIR$/training/src/Models/Lesson.js" />
+        <option value="$PROJECT_DIR$/training/src/Helper.js" />
+        <option value="$PROJECT_DIR$/training/public/index.html" />
+        <option value="$PROJECT_DIR$/training/src/store.js" />
+        <option value="$PROJECT_DIR$/training/src/App.vue" />
+        <option value="$PROJECT_DIR$/training/src/components/LessonItem.vue" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+        <option value="$PROJECT_DIR$/.idea/training.iml" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+        <option value="$PROJECT_DIR$/.idea/misc.xml" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="950" />
+    <option name="width" value="980" />
+    <option name="height" value="1040" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="training" type="b2602c69:ProjectViewProjectNode" />
+              <item name="training" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="training" type="b2602c69:ProjectViewProjectNode" />
+              <item name="training" type="462c0819:PsiDirectoryNode" />
+              <item name="training" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="training" type="b2602c69:ProjectViewProjectNode" />
+              <item name="training" type="462c0819:PsiDirectoryNode" />
+              <item name="training" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="training" type="b2602c69:ProjectViewProjectNode" />
+              <item name="training" type="462c0819:PsiDirectoryNode" />
+              <item name="training" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Models" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2019.1.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="80f40282-68d4-4648-82bb-1a518a76a849" name="Default Changelist" comment="" />
+      <created>1574263341530</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1574263341530</updated>
+      <workItem from="1574263342788" duration="5412000" />
+      <workItem from="1574327277801" duration="451000" />
+      <workItem from="1574332057698" duration="15982000" />
+      <workItem from="1574687187506" duration="806000" />
+      <workItem from="1574770812263" duration="631000" />
+      <workItem from="1574795040825" duration="631000" />
+      <workItem from="1574844405142" duration="25990000" />
+      <workItem from="1574884145403" duration="20292000" />
+      <workItem from="1574931791982" duration="9048000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="79243000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17911434" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32936078" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TypeScript" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.26912183" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/training/src/assets/images/Capture3.PNG" />
+    <entry file="file://$PROJECT_DIR$/training/src/assets/images/Capture2.PNG" />
+    <entry file="file://$PROJECT_DIR$/training/src/plugins/vuetify.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/core-scripting.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4600">
+          <caret line="104" column="16" selection-start-line="104" selection-start-column="16" selection-end-line="104" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/components/PageNotFound.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="24" column="26" lean-forward="true" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
+          <folding>
+            <element signature="n#template#0;n#!!top" />
+            <element signature="n#script#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/node_modules/vuex/types/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="128" column="2" selection-start-line="128" selection-start-column="2" selection-end-line="128" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/components/Courses.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="66" selection-start-line="3" selection-start-column="66" selection-end-line="3" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/Models/Course.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="5" lean-forward="true" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="15" column="60" selection-start-line="15" selection-start-column="60" selection-end-line="15" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/components/Lessons.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="45" column="29" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+          <folding>
+            <element signature="n#style#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/components/ItemList.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="20" column="4" lean-forward="true" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="35" />
+          <folding>
+            <element signature="e#792#823#0" expanded="true" />
+            <element signature="n#style#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/Models/ListItem.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="5" lean-forward="true" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/components/HomePage.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="40" column="25" lean-forward="true" selection-start-line="40" selection-start-column="25" selection-end-line="40" selection-end-column="25" />
+          <folding>
+            <element signature="n#template#0;n#!!top" />
+            <element signature="n#style#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="63" selection-start-line="9" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/Helper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+          <folding>
+            <element signature="n#!!block;n#convertSmpTreeView#0" />
+            <element signature="n#!!block;n#sortLessonIDs#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="18" column="20" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="20" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/App.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-212">
+          <caret line="66" column="20" lean-forward="true" selection-start-line="66" selection-start-column="20" selection-end-line="66" selection-end-column="20" />
+          <folding>
+            <element signature="n#v-app-bar#0;n#v-app#0;n#template#0;n#!!top" />
+            <element signature="n#v-text-field#0;n#v-app-bar#0;n#v-app#0;n#template#0;n#!!top" />
+            <element signature="n#v-content#0;n#v-app#0;n#template#0;n#!!top" />
+            <element signature="e#2755#2954#0" />
+            <element signature="e#3008#3067#0" />
+            <element signature="e#3090#3188#0" />
+            <element signature="e#3223#4062#0" />
+            <element signature="e#4094#4909#0" />
+            <element signature="e#4971#5716#0" />
+            <element signature="e#5090#5486#0" />
+            <element signature="e#5393#5638#0" />
+            <element signature="e#5666#5732#0" />
+            <element signature="e#5774#5840#0" />
+            <element signature="n#style#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/store.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="124" column="10" selection-start-line="124" selection-start-column="10" selection-end-line="124" selection-end-column="10" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#21#42#0" expanded="true" />
+            <element signature="e#677#731#0" />
+            <element signature="e#768#820#0" />
+            <element signature="e#857#909#0" />
+            <element signature="e#944#995#0" />
+            <element signature="e#1032#1084#0" />
+            <element signature="e#1113#1158#0" />
+            <element signature="e#1198#1292#0" />
+            <element signature="e#1321#1366#0" />
+            <element signature="e#1416#1723#0" />
+            <element signature="e#1789#2165#0" />
+            <element signature="e#2233#2597#0" />
+            <element signature="e#2637#2771#0" />
+            <element signature="e#2840#2896#0" />
+            <element signature="e#2935#3214#0" />
+            <element signature="e#3252#3532#0" />
+            <element signature="e#3579#3640#0" />
+            <element signature="e#3692#3758#0" />
+            <element signature="e#3814#3884#0" />
+            <element signature="e#3934#4000#0" />
+            <element signature="e#4042#4133#0" />
+            <element signature="e#4175#4223#0" />
+            <element signature="e#4295#4467#0" />
+            <element signature="e#4512#5120#0" />
+            <element signature="e#5167#5808#0" />
+            <element signature="e#5856#6474#0" />
+            <element signature="e#6534#7445#0" />
+            <element signature="e#7504#8119#0" />
+            <element signature="e#8178#8732#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/Models/Lesson.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/components/LessonItem.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="177" column="71" selection-start-line="177" selection-start-column="71" selection-end-line="177" selection-end-column="71" />
+          <folding>
+            <element signature="e#2409#2851#0" />
+            <element signature="e#3315#5333#0" />
+            <element signature="e#5377#5628#0" />
+            <element signature="e#7399#8948#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
