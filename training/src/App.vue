@@ -77,6 +77,7 @@
         }),
         methods: {
             openOrCloseDrawer() {
+                this.$store.commit('DRAWER', !this.drawer);
                 this.drawer = !this.drawer;
             },
             goHome() {
@@ -145,7 +146,10 @@
                 return this.checkIfRouteIsLesson()
             },
             checkIfRouteIsLesson() {
-                return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
+                console.log("is route a lesson");
+                console.log(this.$router.currentRoute.path)
+                console.log(this.$router.currentRoute.path.split("/lessonItem/").length >= 1 )
+                return this.$router.currentRoute.path.split("/lessonItem/").length >= 1;
             },
             showSnackBar(message) {
                 this.snbText = message;

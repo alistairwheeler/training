@@ -1,6 +1,6 @@
 <template>
     <div id="lesson-item-wrapper" v-cloak>
-        <div class="lesson-content col-6">
+        <div v-bind:class="{large: !openDrawer, 'thin': openDrawer}">
 
             <h1 class="lesson-title smp-blue"><span class="underlined">{{lessonToDisplay.title}}</span></h1>
 
@@ -46,9 +46,13 @@
         name: 'LessonItem',
         data: () => ({
             lessonToDisplay: {},
-            breadCrumbItems: []
+            breadCrumbItems: [],
+            //openDrawer: false,
         }),
         computed: {
+            openDrawer: function (){
+              return this.$store.getters.drawer;
+            },
             ...mapGetters([
                 'allLessonsLoaded',
                 'courses',
@@ -177,33 +181,6 @@
             })
             this.breadCrumbItems.push({text: this.lessonToDisplay.title, disabled: false})
 
-            /*
-                        //TODO : modify this component to match the new way of working of the store
-
-                        console.log("Lesson id : " + lessonId);
-
-                        //2.1 fetch the lesson in the list of lessons in the store :
-                        let smpLesson = this.$store.getters.lessonWithId(lessonId);
-
-                        if (smpLesson !== undefined) { //format it and save it in displayedLesson in the store
-                            let formattedLesson = Lesson.formatFromSimplicite(smpLesson);
-                            this.$store.commit('UPDATE_DISPLAYED_LESSON', formattedLesson);
-
-                        } else { //2.2 if the lesson doesn't exist, then fetch the lessons from the same section and create the treeview
-                            console.log("the lesson is not in the store");
-                            let payload = {
-                                smp: this.$smp,
-                                lessonId: lessonId
-                            };
-                            this.$store.dispatch('fetchLesson', payload) //Récupère la leçon et la stocke dans le store (displayedLesson)
-                                .then(() => {
-                                    payload.courseID = this.lessonToDisplay.row_id;
-                                    this.$store.dispatch('fetchTreeViewFromCourse', payload) //récupérer le treeview (fetch its, sorts it and sets other_lessons_ids
-                                });
-
-                            //3.
-                        }*/
-
             /*await this.fetchLesson(lessonId)
                 .then(lesson => {
                     this.lessonToDisplay = Lesson.formatFromSimplicite(lesson);
@@ -243,6 +220,14 @@
 
     [v-cloak] {
         display: none;
+    }
+
+    .large{
+        width: 50%;
+    }
+
+    .thin{
+        width: 40%;
     }
 
     #error-message {

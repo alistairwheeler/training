@@ -20,6 +20,7 @@ export default new Vuex.Store({
         currentSectionId: 0,
         currentCourseId: 0,
         allLessonsLoaded: false,
+        drawer: false,
 
         currentLessonId: 0,
         otherLessonsIDs: [],
@@ -28,6 +29,10 @@ export default new Vuex.Store({
     getters: {
         allLessonsLoaded: state => {
             return state.allLessonsLoaded;
+        },
+
+        drawer: state => {
+          return state.drawer;
         },
 
         currentLessonId: state => {
@@ -82,6 +87,10 @@ export default new Vuex.Store({
     mutations: {
         ALL_LESSONS_LOADED(state, choice) {
             state.allLessonsLoaded = choice;
+        },
+
+        DRAWER(state, choice){
+            state.drawer = choice;
         },
 
         PUSH_COURSES(state, course) {
