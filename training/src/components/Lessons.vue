@@ -11,7 +11,7 @@
                 Return to courses
             </v-btn>
 
-            <ItemList itemType="lessons" :course-id="courseID"></ItemList>
+            <ItemList :itemType="lessonsOrSections" :course-id="courseID"></ItemList>
 
         </div>
     </div>
@@ -29,6 +29,7 @@
             displayedLessons: [],
             courseID: 0,
             emptyList: false,
+            lessonsOrSections: 'lessons',
         }),
         methods: {
             redirectToLesson(lessonId) {
@@ -36,9 +37,15 @@
             },
         },
         async created() {
+
             //If the user wants the lessons from a specific course
             if (this.$route.params.courseId) {
+                console.log("courseId : " +this.$route.params.courseId );
                 this.courseID = parseInt(this.$route.params.courseId);
+            } else if(this.$route.params.sectionId){
+                console.log("sectionId : " +this.$route.params.sectionId );
+                this.lessonsOrSections='sections';
+                this.courseID = parseInt(this.$route.params.sectionId);
             } else { //If the user is wants to look at all the lessons
                 this.courseID = 0;
             }
@@ -65,28 +72,6 @@
         margin-top: 20px;
     }
 
-    #lesson-list {
-        display: flex;
-        flex-flow: row wrap;
-        box-sizing: border-box;
-    }
-
-    .item-prev {
-        width: 33%;
-        height: 18vw;
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        margin-bottom: 24px;
-        transform: scale(1);
-        transition: transform 200ms;
-    }
-
-    .item-prev:hover {
-        transform: scale(1.05);
-        transition: transform 200ms;
-    }
-
     .item-prev a {
         width: 100%;
         height: 100%;
@@ -95,39 +80,6 @@
         text-decoration: none;
     }
 
-    .content-wrapper {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-
-    }
-
-    .image-wrapper {
-        width: 100%;
-        height: 100%;
-
-        box-sizing: border-box;
-        margin-bottom: 8px;
-    }
-
-    .lesson-prev__image {
-        width: 100%;
-        height: 100%;
-    }
-
-    .information-wrapper {
-        height: 30%;
-    }
-
-    .lesson-prev__section-name {
-        font-weight: normal;
-        font-size: 1.5rem;
-    }
-
-    .item-prev__name {
-        font-size: 1.9rem;
-        color: black;
-    }
 
     .redirect-button {
         align-self: center;

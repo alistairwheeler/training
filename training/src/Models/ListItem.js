@@ -7,7 +7,7 @@ export class ListItem {
     }
 
     static convertSmpLesson({row_id, lrnLsnTitle, lrnLsnShortDescription = '', lrnLsnLongDescription = ''}){
-        return new ListItem(row_id, lrnLsnTitle, lrnLsnShortDescription, lrnLsnLongDescription);
+        return new ListItem(parseInt(row_id), lrnLsnTitle, lrnLsnShortDescription, lrnLsnLongDescription);
     }
 
     static convertSmpCourse({row_id, lrnPlnTitle, lrnPlnShortDescription = '', lrnPlnLongDescription = ''}) {

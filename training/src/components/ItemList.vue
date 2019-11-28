@@ -31,10 +31,13 @@
         }),
         computed: {
             ...mapGetters([
+                'allLessonsLoaded',
                 'courses',
                 'lessons',
-                'coursesAsItemList',
-                'lessonsAsItemList',
+                'lessonsFromCourseAsListItems',
+                'lessonsFromSectionAsListItems',
+                'coursesAsListItems',
+                'lessonsAsListItems',
                 'displayedLesson',
             ])
         },
@@ -56,52 +59,101 @@
             },
         },
         async created() {
+            let allLessonsLoaded = this.allLessonsLoaded;
+            console.log("allLessonsLoaded : " + allLessonsLoaded);
+
             if (this.itemType === "courses") {
                 console.log("displaying courses");
-                let coursesAsItemList = this.coursesAsItemList;
-                //let coursesAsItemList = this.coursesAsItemList;
-                if (coursesAsItemList.length === 0) {
+                let coursesToDisplay = this.coursesAsListItems;
+                if (coursesToDisplay.length === 0) {
                     await this.fetchCourses(this.$smp)
-                        .then(() => this.listToDisplay = this.coursesAsItemList)
+                        .then(() => this.listToDisplay = this.coursesAsListItems)
                 } else {
-                    this.listToDisplay = coursesAsItemList;
+                    this.listToDisplay = coursesToDisplay;
                 }
 
             } else if (this.itemType === "lessons") {
                 console.log("displaying lessons");
+                let courseId = parseInt(this.courseId);
+                console.log("courseId : " + courseId)
 
-                if (this.lessons.length === 0) { //If The store is empty
-                    if (parseInt(this.courseId) !== 0) { //If we want a particular course ...
+                if (allLessonsLoaded === true) { //Si toutes les leçons ont été fetchées à un moment, on se contente de trier selon ce qu'on veut afficher
+                    if (courseId === 0 ){//if (courseId === 0 && this.lessonsFromCourseAsListItems(courseId).length > 0) //Si on veut les leçons d'un cours précis ET si elles sont dans le store
+                        this.listToDisplay = this.lessonsAsListItems;
+                    } else{
+                        this.listToDisplay = this.lessonsFromCourseAsListItems(this.courseId)
+                    }
+
+                } else if (allLessonsLoaded === false) {
+                    console.log("all lessons WERE NOT loaded previously");
+                    if (courseId !== 0 && this.lessonsFromCourseAsListItems(courseId).length > 0) { //Leçons d'un cours sont dans le store
+                        console.log("lessons from course : " + courseId + " from store");
+                        this.listToDisplay = this.lessonsFromCourseAsListItems(this.courseId)
+                    } else if(courseId !== 0) { //Si elles ne sont pas dans le store
+                        console.log("lessons from course : " + courseId + " fetched from the web");
                         let payload = {
                             smp: this.$smp,
-                            courseId: this.courseId
+                            courseId: courseId
                         };
                         await this.$store.dispatch('fetchLessonsFromCourseID', payload)
-                            .then(() => this.listToDisplay = this.lessonsAsItemList)
+                            .then(() => this.listToDisplay = this.lessonsFromCourseAsListItems(courseId))
+                    }else  {
+                        console.log("fetching all lessons from the web");
+                        await this.fetchAllLessons(this.$smp).then(() => {
+                            console.log("this.lessonsAsListItems");
+                            console.log(this.lessonsAsListItems);
+                            this.listToDisplay = this.lessonsAsListItems
+                        })
+                    }
+                    /*
 
-                    } else { // ... Or all the lessons
-                        await this.fetchAllLessons(this.$smp)
-                            .then(() => this.listToDisplay = this.lessonsAsItemList)
-                    }
-                } else { //If the store is not empty
-                    if (this.lessons[0].lrnLsnPrtId__lrnPrtPlnId === parseInt(this.courseId)) { //If they are from the same course as what we want
-                        //TODO: simply display the lessons
-                        console.log("Store NOT empty + same course as before : " + this.courseId);
-                        this.listToDisplay = this.lessonsAsItemList;
-                    } else if (parseInt(this.courseId) === 0) {
-                        await this.fetchAllLessons(this.$smp)
-                            .then(() => this.listToDisplay = this.lessonsAsItemList)
-                    } else {
-                        let payload = {
-                            smp: this.$smp,
-                            courseId: this.courseId
-                        };
-                        await this.$store.dispatch('fetchLessonsFromCourseID', payload)
-                            .then(() => this.listToDisplay = this.lessonsAsItemList)
-                    }
+                                        if (this.lessons.length === 0) { //If The store is empty
+                                            if (parseInt(this.courseId) !== 0) { //If we want a particular course ...
+                                                let payload = {
+                                                    smp: this.$smp,
+                                                    courseId: this.courseId
+                                                };
+                                                await this.$store.dispatch('fetchLessonsFromCourseID', payload)
+                                                    .then(() => this.listToDisplay = this.lessonsFromCourseAsListItems(this.courseId))
+
+                                            } else { // ... Or all the lessons
+                                                await this.fetchAllLessons(this.$smp)
+                                                    .then(() => this.listToDisplay = this.lessonsAsListItems)
+                                            }
+                                        } else { //If the store is not empty
+                                            if (this.lessons.courseId === parseInt(this.courseId)) { //If they are from the same course as what we want
+                                                console.log("Store NOT empty + same course as before : " + this.courseId);
+                                                this.listToDisplay = this.lessonsAsListItems;
+                                            } else if (parseInt(this.courseId) === 0) {
+                                                await this.fetchAllLessons(this.$smp)
+                                                    .then(() => this.listToDisplay = this.lessonsAsListItems)
+                                            } else {
+                                                let payload = {
+                                                    smp: this.$smp,
+                                                    courseId: this.courseId
+                                                };
+                                                await this.$store.dispatch('fetchLessonsFromCourseID', payload)
+                                                    .then(() => this.listToDisplay = this.lessonsAsListItems)
+                                            }
+                                        }*/
                 }
+            } else if (this.itemType === 'sections') {
+                console.log("displaying sections");
+                if (allLessonsLoaded) {
+                    this.listToDisplay = this.lessonsFromSectionAsListItems(this.courseId)
+                } else {
+                    let payload = {
+                        smp: this.$smp,
+                        sectionId: parseInt(this.courseId)
+                    };
+                    await this.$store.dispatch('fetchLessonsFromSection', payload)
+                        .then(() => {
+                            this.listToDisplay = this.lessonsFromSectionAsListItems(this.courseId);
+                        })
+                }
+
             }
-        },
+        }
     }
 </script>
 
