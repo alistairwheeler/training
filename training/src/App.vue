@@ -7,9 +7,9 @@
                         color="warning"
                         open-on-click
                         transition
-                        @update:active="redirectToLesson()">
+                        @update:active="isItemSelected()">
                 <template slot="label" slot-scope="{ item }">
-                    <a @click="redirectToLesson(item)">{{ item.name }}</a>
+                    <a @click="redirectToLesson(item)" >{{ item.name }}</a>
                 </template>
             </v-treeview>
         </v-navigation-drawer>
@@ -75,11 +75,9 @@
             sections: [],
             lessons: [],
         }),
-        created() {
-
-        },
         methods: {
             openOrCloseDrawer() {
+                this.$store.commit('DRAWER', !this.drawer);
                 this.drawer = !this.drawer;
             },
             goHome() {
@@ -123,11 +121,15 @@
                 }
 
             },
+
             redirectToLesson(item) {
+                console.log("item.id : ");
+                console.log(item.id);
                 if (!item.children) { //Si l'item est bien une leçon et pas une section
-                    console.log("redirecting !");
-                    console.log(item);
                     this.$router.push('/lessonItem/'+item.id)
+                } else if (item.children){ //si l'item est une section (pcq il a des enfants).
+                    console.log("item has children");
+                    this.$router.push('/lessons/section/'+item.id)
                 }
             },
             shakeElement(elementId) {
@@ -144,13 +146,24 @@
                 return this.checkIfRouteIsLesson()
             },
             checkIfRouteIsLesson() {
-                return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
+                console.log("is route a lesson");
+                console.log(this.$router.currentRoute.path)
+                console.log(this.$router.currentRoute.path.split("/lessonItem/").length >= 1 )
+                return this.$router.currentRoute.path.split("/lessonItem/").length >= 1;
             },
             showSnackBar(message) {
                 this.snbText = message;
                 this.snackBar = true;
             },
         },
+        created() {
+            this.treeview.forEach(section => {
+                section.forEach(children => {
+                    if (children.id === 7 || children.id === 5 || children.id === 8)
+                        children.active = true;
+                })
+            })
+        }
     };
 </script>
 

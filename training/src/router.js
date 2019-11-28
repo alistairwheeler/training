@@ -9,10 +9,11 @@ const routes = [
     { path: '/', component: HomePage },
     { path: '/home', component: HomePage },
     { path: '/courses', component: Courses },
+    { path: '/lessons/section/:sectionId', component: Lessons },
     { path: '/lessons', component: Lessons },
     { path: '/lessons/:courseId/', component: Lessons },
     { path: '/lessonItem/:lessonId', component: LessonItem },
-    //This route should be last in the list because it can overcome the other ones (because it matches all routes)
+    //This route is last in the list because it can override the other ones (because it matches all routes)
     { path: '/*', component: HomePage }
 ];
 
