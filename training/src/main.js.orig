@@ -4,8 +4,6 @@ import App from './App.vue'
 import VueRouter from 'vue-router' //Documentation + Guide : https://router.vuejs.org/guide/
 import vuetify from './plugins/vuetify' //Documentation + Guide : https://vuetifyjs.com/en/getting-started/quick-start
 import Vuex from 'vuex' //Documentation + Guide : https://vuex.vuejs.org/guide/
-import VueHighlightJS from 'vue-highlightjs'
-Vue.use(VueHighlightJS)
 
 Vue.config.productionTip = false;
 
@@ -25,6 +23,12 @@ import router from './router'
 //3. Importing the Store instance from store.js :
 import store from './store'
 
+<<<<<<< HEAD
+//4. Use the simplicite API :
+Vue.prototype.$smp = new Simplicite.Ajax('https://maxime2.dev.simplicite.io/app', 'api', 'designer', 'simplicite');
+
+=======
+>>>>>>> development
 //5. Creating the Vue instance with the router, the store and el:'#app' as the root instance of vue
 new Vue({
   el: '#app',

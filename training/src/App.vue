@@ -1,6 +1,6 @@
 <template>
     <v-app class="app">
-        <v-navigation-drawer v-if="isNavigationDrawerVisible()" app clipped v-model="drawer">
+        <v-navigation-drawer v-if="isNavigationDrawerVisible()" app clipped v-model="this.$store.getters.drawer">
             <!--<v-card v-for="item in this.$store.getters.treeViewItems" :key="item.row_id" >-->
                 <ul v-for="section in this.$store.getters.treeViewItems" :key="section.row_id">
                     <li class="treeview-section" @click="redirectToLesson(section)"> {{section.name}}</li>
@@ -11,20 +11,6 @@
                         </li>
                     </ul>
                 </ul>
-            <!--</v-card>
-            parseInt(lesson.id) === parseInt(this.$store.getters.currentLessonId)
-            -->
-            <!--<v-treeview :items="this.$store.getters.treeViewItems"
-                        item-key="id"
-                        activatable
-                        color="warning"
-                        open-on-click
-                        transition
-                        @update:active="isItemSelected()">
-                <template slot="label" slot-scope="{ item }">
-                    <a @click="redirectToLesson(item)">{{ item.name }}</a>
-                </template>
-            </v-treeview>-->
         </v-navigation-drawer>
 
         <v-app-bar app color="primary" dark clipped-left>
@@ -175,7 +161,7 @@
             },
 
             isNavigationDrawerVisible() {
-                return (this.checkIfRouteIsLesson() && this.$store.getters.drawer)
+                return (this.checkIfRouteIsLesson())
             },
 
             checkIfRouteIsLesson() {
@@ -240,18 +226,6 @@
 
     .smp-blue {
         color: #387ED1;
-    }
-
-    .smp-aqua-blue {
-        color: #38D1AB;
-    }
-
-    .smp-purple {
-        color: #7272FF;
-    }
-
-    .smp-coral {
-        color: #F08A7B;
     }
 
     #snb-text {

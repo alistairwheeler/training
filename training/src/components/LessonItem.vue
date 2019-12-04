@@ -2,7 +2,7 @@
     <div id="lesson-item-wrapper" v-cloak>
         <div v-bind:class="{large: !openDrawer, 'thin': openDrawer}">
 
-            <h1 class="lesson-title smp-blue"><span class="underlined">{{lessonToDisplay.title}}</span></h1>
+            <h1 class="lesson-title"><span class="underlined">{{lessonToDisplay.title}}</span></h1>
 
             <v-breadcrumbs :items="breadCrumbItems" divider=">"></v-breadcrumbs>
 
@@ -11,8 +11,8 @@
                 <div id="learning-outcomes-container" v-html="lessonToDisplay.learningOutcomes"></div>
             </div>
 
-            <div class="lesson-concepts" v-if="lessonToDisplay.genConcepts">
-                <div id="concepts-container" v-html="lessonToDisplay.genConcepts"></div>
+            <div class="lesson-concepts"  v-if="lessonToDisplay.genConcepts">
+                <div id="concepts-container"  v-highlightjs v-html="lessonToDisplay.genConcepts"></div>
             </div>
         </div>
 
@@ -140,13 +140,14 @@
         flex-flow: column nowrap;
     }
 
-    .lesson-content {
+    .lesson-concepts {
         display: flex;
         flex-flow: column nowrap;
         overflow: hidden;
     }
 
     .lesson-title {
+        color: #387ED1;
         font-size: 3rem;
         font-weight: bold;
         text-decoration: underline;
@@ -154,31 +155,34 @@
         margin-bottom: 20px;
     }
 
-    .lesson-content >>> h2, .exercise >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+    .lesson-concepts >>> h2, .exercise >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
         font-size: 2.2rem;
         font-weight: bold;
         padding-bottom: 3px;
-        border-bottom: solid #d2d2d2 1px;
     }
 
-    .lesson-content >>> h3, .section-title { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+    .lesson-concepts >>> h3, .section-title { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
         font-size: 1.8rem;
         font-weight: bold;
     }
 
-    .lesson-content >>> h4 {
+    .lesson-concepts >>> h4 {
         font-size: 1.5rem;
     }
 
-    .lesson-content >>> h5 {
+    .lesson-concepts >>> h5 {
         font-size: 1.2rem;
     }
 
-    .lesson-content >>> h6 {
+    .lesson-concepts >>> h6 {
         font-size: 1.1rem;
     }
 
-    .lesson-content >>> p {
+    .lesson-concepts >>> hr {
+
+    }
+
+    .lesson-concepts >>> p {
         text-align: justify;
     }
 
@@ -203,5 +207,70 @@
         margin-bottom: 3%;
     }
 
-</style>
+    .lesson-concepts >>> .language-java, .lesson-concepts >>> .language-html {
+        color: #4D515C;
+        padding: 5px;
+        background-color: #F7F7F7;
+    }
 
+    .lesson-concepts >>> .hljs-keyword {
+        color: blue;
+    }
+
+    .lesson-concepts >>> .hljs-string {
+        color: darkred;
+    }
+
+    .lesson-concepts >>> .hljs-comment {
+        color: purple;
+    }
+
+    .lesson-concepts >>> .hljs-tag {
+        color: darkgreen;
+    }
+
+    .lesson-concepts >>> .hljs-attr {
+        color: darkblue;
+    }
+
+    .lesson-concepts >>> .info , .lesson-concepts >>> .success , .lesson-concepts >>> .warning, .lesson-concepts >>> .error {
+        border-radius: 5px;
+        padding: 3px;
+        margin: 5px;
+    }
+    .lesson-concepts >>> .info {
+        background-color: #e6f4fa !important;
+    }
+    .lesson-concepts >>> .success {
+        background-color: #e6fae7 !important;
+    }
+    .lesson-concepts >>> .warning {
+        background-color: #f5e5d5 !important;
+    }
+    .lesson-concepts >>> .error {
+        background-color: #ffc9c9 !important;
+    }
+
+    .lesson-concepts >>> blockquote > p::before{
+        content: '" ';
+    }
+    .lesson-concepts >>> blockquote > p::after {
+        content: ' "';
+    }
+    .lesson-concepts >>> blockquote > p {
+        font-style: italic;
+    }
+
+    .lesson-concepts >>> a:visited  {
+        text-decoration: underline;
+    }
+
+    .lesson-concepts >>> strong {
+        text-decoration: underline;
+    }
+
+    .lesson-concepts >>> ol li {
+        list-style: decimal;
+    }
+
+</style>
