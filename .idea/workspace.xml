@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="80f40282-68d4-4648-82bb-1a518a76a849" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/training/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/training/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/training/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/training/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/training/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/training/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/training/src/components/LessonItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/training/src/components/LessonItem.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/training/src/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/training/src/store.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -21,7 +21,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/training/src/store.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1496">
+            <state relative-caret-position="1564">
               <caret line="92" column="21" selection-start-line="92" selection-start-column="8" selection-end-line="92" selection-end-column="21" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -31,11 +31,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/training/src/App.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="171" column="3" selection-start-line="171" selection-start-column="3" selection-end-line="171" selection-end-column="3" />
+            <state relative-caret-position="417">
+              <caret line="227" column="22" selection-start-line="227" selection-start-column="16" selection-end-line="227" selection-end-column="22" />
               <folding>
                 <element signature="n#v-app-bar#0;n#v-app#0;n#template#0;n#!!top" />
                 <element signature="n#v-text-field#0;n#v-app-bar#0;n#v-app#0;n#template#0;n#!!top" />
@@ -46,27 +46,62 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/training/src/plugins/vuetify.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="25" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/training/src/components/LessonItem.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="274" column="19" selection-start-line="274" selection-start-column="8" selection-end-line="274" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/training/public/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="145">
+              <caret line="13" column="9" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/training/src/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+            <state relative-caret-position="-127">
+              <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
+                <element signature="e#41#62#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/training/src/components/LessonItem.vue">
+        <entry file="file://$PROJECT_DIR$/training/vue.config.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="86" column="54" selection-start-line="86" selection-start-column="54" selection-end-line="86" selection-end-column="54" />
-              <folding>
-                <element signature="e#1531#1571#0" expanded="true" />
-                <element signature="e#1947#2292#0" />
-                <element signature="e#2351#2924#0" />
-              </folding>
+            <state relative-caret-position="34">
+              <caret line="2" column="1" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/training/node_modules/vuetify-loader/dev/webpack.config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="22" column="24" lean-forward="true" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -135,8 +170,8 @@
         <option value="$PROJECT_DIR$/training/src/Helper.js" />
         <option value="$PROJECT_DIR$/training/public/index.html" />
         <option value="$PROJECT_DIR$/training/src/store.js" />
-        <option value="$PROJECT_DIR$/training/src/components/LessonItem.vue" />
         <option value="$PROJECT_DIR$/training/src/App.vue" />
+        <option value="$PROJECT_DIR$/training/src/components/LessonItem.vue" />
       </list>
     </option>
   </component>
@@ -179,13 +214,6 @@
               <item name="training" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="training" type="b2602c69:ProjectViewProjectNode" />
-              <item name="training" type="462c0819:PsiDirectoryNode" />
-              <item name="training" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -196,6 +224,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -248,12 +277,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="90176000" />
+    <option name="totallyTimeSpent" value="92834000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17911434" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17911434" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -344,8 +374,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/training/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="63" selection-start-line="9" selection-end-line="10" />
+        <state relative-caret-position="145">
+          <caret line="13" column="9" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -376,7 +406,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/training/src/plugins/vuetify.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="153">
+          <caret line="9" column="25" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="25" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>
@@ -403,7 +434,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/training/src/store.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1496">
+        <state relative-caret-position="1564">
           <caret line="92" column="21" selection-start-line="92" selection-start-column="8" selection-end-line="92" selection-end-column="21" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
@@ -414,35 +445,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/training/src/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+        <state relative-caret-position="-127">
+          <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/training/src/components/LessonItem.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="86" column="54" selection-start-line="86" selection-start-column="54" selection-end-line="86" selection-end-column="54" />
-          <folding>
-            <element signature="e#1531#1571#0" expanded="true" />
-            <element signature="e#1947#2292#0" />
-            <element signature="e#2351#2924#0" />
+            <element signature="e#41#62#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/training/src/App.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="171" column="3" selection-start-line="171" selection-start-column="3" selection-end-line="171" selection-end-column="3" />
+        <state relative-caret-position="417">
+          <caret line="227" column="22" selection-start-line="227" selection-start-column="16" selection-end-line="227" selection-end-column="22" />
           <folding>
             <element signature="n#v-app-bar#0;n#v-app#0;n#template#0;n#!!top" />
             <element signature="n#v-text-field#0;n#v-app-bar#0;n#v-app#0;n#template#0;n#!!top" />
             <element signature="n#v-container#0;n#v-content#0;n#v-app#0;n#template#0;n#!!top" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/node_modules/vuetify-loader/dev/webpack.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="22" column="24" lean-forward="true" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/training/src/components/LessonItem.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="274" column="19" selection-start-line="274" selection-start-column="8" selection-end-line="274" selection-end-column="19" />
         </state>
       </provider>
     </entry>

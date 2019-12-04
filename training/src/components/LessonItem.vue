@@ -141,8 +141,6 @@
     }
 
     .lesson-concepts {
-        display: flex;
-        flex-flow: column nowrap;
         overflow: hidden;
     }
 
@@ -271,6 +269,10 @@
 
     .lesson-concepts >>> ol li {
         list-style: decimal;
+    }
+
+    .lesson-concepts >>> img {
+        margin-left: 40px;
     }
 
 </style>
