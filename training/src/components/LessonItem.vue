@@ -2,7 +2,7 @@
     <div id="lesson-item-wrapper" v-cloak>
         <div v-bind:class="{large: !openDrawer, 'thin': openDrawer}">
 
-            <h1 class="lesson-title smp-blue"><span class="underlined">{{lessonToDisplay.title}}</span></h1>
+            <h1 class="lesson-title"><span class="underlined">{{lessonToDisplay.title}}</span></h1>
 
             <v-breadcrumbs :items="breadCrumbItems" divider=">"></v-breadcrumbs>
 
@@ -11,8 +11,8 @@
                 <div id="learning-outcomes-container" v-html="lessonToDisplay.learningOutcomes"></div>
             </div>
 
-            <div class="lesson-concepts" v-if="lessonToDisplay.genConcepts">
-                <div id="concepts-container" v-html="lessonToDisplay.genConcepts"></div>
+            <div class="lesson-concepts"  v-if="lessonToDisplay.genConcepts">
+                <div id="concepts-container"  v-highlightjs v-html="lessonToDisplay.genConcepts"></div>
             </div>
         </div>
 
@@ -47,11 +47,10 @@
         data: () => ({
             lessonToDisplay: {},
             breadCrumbItems: [],
-            //openDrawer: false,
         }),
         computed: {
-            openDrawer: function (){
-              return this.$store.getters.drawer;
+            openDrawer: function () {
+                return this.$store.getters.drawer;
             },
             ...mapGetters([
                 'allLessonsLoaded',
@@ -66,150 +65,47 @@
             ])
         },
         methods: {
-            //---------- SIMPLICITE DATA FETCHING & TREATMENTS ------------
-            async fetchLesson(lessonId) {
-                return new Promise((resolve, reject) => {
-                    let lessonObject = this.$smp.getBusinessObject("LrnLesson");
-                    lessonObject.get((response) => {
-                        if (response) {
-                            resolve(response);
-                        } else
-                            reject("Could not load the lesson");
-                    }, lessonId)
-                })
-            },
-
-            async fetchTreeViewFromCourse(courseID) {
-                console.log("fetchTreeViewFromCourse");
-                return new Promise((resolve, reject) => {
-                    this.$smp.treeview((treeView) => {
-                        resolve(treeView.list)
-                    }, 'lrnTreeView', {service: 'page', object: 'LrnPlan', rowid: courseID, child: 'LrnPart'})
+            setBreadCrumb(){
+                this.breadCrumbItems.push({
+                    text: this.lessonToDisplay.courseName,
+                    disabled: false,
+                    href: '/lessons/' + this.lessonToDisplay.courseId,
                 });
-            },
-
-            convertSmpTreeView(smpTreeView) {
-                //Retrieve the sections :
-                let sections = smpTreeView.map(globalSection => globalSection.item); //item est réellement l'objet section, les sections sont donc récupérées
-                //Convert the sections to vuetify treeView objects
-                let tvSections = sections.map((elt) => ({id: elt.row_id, name: elt.lrnPrtTitle, children: []}));
-
-                //Retrieve the lessons :
-                let links = smpTreeView.map(globalSection => globalSection.links);
-                let arrayOfSectionFolder = links.map(link => link[0].list);
-                let lessons = [];
-                arrayOfSectionFolder.forEach(arraySection => {
-                    arraySection.forEach(lesson => lessons.push(lesson.item))
+                this.breadCrumbItems.push({
+                    text: this.lessonToDisplay.sectionName,
+                    disabled: false,
+                    href: '/lessons/' + this.lessonToDisplay.sectionId
                 });
-
-                //Convert them to vuetify treeView objects and map them to the section
-                let tvLessons = lessons.map((elt) => ({
-                    id: elt.row_id,
-                    name: elt.lrnLsnTitle,
-                    sectionId: elt.lrnLsnPrtId,
-                    order: elt.lrnLsnOrder,
-                }));
-                //For each lesson, if the sectionId is the same as a sectionId present in the tvSections array, we push this lesson as a children of the array
-                for (let i = 0; i < tvLessons.length; i++) {
-                    for (let j = 0; j < tvSections.length; j++) {
-                        if (tvLessons[i].sectionId === tvSections[j].id) {
-                            tvSections[j].children.push(tvLessons[i])
-                        }
-                    }
-                }
-                //Now, for each section, we take the lessons in it (children) and order them by their order field
-                for (let j = 0; j < tvSections.length; j++) {
-                    tvSections[j].children.sort((les1, les2) => les1.order - les2.order);
-                }
-                this.$store.commit('UPDATE_TREE_VIEW_ITEMS', tvSections);
-
-                return tvSections;
+                this.breadCrumbItems.push({text: this.lessonToDisplay.title, disabled: false})
             },
-
-            sortLessonIDs(treeViewItems) {
-                let orderedIDs = [];
-                treeViewItems.forEach(section => {
-                    section.children.forEach(lesson => orderedIDs.push(parseInt(lesson.id)))
-                });
-                return orderedIDs;
-            },
-
         },
         async created() {
             let lessonId = parseInt(this.$route.params.lessonId);
             let smpLesson = this.lessonWithId(lessonId);
+
             this.$store.commit('UPDATE_CURRENT_LESSON_ID', lessonId);
+            this.$store.commit('UPDATE_DRAWER', true);
 
             if (smpLesson !== undefined) { //Si la leçon est présente, toutes celles du même cours aussi
                 console.log("smpLesson IS defined");
                 this.lessonToDisplay = Lesson.formatFromSimplicite(smpLesson);
-                /*let payload = {
-                    smp: this.$smp,
-                    courseId: parseInt(this.lessonToDisplay.courseId)
-                };
-                this.$store.dispatch('fetchTreeViewFromCourse', payload); //TODO: change the treeview items*/
-
-            } else if (smpLesson === undefined){
+            } else if (smpLesson === undefined) {
                 console.log("smpLesson NOT defined");
                 let payload = {
                     smp: this.$smp,
                     lessonId: lessonId
                 };
                 this.$store.dispatch('fetchLesson', payload)
-                    .then(() => this.lessonToDisplay = Lesson.formatFromSimplicite(this.$store.getters.lessonWithId(lessonId)))
-                    /*.then(() => {
-                        payload.courseId = parseInt(this.$store.getters.displayedLesson.lrnLsnPrtId__lrnPrtPlnId);
-                        this.$store.dispatch('fetchLessonsFromCourseID', payload)
-                    })
-                    .then(()=> this.$store.dispatch('fetchTreeViewFromCourse', payload) ); //TODO fetch the treeview*/
+                    .then(() => this.lessonToDisplay = Lesson.formatFromSimplicite(this.lessonWithId(lessonId)))
             }
             let payload = {
                 smp: this.$smp,
                 courseId: parseInt(this.lessonToDisplay.courseId)
             };
-            this.$store.dispatch('fetchTreeViewFromCourse', payload)
-
-            this.breadCrumbItems.push({
-                text: this.lessonToDisplay.courseName,
-                disabled: false,
-                href: '/lessons/' + this.lessonToDisplay.courseId,
-            })
-            this.breadCrumbItems.push({
-                text: this.lessonToDisplay.sectionName,
-                disabled: false,
-                href: '/lessons/' + this.lessonToDisplay.sectionId
-            })
-            this.breadCrumbItems.push({text: this.lessonToDisplay.title, disabled: false})
-
-            /*await this.fetchLesson(lessonId)
-                .then(lesson => {
-                    this.lessonToDisplay = Lesson.formatFromSimplicite(lesson);
-                    // Populate the breadcrumb (fil d'Arianne)
-                    this.breadCrumbItems.push({
-                        text: lesson.lrnLsnPrtId__lrnPrtPlnId__lrnPlnTitle,
-                        disabled: false,
-                        href: '/lessons/' + lesson.lrnLsnPrtId__lrnPrtPlnId
-                    })
-                    this.breadCrumbItems.push({
-                        text: lesson.lrnLsnPrtId__lrnPrtTitle,
-                        disabled: false,
-                        href: '/lessons/' + lesson.lrnLsnPrtId__lrnPrtPlnId
-                    })
-                    this.breadCrumbItems.push({text: lesson.lrnLsnTitle, disabled: false})
-                    return lesson; //Doesn't work with resolve(lesson); see : https://stackoverflow.com/questions/27715275/whats-the-difference-between-returning-value-or-promise-resolve-from-then
-                }, err => console.log("error fetching lesson"))
-                .then(lesson => this.fetchTreeViewFromCourse(parseInt(lesson.lrnLsnPrtId__lrnPrtPlnId)),
-                    err => console.log("error fetching treeView"))
-                .then(smpTreeView => this.convertSmpTreeView(smpTreeView),
-                    err => console.log("error converting smpTreeView"))
-                .then(treeView => this.sortLessonIDs(treeView),
-                    err => console.log("error sorting IDs"))
-                .then(orderedLessonIDs => this.$store.commit('UPDATE_OTHER_LESSONS_IDs', orderedLessonIDs),
-                    err => console.log("error updating store IDs"))
-                .then(() => this.$store.commit('UPDATE_CURRENT_LESSON_ID', parseInt(this.lessonToDisplay.row_id)),
-                    err => console.log("error updating store current id"))
-                .then(() => document.getElementById("lesson-item-wrapper").style.visibility = "visible")
-                .catch(err => console.error(err));*/
+            this.$store.dispatch('fetchTreeViewFromCourse', payload);
+            this.$store.commit('fetchTreeViewFromCourse', payload);
+            this.$store.dispatch('fetchTreeViewFromCourse', payload);
+            this.setBreadCrumb();
         },
     }
 
@@ -222,11 +118,11 @@
         display: none;
     }
 
-    .large{
+    .large {
         width: 50%;
     }
 
-    .thin{
+    .thin {
         width: 40%;
     }
 
@@ -244,13 +140,12 @@
         flex-flow: column nowrap;
     }
 
-    .lesson-content {
-        display: flex;
-        flex-flow: column nowrap;
+    .lesson-concepts {
         overflow: hidden;
     }
 
     .lesson-title {
+        color: #387ED1;
         font-size: 3rem;
         font-weight: bold;
         text-decoration: underline;
@@ -258,32 +153,34 @@
         margin-bottom: 20px;
     }
 
-
-    .lesson-content >>> h2, .exercise >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+    .lesson-concepts >>> h2, .exercise >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
         font-size: 2.2rem;
         font-weight: bold;
         padding-bottom: 3px;
-        border-bottom: solid #d2d2d2 1px;
     }
 
-    .lesson-content >>> h3, .section-title { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+    .lesson-concepts >>> h3, .section-title { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
         font-size: 1.8rem;
         font-weight: bold;
     }
 
-    .lesson-content >>> h4 {
+    .lesson-concepts >>> h4 {
         font-size: 1.5rem;
     }
 
-    .lesson-content >>> h5 {
+    .lesson-concepts >>> h5 {
         font-size: 1.2rem;
     }
 
-    .lesson-content >>> h6 {
+    .lesson-concepts >>> h6 {
         font-size: 1.1rem;
     }
 
-    .lesson-content >>> p {
+    .lesson-concepts >>> hr {
+
+    }
+
+    .lesson-concepts >>> p {
         text-align: justify;
     }
 
@@ -308,5 +205,74 @@
         margin-bottom: 3%;
     }
 
-</style>
+    .lesson-concepts >>> .language-java, .lesson-concepts >>> .language-html {
+        color: #4D515C;
+        padding: 5px;
+        background-color: #F7F7F7;
+    }
 
+    .lesson-concepts >>> .hljs-keyword {
+        color: blue;
+    }
+
+    .lesson-concepts >>> .hljs-string {
+        color: darkred;
+    }
+
+    .lesson-concepts >>> .hljs-comment {
+        color: purple;
+    }
+
+    .lesson-concepts >>> .hljs-tag {
+        color: darkgreen;
+    }
+
+    .lesson-concepts >>> .hljs-attr {
+        color: darkblue;
+    }
+
+    .lesson-concepts >>> .info , .lesson-concepts >>> .success , .lesson-concepts >>> .warning, .lesson-concepts >>> .error {
+        border-radius: 5px;
+        padding: 3px;
+        margin: 5px;
+    }
+    .lesson-concepts >>> .info {
+        background-color: #e6f4fa !important;
+    }
+    .lesson-concepts >>> .success {
+        background-color: #e6fae7 !important;
+    }
+    .lesson-concepts >>> .warning {
+        background-color: #f5e5d5 !important;
+    }
+    .lesson-concepts >>> .error {
+        background-color: #ffc9c9 !important;
+    }
+
+    .lesson-concepts >>> blockquote > p::before{
+        content: '" ';
+    }
+    .lesson-concepts >>> blockquote > p::after {
+        content: ' "';
+    }
+    .lesson-concepts >>> blockquote > p {
+        font-style: italic;
+    }
+
+    .lesson-concepts >>> a:visited  {
+        text-decoration: underline;
+    }
+
+    .lesson-concepts >>> strong {
+        text-decoration: underline;
+    }
+
+    .lesson-concepts >>> ol li {
+        list-style: decimal;
+    }
+
+    .lesson-concepts >>> img {
+        margin-left: 40px;
+    }
+
+</style>
