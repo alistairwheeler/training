@@ -17,12 +17,11 @@ export default new Vuex.Store({
         displayedLesson: {},
         courses: [],
         lessons: [],
+        currentLessonId: 0,
         currentSectionId: 0,
         currentCourseId: 0,
         allLessonsLoaded: false,
         drawer: false,
-
-        currentLessonId: 0,
         otherLessonsIDs: [],
         treeViewItems: [],
     },
@@ -83,17 +82,19 @@ export default new Vuex.Store({
             return state.lessons.map(lsn => ListItem.convertSmpLesson(lsn))
         },
 
+
+
     },
     mutations: {
         ALL_LESSONS_LOADED(state, choice) {
             state.allLessonsLoaded = choice;
         },
 
-        DRAWER(state, choice){
+        UPDATE_DRAWER(state, choice){
             state.drawer = choice;
         },
 
-        PUSH_COURSES(state, course) {
+        PUSH_COURSE(state, course) {
             if(state.courses.find(elt => elt.row_id === course.row_id) === undefined){
                 state.courses.push(course);
             } else{
@@ -110,7 +111,15 @@ export default new Vuex.Store({
         },
 
         UPDATE_CURRENT_LESSON_ID(state, id) {
-            Vue.set(state, 'currentLessonId', id)
+            state.currentLessonId = id;
+        },
+
+        UPDATE_CURRENT_SECTION_ID(state, id) {
+            state.currentSectionId = id;
+        },
+
+        UPDATE_CURRENT_COURSE_ID(state, id) {
+            state.currentCourseId = id;
         },
 
         UPDATE_OTHER_LESSONS_IDs(state, lessons) {
@@ -139,12 +148,13 @@ export default new Vuex.Store({
             commit('UPDATE_DISPLAYED_LESSON', lesson);
         },
 
+
         async fetchCourses({commit}, smp) {
             return new Promise((resolve, reject) => {
                 let course = smp.getBusinessObject("LrnPlan");
                 course.search(() => {
                     if (course.list) {
-                        course.list.forEach(elt => commit('PUSH_COURSES', elt));
+                        course.list.forEach(elt => commit('PUSH_COURSE', elt));
                         resolve(course.list);
                     } else {
                         reject("Could not load the content");
@@ -188,11 +198,7 @@ export default new Vuex.Store({
                 let lessonObject = payload.smp.getBusinessObject("LrnLesson");
                 lessonObject.search(() => {
                     if (lessonObject.list) {
-                        lessonObject.list.forEach(elt => context.commit('PUSH_LESSON', elt))
-                        /*let formattedLessons = lessonObject.list.map(lsn => Lesson.formatFromSimplicite(lsn));
-                        console.log("context");
-                        console.log(context);
-                        context.commit('UPDATE_LESSONS', formattedLessons);*/
+                        lessonObject.list.forEach(elt => context.commit('PUSH_LESSON', elt));
                         resolve(lessonObject.list);
                     } else {
                         reject("Could not load the content")
@@ -216,10 +222,12 @@ export default new Vuex.Store({
         },
 
         async fetchTreeViewFromCourse(context, payload) {
+            console.log("fetchTreeView");
+            console.log(payload);
             return new Promise((resolve, reject) => {
                 payload.smp.treeview((treeView) => {
                     console.log(treeView);
-                    let convertedTreeView = convertSmpTreeView(treeView.list)
+                    let convertedTreeView = convertSmpTreeView(treeView.list);
                     context.commit('UPDATE_TREE_VIEW_ITEMS', convertedTreeView);
                     context.commit('UPDATE_OTHER_LESSONS_IDs', sortLessonIDs(convertedTreeView));
                     resolve(convertedTreeView)
