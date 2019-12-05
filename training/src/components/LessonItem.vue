@@ -30,14 +30,13 @@
                         -->
 
             <div id="video-container">
-                <iframe width="100%" height="100%" :src="lessonToDisplay.videoUrl"
-                        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
+                <iframe class="video" :src="lessonToDisplay.videoUrl"
+                         frameborder="0"
+                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                         allowfullscreen>
                 </iframe>
             </div>
         </div>
-
-        <h1 id="error-message">Sorry, we could not load this lesson</h1>
 
     </div>
 
@@ -141,20 +140,51 @@
     }
 
     .large, .thin {
-        padding: 10px 30px 10px 30px;
+        padding: 10px 0 10px 4.5%;
+        display: flex;
+        flex-direction: column;
     }
 
     .large {
-        width: 50%;
+        width: 55%;
     }
 
     .thin {
-        width: 40%;
+        width: 50%;
     }
 
     #error-message {
         visibility: hidden;
     }
+
+    /* ----- VIDEO & PDF -----*/
+    #aside-content {
+        padding: 0;
+        margin-top: 0;
+        position: fixed;
+        right: 0;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        height: 100%;
+        width: 45%;
+    }
+
+    #carousel-container {
+        height: 45%;
+        width: 80%;
+    }
+
+    #video-container {
+        height: 45%;
+        width: 80%;
+    }
+
+    .video {
+        height: 100%;
+        width: 100%;
+    }
+
 
     /* ----- LESSON CONTENT ----- */
     #lesson-item-wrapper {
@@ -220,28 +250,6 @@
         text-align: justify;
     }
 
-    /* ----- VIDEO & PDF -----*/
-    #aside-content {
-        position: fixed;
-        right: 0;
-        display: flex;
-        flex-flow: column;
-        height: 100%;
-    }
-
-    #video-container {
-        height: 40%;
-        display: flex;
-        align-items: center;
-    }
-
-    #carousel-container {
-        justify-content: center;
-        align-self: center;
-        height: 45%;
-        width: 100%;
-        margin-bottom: 3%;
-    }
 
     .lesson-content__concepts >>> .language-java, .lesson-content__concepts >>> .language-html {
         color: #4D515C;
