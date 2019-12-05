@@ -221,7 +221,8 @@
     }
 
     .treeview-lesson--active {
-        color: darkred;
+        color: #272635;
+        background-color: #e6eced;
     }
 
     .smp-blue {
@@ -239,8 +240,8 @@
 
     @keyframes headshake {
         0% {
-            background-color: #F08A7B;
-            border: solid #F08A7B;
+            background-color: #5edbb6;
+            border: solid #5edbb6;
         }
         25% {
             transform: translateX(10%);

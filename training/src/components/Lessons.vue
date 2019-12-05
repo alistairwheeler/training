@@ -1,7 +1,7 @@
 <template>
     <div id="lessons-wrapper">
         <div id="wrapper">
-            <h1 id="page-title" class="smp-blue">Toutes les leçons disponibles :</h1>
+            <h1 id="page-title">Toutes les leçons disponibles :</h1>
 
             <v-btn v-if="emptyList"
                    class="redirect-button ma-2"
@@ -70,6 +70,7 @@
 
     h1 {
         margin-top: 20px;
+        color: #5edbb6;
     }
 
     .item-prev a {

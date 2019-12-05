@@ -1,7 +1,7 @@
 <template>
     <div id="lesson-item-wrapper">
         <div id="wrapper">
-            <h1 class="smp-blue">Tous les cours disponibles :</h1>
+            <h1 >Tous les cours disponibles :</h1>
 
             <ItemList itemType="courses" course-id="courseId"></ItemList>
 
@@ -48,5 +48,6 @@
 
     h1 {
         margin-top: 20px;
+        color: #5edbb6;
     }
 </style>

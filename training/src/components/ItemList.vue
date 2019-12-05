@@ -7,7 +7,7 @@
             </div>
 
             <div class="item-prev__info-container">
-                <h2 class="item-prev__name ">{{item.title}}</h2>
+                <h2 class="item-prev__name">{{item.title}}</h2>
                 <h3 class="item-prev__short-description">{{item.shortDescription}}</h3>
                 <p class="item-prev__long-description">{{item.longDescription}}</p>
             </div>
@@ -105,37 +105,6 @@
                             this.listToDisplay = this.lessonsAsListItems
                         })
                     }
-                    /*
-
-                                        if (this.lessons.length === 0) { //If The store is empty
-                                            if (parseInt(this.courseId) !== 0) { //If we want a particular course ...
-                                                let payload = {
-                                                    smp: this.$smp,
-                                                    courseId: this.courseId
-                                                };
-                                                await this.$store.dispatch('fetchLessonsFromCourseID', payload)
-                                                    .then(() => this.listToDisplay = this.lessonsFromCourseAsListItems(this.courseId))
-
-                                            } else { // ... Or all the lessons
-                                                await this.fetchAllLessons(this.$smp)
-                                                    .then(() => this.listToDisplay = this.lessonsAsListItems)
-                                            }
-                                        } else { //If the store is not empty
-                                            if (this.lessons.courseId === parseInt(this.courseId)) { //If they are from the same course as what we want
-                                                console.log("Store NOT empty + same course as before : " + this.courseId);
-                                                this.listToDisplay = this.lessonsAsListItems;
-                                            } else if (parseInt(this.courseId) === 0) {
-                                                await this.fetchAllLessons(this.$smp)
-                                                    .then(() => this.listToDisplay = this.lessonsAsListItems)
-                                            } else {
-                                                let payload = {
-                                                    smp: this.$smp,
-                                                    courseId: this.courseId
-                                                };
-                                                await this.$store.dispatch('fetchLessonsFromCourseID', payload)
-                                                    .then(() => this.listToDisplay = this.lessonsAsListItems)
-                                            }
-                                        }*/
                 }
             } else if (this.itemType === 'sections') {
                 console.log("displaying sections");
@@ -199,15 +168,16 @@
     }
 
     .item-prev__name {
-        font-size: 1.3rem;
-        color: #387ED1;
+        font-size: 1.6rem;
+        color: #272635;
     }
 
     .item-prev__short-description {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
     }
 
     .item-prev__long-description {
         padding-right: 10px;
+        font-size: 1rem;
     }
 </style>

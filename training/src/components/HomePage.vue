@@ -10,10 +10,10 @@
                 <div id="heading">
                     <h1 class="heading__title">Simplicite Software Training Platform</h1>
                     <p class="heading__promotion">
-                        Learn to master the Simplicite platform to help your company build powerful applications, at lightning speed.</p>
+                        Learn to master the Simplicite platform to help your company build <span class="green-text"> powerful applications</span>, at <span class="green-text"> lightning speed</span></p>
 
                        <p class="heading__promotion"> This training will help you understand the basics of how
-                        our platform works and teach you the good practices to become a great application designer </p>
+                        our platform works and teach you the <span class="green-text"> good practices</span> to become a great application designer </p>
 
                     <v-btn class="try-button" x-large outlined link color="white" @click="redirectTo('/courses')">Try It </v-btn>
 
@@ -22,13 +22,13 @@
             <nav>
                 <ul class="nav-links">
                     <li>
-                        <v-btn x-large class="text-white" link color="#387ED1" @click="redirectTo('https://simplicite.fr/')">Discover our offers </v-btn>
+                        <v-btn x-large class="text-white" link color="#272635" @click="redirectTo('https://simplicite.fr/')">Discover our offers </v-btn>
                     </li>
                     <li>
-                        <v-btn x-large class="text-white" link color="#387ED1" @click="redirectTo('https://docs.simplicite.io/')"> Read the Documentation</v-btn>
+                        <v-btn x-large class="text-white" link color="#272635" @click="redirectTo('https://docs.simplicite.io/')"> Read the Documentation</v-btn>
                     </li>
                     <li>
-                        <v-btn x-large class="text-white" link color="#387ED1" @click="redirectTo('https://simplicite.fr/cas-clients/')">Watch Examples </v-btn>
+                        <v-btn x-large class="text-white" link color="#272635" @click="redirectTo('https://simplicite.fr/cas-clients/')">Watch Examples </v-btn>
                     </li>
                 </ul>
             </nav>
@@ -79,7 +79,6 @@
     .row-1 {
         display: flex;
         flex-flow: row;
-       background-color: #168CFF;
 
     }
 
@@ -97,7 +96,7 @@
     #heading {
         display: flex;
         flex-direction: column;
-        color: white;
+        color: #272635;;
        /* background-color: mediumaquamarine;
 
         */
@@ -118,6 +117,10 @@
     .nav-links {
         display: flex;
         flex-flow: row;justify-content: space-around;
+    }
+
+    .green-text {
+        color: #5edbb6;
     }
 </style>
 

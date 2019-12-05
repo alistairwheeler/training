@@ -7,18 +7,17 @@
             <v-breadcrumbs :items="breadCrumbItems" divider=">"></v-breadcrumbs>
 
             <div class="lesson-content__lrn-outcomes" v-if="lessonToDisplay.learningOutcomes">
-                <h2 class="section-title">Objectifs Pédagogiques</h2>
+                <h1 class="section-title">Objectifs Pédagogiques</h1>
                 <div id="learning-outcomes-container" v-html="lessonToDisplay.learningOutcomes"></div>
             </div>
 
-            <div class="lesson-concepts" v-if="lessonToDisplay.genConcepts">
+            <div class="lesson-content__concepts" v-if="lessonToDisplay.genConcepts">
                 <div id="concepts-container" v-highlightjs v-html="lessonToDisplay.genConcepts"></div>
             </div>
         </div>
 
         <div id="aside-content" class="col-6">
-            <div id="pdf-container">
-
+            <div id="carousel-container">
                 <v-carousel hide-delimiters show-arrows-on-hover height="100%">
                     <v-carousel-item v-for="(item, i) in items"
                                      :key="i"
@@ -141,6 +140,10 @@
         display: none;
     }
 
+    .large, .thin {
+        padding: 10px 30px 10px 30px;
+    }
+
     .large {
         width: 50%;
     }
@@ -158,17 +161,17 @@
         display: flex;
     }
 
-    .lesson-content__lrn-outcomes, .lesson-concepts {
+    .lesson-content__lrn-outcomes, .lesson-content__concepts {
         display: flex;
         flex-flow: column nowrap;
     }
 
-    .lesson-concepts {
+    .lesson-content__concepts {
         overflow: hidden;
     }
 
     .lesson-title {
-        color: #387ED1;
+        color: #5edbb6;
         font-size: 3rem;
         font-weight: bold;
         text-decoration: underline;
@@ -176,34 +179,44 @@
         margin-bottom: 20px;
     }
 
-    .lesson-concepts >>> h2, .exercise >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+    .lesson-content__concepts >>> h1, .section-title {
+        font-size: 2.4rem;
+        color: #5edbb6;
+    }
+
+    .lesson-content__concepts >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
         font-size: 2.2rem;
         font-weight: bold;
+        color: #272635;
         padding-bottom: 3px;
     }
 
-    .lesson-concepts >>> h3, .section-title { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+    .lesson-content__concepts >>> h3 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
         font-size: 1.8rem;
         font-weight: bold;
+        color: #272635;
     }
 
-    .lesson-concepts >>> h4 {
+    .lesson-content__concepts >>> h4 {
         font-size: 1.5rem;
+        color: #272635;
     }
 
-    .lesson-concepts >>> h5 {
+    .lesson-content__concepts >>> h5 {
         font-size: 1.2rem;
+        color: #272635;
     }
 
-    .lesson-concepts >>> h6 {
+    .lesson-content__concepts >>> h6 {
         font-size: 1.1rem;
+        color: #272635;
     }
 
-    .lesson-concepts >>> hr {
+    .lesson-content__concepts >>> hr {
 
     }
 
-    .lesson-concepts >>> p {
+    .lesson-content__concepts >>> p {
         text-align: justify;
     }
 
@@ -222,88 +235,87 @@
         align-items: center;
     }
 
-    #pdf-container {
+    #carousel-container {
         justify-content: center;
         align-self: center;
         height: 45%;
         width: 100%;
-        background-color: red;
         margin-bottom: 3%;
     }
 
-    .lesson-concepts >>> .language-java, .lesson-concepts >>> .language-html {
+    .lesson-content__concepts >>> .language-java, .lesson-content__concepts >>> .language-html {
         color: #4D515C;
         padding: 5px;
         background-color: #F7F7F7;
     }
 
-    .lesson-concepts >>> .hljs-keyword {
+    .lesson-content__concepts >>> .hljs-keyword {
         color: blue;
     }
 
-    .lesson-concepts >>> .hljs-string {
+    .lesson-content__concepts >>> .hljs-string {
         color: darkred;
     }
 
-    .lesson-concepts >>> .hljs-comment {
+    .lesson-content__concepts >>> .hljs-comment {
         color: purple;
     }
 
-    .lesson-concepts >>> .hljs-tag {
+    .lesson-content__concepts >>> .hljs-tag {
         color: darkgreen;
     }
 
-    .lesson-concepts >>> .hljs-attr {
+    .lesson-content__concepts >>> .hljs-attr {
         color: darkblue;
     }
 
-    .lesson-concepts >>> .info, .lesson-concepts >>> .success, .lesson-concepts >>> .warning, .lesson-concepts >>> .error {
+    .lesson-content__concepts >>> .info, .lesson-content__concepts >>> .success, .lesson-content__concepts >>> .warning, .lesson-content__concepts >>> .error {
         border-radius: 5px;
         padding: 3px;
         margin: 5px;
     }
 
-    .lesson-concepts >>> .info {
+    .lesson-content__concepts >>> .info {
         background-color: #e6f4fa !important;
     }
 
-    .lesson-concepts >>> .success {
+    .lesson-content__concepts >>> .success {
         background-color: #e6fae7 !important;
     }
 
-    .lesson-concepts >>> .warning {
+    .lesson-content__concepts >>> .warning {
         background-color: #f5e5d5 !important;
     }
 
-    .lesson-concepts >>> .error {
+    .lesson-content__concepts >>> .error {
         background-color: #ffc9c9 !important;
     }
 
-    .lesson-concepts >>> blockquote > p::before {
+    .lesson-content__concepts >>> blockquote > p::before {
         content: '" ';
     }
 
-    .lesson-concepts >>> blockquote > p::after {
+    .lesson-content__concepts >>> blockquote > p::after {
         content: ' "';
     }
 
-    .lesson-concepts >>> blockquote > p {
+    .lesson-content__concepts >>> blockquote > p {
         font-style: italic;
     }
 
-    .lesson-concepts >>> a:visited {
+    .lesson-content__concepts >>> a:visited {
         text-decoration: underline;
     }
 
-    .lesson-concepts >>> strong {
+    .lesson-content__concepts >>> strong {
         text-decoration: underline;
     }
 
-    .lesson-concepts >>> ol li {
+    .lesson-content__concepts >>> ol li {
         list-style: decimal;
     }
 
-    .lesson-concepts >>> img {
+    .lesson-content__concepts >>> img {
         margin-left: 40px;
     }
 
