@@ -14,4 +14,12 @@ export class ListItem {
         return new ListItem(parseInt(row_id), lrnPlnTitle, lrnPlnShortDescription, lrnPlnLongDescription);
     }
 
+    static convertSmpCategory(category) {
+        return new ListItem(parseInt(category.row_id), category.title, category.description);
+    }
+
+    static convertSmpContentItem(item) {
+        return new ListItem(parseInt(item.row_id), item.title, item.description);
+    }
+
 }

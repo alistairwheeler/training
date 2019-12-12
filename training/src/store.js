@@ -25,6 +25,9 @@ export default new Vuex.Store({
         otherLessonsIDs: [],
         treeViewItems: [],
 
+        categories: [],
+        items: [],
+
     },
     getters: {
         allLessonsLoaded: state => {
@@ -83,7 +86,15 @@ export default new Vuex.Store({
             return state.lessons.map(lsn => ListItem.convertSmpLesson(lsn))
         },
 
+        //NEW MODEL
 
+        categoriesAsListItems: (state) => {
+            return state.categories.map(category => ListItem.convertSmpCategory(category))
+        },
+
+        contentItemsAsListItems: (state) => {
+            return state.items.map(item => ListItem.convertSmpContentItem(item));
+        }
 
     },
     mutations: {
@@ -142,13 +153,30 @@ export default new Vuex.Store({
         UPDATE_LESSONS(state, lessons) {
             state.lessons = lessons;
         },
+
+        //NEW MODEL
+
+        PUSH_CATEGORY(state, category){
+            if(state.categories.find(elt => elt.row_id === category.row_id) === undefined){
+                state.courses.push(category);
+            } else{
+                console.log("category already in the store")
+            }
+        },
+
+        PUSH_ITEM(state, item){
+            if(state.items.find(elt => elt.row_id === item.row_id) === undefined){
+                state.courses.push(item);
+            } else{
+                console.log("category already in the store")
+            }
+        },
     },
     actions: {
         updateDisplayedLesson({commit}, lesson) {
             console.log(lesson);
             commit('UPDATE_DISPLAYED_LESSON', lesson);
         },
-
 
         async fetchCourses({commit}, smp) {
             return new Promise((resolve, reject) => {
@@ -236,11 +264,14 @@ export default new Vuex.Store({
             });
         },
 
-        async getCategories({commit}, smp) {
+        //NEW MODEL
+
+        async getCategories(context, smp) {
             return new Promise((resolve, reject) => {
                 let category = smp.getBusinessObject("TrnCategory");
                 category.search(() => {
                     if (category.list) {
+                        category.list.forEach(elt => context.commit('PUSH_CATEGORY', elt));
                         resolve(category.list);
                     } else {
                         reject("Could not load the categories");
@@ -249,11 +280,12 @@ export default new Vuex.Store({
             });
         },
 
-        async getCategoriesFromParent({commit}, payload) {
+        async getCategoriesFromParent(context, payload) {
             return new Promise((resolve, reject) => {
                 let category = payload.smp.getBusinessObject("TrnCategory");
                 category.search(() => {
                     if (category.list) {
+                        category.list.forEach(elt => context.commit('PUSH_CATEGORY', elt));
                         resolve(category.list);
                     } else {
                         reject("Could not load the categories");
@@ -262,11 +294,12 @@ export default new Vuex.Store({
             });
         },
 
-        async getLessons({commit}, smp) {
+        async getLessons(context, smp) {
             return new Promise((resolve, reject) => {
                 let lesson = smp.getBusinessObject("TrnLesson");
                 lesson.search(() => {
                     if (lesson.list) {
+                        lesson.list.forEach(elt => context.commit('PUSH_ITEM', elt));
                         resolve(lesson.list);
                     } else {
                         reject("Could not load the lessons");
@@ -275,11 +308,12 @@ export default new Vuex.Store({
             });
         },
 
-        async getLessonsFromCategory({commit}, payload) {
+        async getLessonsFromCategory(context, payload) {
             return new Promise((resolve, reject) => {
                 let lesson = payload.smp.getBusinessObject("TrnLesson");
                 lesson.search(() => {
                     if (lesson.list) {
+                        lesson.list.forEach(elt => context.commit('PUSH_ITEM', elt));
                         resolve(lesson.list);
                     } else {
                         reject("Could not load the lessons");
@@ -287,7 +321,5 @@ export default new Vuex.Store({
                 }, {"trnCatId": payload.categoryId})
             });
         },
-
-
     }
 });
