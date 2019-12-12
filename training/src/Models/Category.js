@@ -6,7 +6,7 @@ export class Category {
         this.description = trnCatTitle;
         this.description = trnCatDescription;
         this.path = trnCatPath;
-        this.parentId = trnCatId_trnCatId;
+        this.parentId = trnCatId;
         this.parentTitle = trnCatId_trnCatTitle;
         this.parentPath = trnCatId_trnCatPath;
     }

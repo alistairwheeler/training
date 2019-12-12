@@ -14,5 +14,4 @@ export class ContentItem {
         this.categoryPath = trnLsnCatId_trnCatPath;
     }
 
-
 }

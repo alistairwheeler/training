@@ -24,6 +24,7 @@ export default new Vuex.Store({
         drawer: false,
         otherLessonsIDs: [],
         treeViewItems: [],
+
     },
     getters: {
         allLessonsLoaded: state => {
@@ -234,5 +235,59 @@ export default new Vuex.Store({
                 }, 'lrnTreeView', {service: 'page', object: 'LrnPlan', rowid: payload.courseId, child: 'LrnPart'})
             });
         },
+
+        async getCategories({commit}, smp) {
+            return new Promise((resolve, reject) => {
+                let category = smp.getBusinessObject("TrnCategory");
+                category.search(() => {
+                    if (category.list) {
+                        resolve(category.list);
+                    } else {
+                        reject("Could not load the categories");
+                    }
+                }, {})
+            });
+        },
+
+        async getCategoriesFromParent({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                let category = payload.smp.getBusinessObject("TrnCategory");
+                category.search(() => {
+                    if (category.list) {
+                        resolve(category.list);
+                    } else {
+                        reject("Could not load the categories");
+                    }
+                }, {"trnCatId": payload.categoryId})
+            });
+        },
+
+        async getLessons({commit}, smp) {
+            return new Promise((resolve, reject) => {
+                let lesson = smp.getBusinessObject("TrnLesson");
+                lesson.search(() => {
+                    if (lesson.list) {
+                        resolve(lesson.list);
+                    } else {
+                        reject("Could not load the lessons");
+                    }
+                }, {})
+            });
+        },
+
+        async getLessonsFromCategory({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                let lesson = payload.smp.getBusinessObject("TrnLesson");
+                lesson.search(() => {
+                    if (lesson.list) {
+                        resolve(lesson.list);
+                    } else {
+                        reject("Could not load the lessons");
+                    }
+                }, {"trnCatId": payload.categoryId})
+            });
+        },
+
+
     }
 });
