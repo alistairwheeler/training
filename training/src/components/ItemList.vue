@@ -1,6 +1,6 @@
 <template>
     <div class="item-list-wrapper">
-        <v-card class="item-prev" @click="redirect(item)" v-for="item in listToDisplay" :key="item.row_id">
+        <v-card class="item-prev" @click="onListItemClicked(item)" v-for="item in listToDisplay" :key="item.row_id">
             <div class="item-prev__picture-container">
                 <img class="item-prev__picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
                      alt="course logo"/>
@@ -20,107 +20,64 @@
 
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import {CATEGORY, CONTENT, ListItem} from "../Models/ListItem";
 
 
     export default {
         name: 'ItemList',
-        props: ["itemType", "courseId"],
+        props: ["itemType", "categoryPath"],
         data: () => ({
             listToDisplay: [],
             redirectToLesson: false,
         }),
         computed: {
             ...mapGetters([
-                'allLessonsLoaded',
-                'courses',
-                'lessons',
-                'lessonsFromCourseAsListItems',
-                'lessonsFromSectionAsListItems',
-                'coursesAsListItems',
-                'lessonsAsListItems',
-                'displayedLesson',
+                'categoriesAsListItems',
+                'allCategoriesLoaded',
+                'allChildrenAsItemList',
+                'allItemsLoaded',
             ])
         },
         methods: {
-            ...mapActions([
-                'fetchCourses', // map `this.increment()` to `this.$store.dispatch('increment')`
 
-                // `mapActions` also supports payloads:
-                'fetchAllLessons', // map `this.incrementBy(amount)` to `this.$store.dispatch('incrementBy', amount)`
-
-                'fetchLessonsFromCourseID',
-            ]),
-            redirect(item) {
-                if (this.itemType !== "courses") {
-                    this.$router.push('/lessonItem/' + item.row_id)
-                } else if (this.itemType === "courses") {
-                    this.$router.push('/lessons/' + item.row_id)
+            onListItemClicked(item) {
+                if(item.itemType === CATEGORY){
+                    this.$router.push('/courses' + item.path);
+                } else if (item.itemType === CONTENT){
+                    this.$router.push('/lessonItem' + item.path)
+                } else {
+                    console.error("there is an error on the itemType, it is : " + item.itemType)
                 }
             },
         },
         async created() {
-            let allLessonsLoaded = this.allLessonsLoaded;
-            console.log("allLessonsLoaded : " + allLessonsLoaded);
 
-            if (this.itemType === "courses") {
-                console.log("displaying courses");
-                let coursesToDisplay = this.coursesAsListItems;
-                if (coursesToDisplay.length === 0) {
-                    await this.fetchCourses(this.$smp)
-                        .then(() => this.listToDisplay = this.coursesAsListItems)
+            if(this.categoryPath === ''){ //Displaying every category
+                console.log("Loading everyCategory");
+                let payload = {
+                    smp: this.$smp,
+                    categoryPath: this.categoryPath
+                };
+                if(this.allCategoriesLoaded && this.allItemsLoaded){
+                    this.listToDisplay = this.categoriesAsListItems;
                 } else {
-                    this.listToDisplay = coursesToDisplay;
+                    await this.$store.dispatch('fetchCategories', payload)
+                        .then(() => { this.listToDisplay = this.categoriesAsListItems });
                 }
+            } else {
+                console.log("Loading children of a category");
+                let payload = {
+                    smp: this.$smp,
+                    categoryPath: this.categoryPath
+                };
 
-            } else if (this.itemType === "lessons") {
-                console.log("displaying lessons");
-                let courseId = parseInt(this.courseId);
-                console.log("courseId : " + courseId)
-
-                if (allLessonsLoaded === true) { //Si toutes les leçons ont été fetchées à un moment, on se contente de trier selon ce qu'on veut afficher
-                    if (courseId === 0 ){//if (courseId === 0 && this.lessonsFromCourseAsListItems(courseId).length > 0) //Si on veut les leçons d'un cours précis ET si elles sont dans le store
-                        this.listToDisplay = this.lessonsAsListItems;
-                    } else{
-                        this.listToDisplay = this.lessonsFromCourseAsListItems(this.courseId)
-                    }
-
-                } else if (allLessonsLoaded === false) {
-                    console.log("all lessons WERE NOT loaded previously");
-                    if (courseId !== 0 && this.lessonsFromCourseAsListItems(courseId).length > 0) { //Leçons d'un cours sont dans le store
-                        console.log("lessons from course : " + courseId + " from store");
-                        this.listToDisplay = this.lessonsFromCourseAsListItems(this.courseId)
-                    } else if(courseId !== 0) { //Si elles ne sont pas dans le store
-                        console.log("lessons from course : " + courseId + " fetched from the web");
-                        let payload = {
-                            smp: this.$smp,
-                            courseId: courseId
-                        };
-                        await this.$store.dispatch('fetchLessonsFromCourseID', payload)
-                            .then(() => this.listToDisplay = this.lessonsFromCourseAsListItems(courseId))
-                    }else  {
-                        console.log("fetching all lessons from the web");
-                        await this.fetchAllLessons(this.$smp).then(() => {
-                            console.log("this.lessonsAsListItems");
-                            console.log(this.lessonsAsListItems);
-                            this.listToDisplay = this.lessonsAsListItems
-                        })
-                    }
-                }
-            } else if (this.itemType === 'sections') {
-                console.log("displaying sections");
-                if (allLessonsLoaded) {
-                    this.listToDisplay = this.lessonsFromSectionAsListItems(this.courseId)
+                if (this.allCategoriesLoaded && this.allItemsLoaded){
+                    this.listToDisplay = this.allChildrenAsItemList(this.categoryPath);
                 } else {
-                    let payload = {
-                        smp: this.$smp,
-                        sectionId: parseInt(this.courseId)
-                    };
-                    await this.$store.dispatch('fetchLessonsFromSection', payload)
-                        .then(() => {
-                            this.listToDisplay = this.lessonsFromSectionAsListItems(this.courseId);
-                        })
+                    await this.$store.dispatch('getCategoriesFromParent', payload)
+                        .then(() => this.$store.dispatch('getLessonsFromCategory', payload))
+                        .then(() => this.listToDisplay = this.allChildrenAsItemList(this.categoryPath));
                 }
-
             }
         }
     }

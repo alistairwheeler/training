@@ -1,9 +1,12 @@
+/* eslint-disable no-console */
 export class ListItem {
-    constructor(row_id, title, shortDescription, longDescription ){
+    constructor(row_id, title, shortDescription, longDescription, itemType , path){
         this.row_id = row_id;
         this.title = title;
         this.shortDescription = shortDescription;
         this.longDescription = longDescription;
+        this.itemType = itemType;
+        this.path = path;
     }
 
     static convertSmpLesson({row_id, lrnLsnTitle, lrnLsnShortDescription = '', lrnLsnLongDescription = ''}){
@@ -14,12 +17,15 @@ export class ListItem {
         return new ListItem(parseInt(row_id), lrnPlnTitle, lrnPlnShortDescription, lrnPlnLongDescription);
     }
 
-    static convertSmpCategory(category) {
-        return new ListItem(parseInt(category.row_id), category.title, category.description);
+    static convertCategoryToListItem(category) {
+        return new ListItem(parseInt(category.row_id),  category.title, "Description d'une Catégorie",
+                            category.description, CATEGORY, category.path);
     }
 
-    static convertSmpContentItem(item) {
-        return new ListItem(parseInt(item.row_id), item.title, item.description);
+    static convertContentItemToListItem(item) {
+        return new ListItem(parseInt(item.row_id), item.title, "Description d'un contenu", item.description, CONTENT, item.path);
     }
 
 }
+    export const CATEGORY = "category";
+    export const CONTENT = "content";
