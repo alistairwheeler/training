@@ -7,28 +7,26 @@
                             width="712" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
                     </iframe>
                 </div>
-                <div id="heading">
+                <div class="heading">
                     <h1 class="heading__title">Simplicite Software Training Platform</h1>
                     <p class="heading__promotion">
-                        Learn to master the Simplicite platform to help your company build <span class="green-text"> powerful applications</span>, at <span class="green-text"> lightning speed</span></p>
+                        Learn to master the Simplicite platform to help your company build <span class="highlighted"> powerful applications</span>, at <span class="highlighted"> lightning speed</span></p>
 
                        <p class="heading__promotion"> This training will help you understand the basics of how
-                        our platform works and teach you the <span class="green-text"> good practices</span> to become a great application designer </p>
-
-                    <v-btn class="try-button" x-large outlined link color="white" @click="redirectTo('/courses')">Try It </v-btn>
+                        our platform works and teach you the <span class="highlighted"> good practices</span> to become a great application designer </p>
 
                 </div>
             </div>
             <nav>
-                <ul class="nav-links">
+                <ul class="__links">
                     <li>
-                        <v-btn x-large class="text-white" link color="#272635" @click="redirectTo('https://simplicite.fr/')">Discover our offers </v-btn>
+                        <v-btn x-large class="text-white" link color="primary" @click="redirectTo('https://simplicite.fr/')">Discover our offers </v-btn>
                     </li>
                     <li>
-                        <v-btn x-large class="text-white" link color="#272635" @click="redirectTo('https://docs.simplicite.io/')"> Read the Documentation</v-btn>
+                        <v-btn x-large class="text-white" link color="primary" @click="redirectTo('https://docs.simplicite.io/')"> Read the Documentation</v-btn>
                     </li>
                     <li>
-                        <v-btn x-large class="text-white" link color="#272635" @click="redirectTo('https://simplicite.fr/cas-clients/')">Watch Examples </v-btn>
+                        <v-btn x-large class="text-white" link color="primary" @click="redirectTo('https://simplicite.fr/cas-clients/')">Watch Examples </v-btn>
                     </li>
                 </ul>
             </nav>
@@ -48,75 +46,65 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+
+    @import "../assets/sass/utils/variables";
+    @import "../assets/sass/utils/mixins";
 
     #homepage-container {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+        @include flex-column-nowrap;
         align-items: center;
     }
 
-    .try-button {
-        align-self: center;
-        outline: none;
-        margin-bottom: 15px;
-    }
-
     #outer-div {
-        display: flex;
-        flex-flow: column nowrap;
-       /* background-color: pink;
-       */
+        @include flex-column-nowrap;
         margin-top: 5vh;
     }
 
     .row-1 {
         display: flex;
         flex-flow: row;
-
     }
 
     #video-wrapper, #heading {
-        width: 50%;
+        width: $homepage-dividing-width;
     }
+
     #video-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
-       /* background-color: cornflowerblue;
-
-        */
     }
-    #heading {
+
+    .heading {
         display: flex;
         flex-direction: column;
-        color: #272635;;
-       /* background-color: mediumaquamarine;
+        color: $color-secondary;
 
-        */
-    }
-    .heading__title {
-        font-size: 4rem;
-    }
+        &__title {
+            font-size: $h1-size+1rem;
+        }
 
-    .heading__promotion {
-        font-size: 1.5rem;
+        &__promotion {
+            font-size: 1.5rem;
+            color: $light-black;
+        }
     }
 
     nav {
-        margin-top: 60px;
+        margin-top: $content-padding;
         width: 60%;
         align-self: center;
-    }
-    .nav-links {
-        display: flex;
-        flex-flow: row;justify-content: space-around;
+
+        .__links {
+            display: flex;
+            flex-flow: row;
+            justify-content: space-around;
+        }
     }
 
-    .green-text {
-        color: #5edbb6;
+    .highlighted {
+        color: $color-secondary;
     }
 </style>
 

@@ -54,33 +54,25 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+
+    @import "../assets/sass/utils/variables";
+    @import "../assets/sass/utils/mixins";
 
     #lessons-wrapper {
-        display: flex;
-        flex-direction: column;
+        @include flex-column-nowrap;
         align-items: center;
     }
 
     #wrapper {
+        @include flex-column-nowrap;
         width: 80%;
-        display: flex;
-        flex-direction: column;
     }
 
     h1 {
         margin-top: 20px;
-        color: #5edbb6;
+        color: $color-secondary;
     }
-
-    .item-prev a {
-        width: 100%;
-        height: 100%;
-        display: flex; /*Pas besoin de préciser la flex direction pcq le lien n'a qu'un enfant qui est .content-wrapper*/
-        padding: 16px;
-        text-decoration: none;
-    }
-
 
     .redirect-button {
         align-self: center;

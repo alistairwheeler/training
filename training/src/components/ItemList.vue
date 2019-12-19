@@ -8,7 +8,6 @@
 
             <div class="item-prev__info-container">
                 <h2 class="item-prev__name">{{item.title}}</h2>
-                <h3 class="item-prev__short-description">{{item.shortDescription}}</h3>
                 <p class="item-prev__long-description">{{item.longDescription}}</p>
             </div>
         </v-card>
@@ -18,9 +17,8 @@
 <script>
     /* eslint-disable no-unused-vars,no-console */
 
-    import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
-    import {CATEGORY, CONTENT, ListItem} from "../Models/ListItem";
+    import {CATEGORY, CONTENT} from "../Models/ListItem";
 
 
     export default {
@@ -62,7 +60,7 @@
                     this.listToDisplay = this.categoriesAsListItems;
                 } else {
                     await this.$store.dispatch('fetchCategories', payload)
-                        .then(() => { this.listToDisplay = this.categoriesAsListItems });
+                        .then(() => { this.listToDisplay = this.categoriesAsListItems }).then(() => console.log(this.listToDisplay));
                 }
             } else {
                 console.log("Loading children of a category");
@@ -76,9 +74,11 @@
                 } else {
                     await this.$store.dispatch('getCategoriesFromParent', payload)
                         .then(() => this.$store.dispatch('getLessonsFromCategory', payload))
-                        .then(() => this.listToDisplay = this.allChildrenAsItemList(this.categoryPath));
+                        .then(() => this.listToDisplay = this.allChildrenAsItemList(this.categoryPath)).then(() => console.log(this.listToDisplay));
                 }
             }
+
+
         }
     }
 </script>
@@ -86,6 +86,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 
+    @import "../assets/sass/utils/variables";
 
     .item-list-wrapper {
         display: flex;
@@ -101,42 +102,44 @@
         transform: scale(1);
         transition: transform 400ms;
 
+        &:hover {
+            transform: scale(1.01);
+            transition: transform 200ms;
+        }
+
+        &__name {
+            font-size: 1.6rem;
+        }
+
+        &__picture-container{
+            width: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &__picture {
+            height: 70%;
+            width: 80%;
+            border: solid $light-black 0.3px;
+        }
+
+        &__info-container {
+            width: 70%;
+            padding-top: 25px;
+
+        }
+
+        &__short-description {
+            font-size: 1.2rem;
+        }
+
+        &__long-description {
+            padding-right: 10px;
+            font-size: 1rem;
+        }
     }
 
-    .item-prev:hover {
-        transform: scale(1.01);
-        transition: transform 200ms;
-    }
 
-    .item-prev__picture-container {
-        width: 30%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 
-    .item-prev__picture {
-        height: 70%;
-        width: 80%;
-        border: solid black 0.3px;
-    }
-
-    .item-prev__info-container {
-        width: 70%;
-        padding-top: 25px;
-    }
-
-    .item-prev__name {
-        font-size: 1.6rem;
-        //color: #272635;
-    }
-
-    .item-prev__short-description {
-        font-size: 1.2rem;
-    }
-
-    .item-prev__long-description {
-        padding-right: 10px;
-        font-size: 1rem;
-    }
 </style>

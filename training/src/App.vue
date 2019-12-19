@@ -184,24 +184,17 @@
 <style lang="scss">
 
     @import "assets/sass/utils/variables";
+    @import "assets/sass/utils/mixins";
 
     * {
-        margin: 0;
-        padding: 0;
+        @include no-padding-margin;
         list-style-type: none;
         outline: 0;
         font-family: 'Montserrat', sans-serif;
     }
 
-    .app {
-    }
-
     .content {
         width: 100%;
-        background-color: white;
-    }
-
-    .router-container-2 {
         background-color: white;
     }
 
@@ -216,16 +209,12 @@
 
     .treeview-lesson, .treeview-lesson--active{
         cursor: pointer;
-        font-size: 1.3em;
+        font-size: $h4-size;
     }
 
     .treeview-lesson--active {
-        color: #272635;
-        background-color: #e6eced;
-    }
-
-    .smp-blue {
-        color: #387ED1;
+        color: $light-black;
+        background-color: $treeView-active;
     }
 
     #snb-text {
