@@ -145,7 +145,7 @@
                 console.log("item.id : ");
                 console.log(item.id);
                 if (!item.children) { //Si l'item est bien une leçon et pas une section
-                    this.$router.push('/lessonItem/'+item.id)
+                    this.$router.push('/lessonItem'+item.path)
                 } else if (item.children){ //si l'item est une section (pcq il a des enfants).
                     console.log("item has children");
                     this.$router.push('/lessons/section/'+item.id)
@@ -165,10 +165,6 @@
             },
 
             checkIfRouteIsLesson() {
-                console.log("is route a lesson ?");
-                console.log(this.$router.currentRoute.path);
-                console.log(this.$router.currentRoute.path.split("/lessonItem/").length )
-                console.log(this.$router.currentRoute.path.split("/lessonItem/").length > 1 )
                 return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
             },
 
@@ -185,7 +181,10 @@
     };
 </script>
 
-<style>
+<style lang="scss">
+
+    @import "assets/sass/utils/variables";
+
     * {
         margin: 0;
         padding: 0;

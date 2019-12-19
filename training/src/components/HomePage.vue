@@ -39,10 +39,6 @@
 <script>
     export default {
         name: 'HomePage',
-        props: {},
-        data: () => ({
-
-        }),
         methods: {
             redirectTo(url) {
                 window.location.href = url;

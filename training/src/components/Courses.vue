@@ -3,7 +3,7 @@
         <div id="wrapper">
             <h1 >Tous les cours disponibles :</h1>
 
-            <ItemList itemType="courses" course-id="courseId"></ItemList>
+            <ItemList itemType="courses" :category-path="categoryPath"></ItemList>
 
         </div>
     </div>
@@ -17,17 +17,14 @@
         name: 'Courses',
         components: {ItemList},
         data: () => ({
-                courseId:0,
+            categoryPath: '',
         }),
-
         //LIFECYCLE HOOKS
         created() {
             console.log("Courses CREATED");
+            let splittedPath = this.$router.currentRoute.path.split("courses/");
+            this.categoryPath = splittedPath[1] ? ("/" + splittedPath[1]) : '';
         },
-
-        destroyed() {
-            console.log("Courses DESTROYED");
-        }
     }
 </script>
 

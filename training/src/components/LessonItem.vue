@@ -6,13 +6,8 @@
 
             <v-breadcrumbs :items="breadCrumbItems" divider=">"></v-breadcrumbs>
 
-            <div class="lesson-content__lrn-outcomes" v-if="lessonToDisplay.learningOutcomes">
-                <h1 class="section-title">Objectifs Pédagogiques</h1>
-                <div id="learning-outcomes-container" v-html="lessonToDisplay.learningOutcomes"></div>
-            </div>
-
-            <div class="lesson-content__concepts" v-if="lessonToDisplay.genConcepts">
-                <div id="concepts-container" v-highlightjs v-html="lessonToDisplay.genConcepts"></div>
+            <div class="lesson-content__concepts" v-if="lessonToDisplay.Content">
+                <div id="concepts-container" v-highlightjs v-html="lessonToDisplay.Content"></div>
             </div>
         </div>
 
@@ -25,9 +20,6 @@
                     </v-carousel-item>
                 </v-carousel>
             </div>
-            <!--
-                            <embed :src="lessonToDisplay.pdfUrl" type="application/pdf" width="100%" height="100%">
-                        -->
 
             <div id="video-container">
                 <iframe class="video" :src="lessonToDisplay.videoUrl"
@@ -45,14 +37,13 @@
 <script>
     /* eslint-disable no-console,no-unused-vars,no-undef */
 
-    import {Lesson} from "../Models/Lesson";
     import {mapGetters} from 'vuex';
-    import {mapActions} from 'vuex';
 
     export default {
         name: 'LessonItem',
         data: () => ({
             lessonToDisplay: {},
+            breadCrumbItems: [],
             items: [
                 {
                     src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
@@ -67,22 +58,13 @@
                     src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
                 },
             ],
-            breadCrumbItems: [],
         }),
         computed: {
             openDrawer: function () {
                 return this.$store.getters.drawer;
             },
             ...mapGetters([
-                'allLessonsLoaded',
-                'courses',
-                'lessons',
-                'lessonWithId',
-                'lessonsFromCourseAsListItems',
-                'lessonsFromSectionAsListItems',
-                'coursesAsListItems',
-                'lessonsAsListItems',
-                'displayedLesson',
+                'getLessonWithPath',
             ])
         },
         methods: {
@@ -99,35 +81,45 @@
                 });
                 this.breadCrumbItems.push({text: this.lessonToDisplay.title, disabled: false})
             },
+            displayLesson(smpContentItem) {
+                this.lessonToDisplay.title = smpContentItem.title;
+                this.lessonToDisplay.Content = smpContentItem.content;
+                this.lessonToDisplay.videoUrl = smpContentItem.videoUrl;
+                this.$store.commit('UPDATE_CURRENT_LESSON_ID', smpContentItem.row_id);
+            },
         },
-        async created() {
-            let lessonId = parseInt(this.$route.params.lessonId);
-            let smpLesson = this.lessonWithId(lessonId);
+        async mounted() {
+            let splitted = this.$router.currentRoute.path.split("lessonItem");
+            let lessonPath = splitted[1] ? (splitted[1]) : '';
 
-            this.$store.commit('UPDATE_CURRENT_LESSON_ID', lessonId);
             this.$store.commit('UPDATE_DRAWER', true);
 
-            if (smpLesson !== undefined) { //Si la leçon est présente, toutes celles du même cours aussi
-                console.log("smpLesson IS defined");
-                this.lessonToDisplay = Lesson.formatFromSimplicite(smpLesson);
-            } else if (smpLesson === undefined) {
-                console.log("smpLesson NOT defined");
-                let payload = {
-                    smp: this.$smp,
-                    lessonId: lessonId
-                };
-                this.$store.dispatch('fetchLesson', payload)
-                    .then(() => this.lessonToDisplay = Lesson.formatFromSimplicite(this.lessonWithId(lessonId)))
+            if(lessonPath !== ''){
+                let smpContentItem = this.getLessonWithPath(lessonPath)
+                if(smpContentItem !== undefined){
+                    //1. Display the lesson
+                    this.displayLesson(smpContentItem);
+
+                    //2. Get the treeview
+
+                    //3. Display the pictures
+                } else {
+                    //1. Fetch the lesson on the server & Display it
+                    let payload = {
+                        smp : this.$smp,
+                        itemPath : this.$route.params.lessonPath,
+                    };
+                    this.$store.dispatch('fetchContentItem', payload).then(smpContentItem => this.displayLesson(smpContentItem));
+
+                    //3. Get the treeview
+
+                    //4. Display the pictures
+                }
+            } else {
+                console.error('error on the path of the lesson' + lessonPath);
             }
-            let payload = {
-                smp: this.$smp,
-                courseId: parseInt(this.lessonToDisplay.courseId)
-            };
-            this.$store.dispatch('fetchTreeViewFromCourse', payload);
-            this.$store.commit('fetchTreeViewFromCourse', payload);
-            this.$store.dispatch('fetchTreeViewFromCourse', payload);
-            this.setBreadCrumb();
-        },
+
+        }
     }
 
 </script>
@@ -168,6 +160,7 @@
         align-items: center;
         height: 100%;
         width: 45%;
+        background-color: var(--light-grey);
     }
 
     #carousel-container {
