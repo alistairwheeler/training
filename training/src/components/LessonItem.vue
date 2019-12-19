@@ -2,17 +2,17 @@
     <div id="lesson-item-wrapper" v-cloak>
         <div v-bind:class="{large: !openDrawer, 'thin': openDrawer}">
 
-            <h1 class="lesson-title"><span class="underlined">{{lessonToDisplay.title}}</span></h1>
+            <h1 class="lesson-title">{{lessonToDisplay.title}}</h1>
 
-            <v-breadcrumbs :items="breadCrumbItems" divider=">"></v-breadcrumbs>
+            <v-breadcrumbs class="breadcrumbs" :items="breadCrumbItems" divider=">"></v-breadcrumbs>
 
-            <div class="lesson-content__concepts" v-if="lessonToDisplay.Content">
-                <div id="concepts-container" v-highlightjs v-html="lessonToDisplay.Content"></div>
+            <div class="lesson_content" v-if="lessonToDisplay.Content">
+                <div class="html-content" v-highlightjs v-html="lessonToDisplay.Content"></div>
             </div>
         </div>
 
-        <div id="aside-content" class="col-6">
-            <div id="carousel-container">
+        <div class="aside-content col-6">
+            <div class="aside-content__carousel-container">
                 <v-carousel hide-delimiters show-arrows-on-hover height="100%">
                     <v-carousel-item v-for="(item, i) in items"
                                      :key="i"
@@ -21,11 +21,11 @@
                 </v-carousel>
             </div>
 
-            <div id="video-container">
-                <iframe class="video" :src="lessonToDisplay.videoUrl"
-                         frameborder="0"
-                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                         allowfullscreen>
+            <div class="video-container">
+                <iframe class="video-container__video-frame" :src="lessonToDisplay.videoUrl"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
                 </iframe>
             </div>
         </div>
@@ -85,7 +85,6 @@
                 this.lessonToDisplay.title = smpContentItem.title;
                 this.lessonToDisplay.Content = smpContentItem.content;
                 this.lessonToDisplay.videoUrl = smpContentItem.videoUrl;
-                this.$store.commit('UPDATE_CURRENT_LESSON_ID', smpContentItem.row_id);
             },
         },
         async mounted() {
@@ -125,199 +124,189 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+
+    @import "../assets/sass/utils/variables";
+    @import "../assets/sass/utils/mixins";
 
     [v-cloak] {
         display: none;
     }
 
     .large, .thin {
-        padding: 10px 0 10px 4.5%;
+        padding: $content-padding;
         display: flex;
         flex-direction: column;
     }
 
     .large {
-        width: 55%;
+        width: $large-width;
     }
 
     .thin {
-        width: 50%;
+        width: $thin-width;
     }
 
-    #error-message {
-        visibility: hidden;
-    }
 
     /* ----- VIDEO & PDF -----*/
-    #aside-content {
-        padding: 0;
-        margin-top: 0;
+    .aside-content {
+        @include no-padding-margin;
+        @include flex-column-nowrap;
         position: fixed;
         right: 0;
-        display: flex;
-        flex-flow: column;
         align-items: center;
         height: 100%;
         width: 45%;
-        background-color: var(--light-grey);
+        background-color: $light-grey;
+
+        &__carousel-container {
+            height: $media-height;
+            width: $media-width;
+        }
     }
 
-    #carousel-container {
-        height: 45%;
-        width: 80%;
-    }
+    .video-container {
+        height: $media-height;
+        width: $media-width;
 
-    #video-container {
-        height: 45%;
-        width: 80%;
+        &__video-frame {
+            height: 100%;
+            width: 100%;
+        }
     }
-
-    .video {
-        height: 100%;
-        width: 100%;
-    }
-
 
     /* ----- LESSON CONTENT ----- */
     #lesson-item-wrapper {
         display: flex;
     }
 
-    .lesson-content__lrn-outcomes, .lesson-content__concepts {
-        display: flex;
-        flex-flow: column nowrap;
+    .lesson-content__lrn-outcomes, .lesson_content {
+        @include flex-column-nowrap;
     }
 
-    .lesson-content__concepts {
+    .lesson_content {
         overflow: hidden;
     }
 
     .lesson-title {
-        color: #5edbb6;
+        color: $color-primary;
         font-size: 3rem;
         font-weight: bold;
-        text-decoration: underline;
-        text-underline-position: under;
-        margin-bottom: 20px;
     }
 
-    .lesson-content__concepts >>> h1, .section-title {
-        font-size: 2.4rem;
-        color: #5edbb6;
+    .lesson_content >>> h1 {
+            font-size: $h1-size;
+            color: $color-accent;
     }
 
-    .lesson-content__concepts >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
-        font-size: 2.2rem;
+    .lesson_content >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+        font-size: $h2-size;
         font-weight: bold;
-        color: #272635;
+        color: $color-secondary;
         padding-bottom: 3px;
     }
 
-    .lesson-content__concepts >>> h3 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
-        font-size: 1.8rem;
+    .lesson_content >>> h3 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+        font-size: $h3-size;
         font-weight: bold;
-        color: #272635;
+        color: $color-secondary;
     }
 
-    .lesson-content__concepts >>> h4 {
-        font-size: 1.5rem;
-        color: #272635;
+    .lesson_content >>> h4 {
+        font-size: $h4-size;
+        color: $color-secondary;
     }
 
-    .lesson-content__concepts >>> h5 {
-        font-size: 1.2rem;
-        color: #272635;
+    .lesson_content >>> h5 {
+        font-size: $h5-size;
+        color: $color-secondary;
     }
 
-    .lesson-content__concepts >>> h6 {
-        font-size: 1.1rem;
-        color: #272635;
+    .lesson_content >>> h6 {
+        font-size: $h6-size;
+        color: $color-secondary;
     }
 
-    .lesson-content__concepts >>> hr {
-
-    }
-
-    .lesson-content__concepts >>> p {
+    .lesson_content >>> p {
         text-align: justify;
     }
 
-
-    .lesson-content__concepts >>> .language-java, .lesson-content__concepts >>> .language-html {
+    .lesson_content >>> .language-java, .lesson_content >>> .language-html {
         color: #4D515C;
         padding: 5px;
-        background-color: #F7F7F7;
+        background-color: $code-background;
     }
 
-    .lesson-content__concepts >>> .hljs-keyword {
-        color: blue;
+    .lesson_content >>> .hljs-keyword {
+        color: $code-keyword;
     }
 
-    .lesson-content__concepts >>> .hljs-string {
-        color: darkred;
+    .lesson_content >>> .hljs-string {
+        color: $code-string;
     }
 
-    .lesson-content__concepts >>> .hljs-comment {
-        color: purple;
+    .lesson_content >>> .hljs-comment {
+        color: $code-comment;
     }
 
-    .lesson-content__concepts >>> .hljs-tag {
-        color: darkgreen;
+    .lesson_content >>> .hljs-tag {
+        color: $code-tag;
     }
 
-    .lesson-content__concepts >>> .hljs-attr {
-        color: darkblue;
+    .lesson_content >>> .hljs-attr {
+        color: $code-attribute;
     }
 
-    .lesson-content__concepts >>> .info, .lesson-content__concepts >>> .success, .lesson-content__concepts >>> .warning, .lesson-content__concepts >>> .error {
+    .lesson_content >>> .info, .lesson_content >>> .success, .lesson_content >>> .warning, .lesson_content >>> .error {
         border-radius: 5px;
         padding: 3px;
         margin: 5px;
     }
 
-    .lesson-content__concepts >>> .info {
-        background-color: #e6f4fa !important;
+    .lesson_content >>> .info {
+        background-color: $information !important;
     }
 
-    .lesson-content__concepts >>> .success {
-        background-color: #e6fae7 !important;
+    .lesson_content >>> .success {
+        background-color: $success !important;
     }
 
-    .lesson-content__concepts >>> .warning {
-        background-color: #f5e5d5 !important;
+    .lesson_content >>> .warning {
+        background-color: $warning !important;
     }
 
-    .lesson-content__concepts >>> .error {
-        background-color: #ffc9c9 !important;
+    .lesson_content >>> .error {
+        background-color: $error !important;
     }
 
-    .lesson-content__concepts >>> blockquote > p::before {
+    .lesson_content >>> blockquote > p::before {
         content: '" ';
     }
 
-    .lesson-content__concepts >>> blockquote > p::after {
+    .lesson_content >>> blockquote > p::after {
         content: ' "';
     }
 
-    .lesson-content__concepts >>> blockquote > p {
+    .lesson_content >>> blockquote > p {
         font-style: italic;
     }
 
-    .lesson-content__concepts >>> a:visited {
+    .lesson_content >>> strong {
         text-decoration: underline;
     }
 
-    .lesson-content__concepts >>> strong {
-        text-decoration: underline;
-    }
-
-    .lesson-content__concepts >>> ol li {
+    .lesson_content >>> ol li {
         list-style: decimal;
     }
 
-    .lesson-content__concepts >>> img {
-        margin-left: 40px;
+    .lesson_content >>> img {
+        margin-left: $content-padding;
+    }
+
+    .breadcrumbs {
+        border-top: $border-thickness solid $light-grey;
+        border-bottom: $border-thickness solid $light-grey;
+        margin-bottom: 20px;
     }
 
 </style>

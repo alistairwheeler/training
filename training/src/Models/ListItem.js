@@ -9,14 +9,6 @@ export class ListItem {
         this.path = path;
     }
 
-    static convertSmpLesson({row_id, lrnLsnTitle, lrnLsnShortDescription = '', lrnLsnLongDescription = ''}){
-        return new ListItem(parseInt(row_id), lrnLsnTitle, lrnLsnShortDescription, lrnLsnLongDescription);
-    }
-
-    static convertSmpCourse({row_id, lrnPlnTitle, lrnPlnShortDescription = '', lrnPlnLongDescription = ''}) {
-        return new ListItem(parseInt(row_id), lrnPlnTitle, lrnPlnShortDescription, lrnPlnLongDescription);
-    }
-
     static convertCategoryToListItem(category) {
         return new ListItem(parseInt(category.row_id),  category.title, "Description d'une Catégorie",
                             category.description, CATEGORY, category.path);

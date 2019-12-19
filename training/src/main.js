@@ -13,16 +13,16 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-//4. Use the simplicite API :
+//2. Use the simplicite API :
 if (process.env.NODE_ENV === "development") {
   Vue.prototype.$smp = new Simplicite.Ajax('https://maxime2.dev.simplicite.io/app', 'api', 'designer', 'simplicite');
 }
 else
   Vue.prototype.$smp = new Simplicite.Ajax('/app', 'api', 'designer', 'simplicite');
 
-//2. Importing the router from router.js :
+//3. Importing the router from router.js :
 import router from './router'
-//3. Importing the Store instance from store.js :
+//4. Importing the Store instance from store.js :
 import store from './store'
 
 //5. Creating the Vue instance with the router, the store and el:'#app' as the root instance of vue

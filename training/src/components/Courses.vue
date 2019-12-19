@@ -29,7 +29,9 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+
+    @import "../assets/sass/utils/variables";
 
     #lesson-item-wrapper {
         display: flex;
@@ -45,6 +47,6 @@
 
     h1 {
         margin-top: 20px;
-        color: #5edbb6;
+        color: $color-secondary;
     }
 </style>

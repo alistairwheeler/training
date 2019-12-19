@@ -1,0 +1,9 @@
+@mixin no-padding-margin {
+  padding: 0;
+  margin: 0;
+}
+
+@mixin flex-column-nowrap{
+  display: flex;
+  flex-flow: column nowrap;
+}
