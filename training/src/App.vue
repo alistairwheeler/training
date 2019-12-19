@@ -193,22 +193,6 @@
         font-family: 'Montserrat', sans-serif;
     }
 
-    :root {
-        --primary-color: blue;
-        --secondary-color: red;
-        --third-color: pink;
-        --light-grey: #eee;
-    }
-
-    .item-prev__info-container {
-        background-color: $color-primary;
-
-        .item-prev__name {
-            color: $color-tertiary;
-        }
-    }
-
-
     .app {
     }
 
