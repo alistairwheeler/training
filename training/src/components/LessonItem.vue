@@ -82,9 +82,9 @@
                 this.breadCrumbItems.push({text: this.lessonToDisplay.title, disabled: false})
             },
             displayLesson(smpContentItem) {
-                this.lessonToDisplay.title = smpContentItem.trnLsnTitle;
-                this.lessonToDisplay.Content = smpContentItem.trnLsnContent;
-                this.lessonToDisplay.videoUrl = smpContentItem.trnLsnVideoUrl;
+                this.lessonToDisplay.title = smpContentItem.title;
+                this.lessonToDisplay.Content = smpContentItem.content;
+                this.lessonToDisplay.videoUrl = smpContentItem.videoUrl;
                 this.$store.commit('UPDATE_CURRENT_LESSON_ID', smpContentItem.row_id);
             },
         },
@@ -160,6 +160,7 @@
         align-items: center;
         height: 100%;
         width: 45%;
+        background-color: var(--light-grey);
     }
 
     #carousel-container {

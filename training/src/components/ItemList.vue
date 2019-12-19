@@ -84,7 +84,9 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+
+
     .item-list-wrapper {
         display: flex;
         flex-direction: column;
@@ -126,7 +128,7 @@
 
     .item-prev__name {
         font-size: 1.6rem;
-        color: #272635;
+        //color: #272635;
     }
 
     .item-prev__short-description {

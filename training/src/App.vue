@@ -181,7 +181,10 @@
     };
 </script>
 
-<style>
+<style lang="scss">
+
+    @import "assets/sass/utils/variables";
+
     * {
         margin: 0;
         padding: 0;
@@ -189,6 +192,22 @@
         outline: 0;
         font-family: 'Montserrat', sans-serif;
     }
+
+    :root {
+        --primary-color: blue;
+        --secondary-color: red;
+        --third-color: pink;
+        --light-grey: #eee;
+    }
+
+    .item-prev__info-container {
+        background-color: $color-primary;
+
+        .item-prev__name {
+            color: $color-tertiary;
+        }
+    }
+
 
     .app {
     }
