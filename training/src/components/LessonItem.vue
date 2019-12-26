@@ -69,17 +69,15 @@
         },
         methods: {
             setBreadCrumb() {
-                this.breadCrumbItems.push({
-                    text: this.lessonToDisplay.courseName,
-                    disabled: false,
-                    href: '/lessons/' + this.lessonToDisplay.courseId,
+                let path = this.$router.currentRoute.path.split('/lessonItem/');
+                console.log(path);
+                path[path.length-1].split('/').forEach(element => {
+                    this.breadCrumbItems.push({
+                        text: element.toUpperCase(),
+                        disabled: false,
+                        href: '/lessons/' + this.lessonToDisplay.courseId,
+                    });
                 });
-                this.breadCrumbItems.push({
-                    text: this.lessonToDisplay.sectionName,
-                    disabled: false,
-                    href: '/lessons/' + this.lessonToDisplay.sectionId
-                });
-                this.breadCrumbItems.push({text: this.lessonToDisplay.title, disabled: false})
             },
             displayLesson(smpContentItem) {
                 this.lessonToDisplay.title = smpContentItem.title;
@@ -87,9 +85,10 @@
                 this.lessonToDisplay.videoUrl = smpContentItem.videoUrl;
             },
         },
-        async mounted() {
+        async created() {
             let splitted = this.$router.currentRoute.path.split("lessonItem");
             let lessonPath = splitted[1] ? (splitted[1]) : '';
+            this.setBreadCrumb();
 
             this.$store.commit('UPDATE_DRAWER', true);
 
@@ -195,35 +194,35 @@
     }
 
     .lesson_content >>> h1 {
-            font-size: $h1-size;
+            font-size: nth($title-size, 1);
             color: $color-accent;
     }
 
     .lesson_content >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
-        font-size: $h2-size;
+        font-size: nth($title-size, 2);
         font-weight: bold;
         color: $color-secondary;
         padding-bottom: 3px;
     }
 
     .lesson_content >>> h3 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
-        font-size: $h3-size;
+        font-size: nth($title-size, 3);
         font-weight: bold;
         color: $color-secondary;
     }
 
     .lesson_content >>> h4 {
-        font-size: $h4-size;
+        font-size: nth($title-size, 4);
         color: $color-secondary;
     }
 
     .lesson_content >>> h5 {
-        font-size: $h5-size;
+        font-size: nth($title-size, 5);
         color: $color-secondary;
     }
 
     .lesson_content >>> h6 {
-        font-size: $h6-size;
+        font-size: nth($title-size, 6);
         color: $color-secondary;
     }
 

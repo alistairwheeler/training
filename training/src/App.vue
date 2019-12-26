@@ -23,7 +23,7 @@
                     solo-inverted
                     hide-details
                     append-icon="mdi-magnify"
-                    placeholder="Search a keyword ..."
+                    placeholder="Rechercher un mot clé ..."
                     class="ml-12">
 
             </v-text-field>
@@ -209,7 +209,7 @@
 
     .treeview-lesson, .treeview-lesson--active{
         cursor: pointer;
-        font-size: $h4-size;
+        font-size: nth($title-size, 4);
     }
 
     .treeview-lesson--active {

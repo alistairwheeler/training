@@ -147,7 +147,7 @@ export default new Vuex.Store({
                             console.log(smpCategory);
                             commit('PUSH_CATEGORY', new Category(smpCategory))
                         });
-                        commit('ALL_LESSONS_LOADED', true);
+                        commit('ALL_CATEGORIES_LOADED', true);
                         resolve(category.list);
                     } else {
                         reject("Could not load the categories");

@@ -82,7 +82,7 @@
         color: $color-secondary;
 
         &__title {
-            font-size: $h1-size+1rem;
+            font-size: nth($title-size, 1)+1rem;
         }
 
         &__promotion {

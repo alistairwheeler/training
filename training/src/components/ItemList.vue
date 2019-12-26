@@ -77,8 +77,6 @@
                         .then(() => this.listToDisplay = this.allChildrenAsItemList(this.categoryPath)).then(() => console.log(this.listToDisplay));
                 }
             }
-
-
         }
     }
 </script>
