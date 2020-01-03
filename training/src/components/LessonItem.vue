@@ -24,10 +24,16 @@
 
         <div class="aside-content col-6">
             <div class="aside-content__carousel-container">
-                <v-carousel hide-delimiters show-arrows-on-hover height="100%">
-                    <v-carousel-item v-for="(item, i) in items"
-                                     :key="i"
-                                     :src="item.src">
+                <v-carousel
+                        hide-delimiters
+                        show-arrows-on-hover
+                        cycle
+                        interval="10000"
+                        progress
+                        height="100%">
+                    <v-carousel-item v-for="(url, index) in picturesURL"
+                                     :key="index"
+                                     :src="url">
                     </v-carousel-item>
                 </v-carousel>
             </div>
@@ -54,20 +60,7 @@
         name: 'LessonItem',
         data: () => ({
             lessonToDisplay: {},
-            items: [
-                {
-                    src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-                },
-                {
-                    src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-                },
-                {
-                    src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-                },
-                {
-                    src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-                },
-            ],
+            picturesURL: [],
         }),
         computed: {
             ...mapGetters([
@@ -79,7 +72,6 @@
                 return this.$store.getters.drawerOpen;
             },
             breadCrumbItems: function () {
-                console.log("BREAD CRUMB ITEMS FOR : " + this.$router.currentRoute.path.split('lessonItem')[1]);
                 return this.breadCrumb(this.$router.currentRoute.path.split('lessonItem')[1]);
             },
 
@@ -89,7 +81,16 @@
                 this.lessonToDisplay.title = contentItem.title;
                 this.lessonToDisplay.Content = contentItem.content;
                 this.lessonToDisplay.videoUrl = contentItem.videoUrl;
+                console.log("contentItem.videoUrl")
+                console.log(contentItem.videoUrl)
                 this.$store.commit('UPDATE_DISPLAYED_LESSON_PATH', contentItem.path);
+                let payload = {
+                    smp: this.$smp,
+                    lessonId: contentItem.row_id,
+                };
+                this.$store.dispatch('fetchPicturesURLs', payload)
+                    .then(urlList => this.picturesURL = urlList)
+                    .catch(err => console.error(err))
             },
 
             breadCrumbItemClicked(categoryPath, index, length) {
@@ -119,7 +120,6 @@
                         });
                 }
                 this.$store.dispatch('fetchHierarchy', payload).catch(err => console.error(err))
-                //.then(() => this.$store.commit('UPDATE_ACTIVE_TREE_VIEW_ITEM', '/cat1/cat2/cat3/cat4/lecon1' ))
             } else {
                 console.error('error on the path of the lesson' + lessonPath);
             }

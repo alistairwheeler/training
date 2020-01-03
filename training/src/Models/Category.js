@@ -49,7 +49,6 @@ export class Category {
      * @returns {Array}
      */
     static findLessonBreadCrumb(extCategory, lessonPath) {
-        console.log("findLessonBreadCrumb");
         let parents = [];
         let obj = {};
         if (extCategory.categories) {
