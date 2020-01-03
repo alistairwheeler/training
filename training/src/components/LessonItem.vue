@@ -1,14 +1,25 @@
 <template>
-    <div id="lesson-item-wrapper" v-cloak>
+    <div id="lesson-item-wrapper" >
         <div v-bind:class="{large: !openDrawer, 'thin': openDrawer}">
 
             <h1 class="lesson-title">{{lessonToDisplay.title}}</h1>
 
-            <v-breadcrumbs class="breadcrumbs" :items="breadCrumbItems" divider=">"></v-breadcrumbs>
+            <ul class="breadcrumb">
+                <li class="breadcrumb__item"
+                    v-for="(item, index) in this.breadCrumbItems"
+                    :key="index"
+                    @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)"
+                >
+                    <span> {{item.title}}</span>
+                    <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1"> > </span>
+
+                </li>
+            </ul>
 
             <div class="lesson_content" v-if="lessonToDisplay.Content">
                 <div class="html-content" v-highlightjs v-html="lessonToDisplay.Content"></div>
             </div>
+
         </div>
 
         <div class="aside-content col-6">
@@ -43,7 +54,6 @@
         name: 'LessonItem',
         data: () => ({
             lessonToDisplay: {},
-            breadCrumbItems: [],
             items: [
                 {
                     src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
@@ -60,64 +70,59 @@
             ],
         }),
         computed: {
-            openDrawer: function () {
-                return this.$store.getters.drawer;
-            },
             ...mapGetters([
                 'getLessonWithPath',
-            ])
+                'hierarchy',
+                'breadCrumb',
+            ]),
+            openDrawer: function () {
+                return this.$store.getters.drawerOpen;
+            },
+            breadCrumbItems: function () {
+                console.log("BREAD CRUMB ITEMS FOR : " + this.$router.currentRoute.path.split('lessonItem')[1]);
+                return this.breadCrumb(this.$router.currentRoute.path.split('lessonItem')[1]);
+            },
+
         },
         methods: {
-            setBreadCrumb() {
-                this.breadCrumbItems.push({
-                    text: this.lessonToDisplay.courseName,
-                    disabled: false,
-                    href: '/lessons/' + this.lessonToDisplay.courseId,
-                });
-                this.breadCrumbItems.push({
-                    text: this.lessonToDisplay.sectionName,
-                    disabled: false,
-                    href: '/lessons/' + this.lessonToDisplay.sectionId
-                });
-                this.breadCrumbItems.push({text: this.lessonToDisplay.title, disabled: false})
+            displayLesson(contentItem) {
+                this.lessonToDisplay.title = contentItem.title;
+                this.lessonToDisplay.Content = contentItem.content;
+                this.lessonToDisplay.videoUrl = contentItem.videoUrl;
+                this.$store.commit('UPDATE_DISPLAYED_LESSON_PATH', contentItem.path);
             },
-            displayLesson(smpContentItem) {
-                this.lessonToDisplay.title = smpContentItem.title;
-                this.lessonToDisplay.Content = smpContentItem.content;
-                this.lessonToDisplay.videoUrl = smpContentItem.videoUrl;
+
+            breadCrumbItemClicked(categoryPath, index, length) {
+                if(index !== length-1){
+                    this.$router.push('/courses/' + categoryPath).catch(err => console.error(err));
+                }
             },
         },
-        async mounted() {
+        async created() {
             let splitted = this.$router.currentRoute.path.split("lessonItem");
             let lessonPath = splitted[1] ? (splitted[1]) : '';
+            let payload = {
+                smp: this.$smp,
+            };
 
-            this.$store.commit('UPDATE_DRAWER', true);
+            this.$store.commit('UPDATE_DRAWER_OPEN', true);
 
-            if(lessonPath !== ''){
-                let smpContentItem = this.getLessonWithPath(lessonPath)
-                if(smpContentItem !== undefined){
-                    //1. Display the lesson
-                    this.displayLesson(smpContentItem);
-
-                    //2. Get the treeview
-
-                    //3. Display the pictures
+            if (lessonPath !== '') {
+                let contentItem = this.getLessonWithPath(lessonPath);
+                if (contentItem !== undefined) {
+                    this.displayLesson(contentItem);
                 } else {
-                    //1. Fetch the lesson on the server & Display it
-                    let payload = {
-                        smp : this.$smp,
-                        itemPath : this.$route.params.lessonPath,
-                    };
-                    this.$store.dispatch('fetchContentItem', payload).then(smpContentItem => this.displayLesson(smpContentItem));
-
-                    //3. Get the treeview
-
-                    //4. Display the pictures
+                    payload.itemPath = lessonPath;
+                    this.$store.dispatch('fetchContentItem', payload)
+                        .then(contentItem => {
+                            this.displayLesson(contentItem)
+                        });
                 }
+                this.$store.dispatch('fetchHierarchy', payload).catch(err => console.error(err))
+                //.then(() => this.$store.commit('UPDATE_ACTIVE_TREE_VIEW_ITEM', '/cat1/cat2/cat3/cat4/lecon1' ))
             } else {
                 console.error('error on the path of the lesson' + lessonPath);
             }
-
         }
     }
 
@@ -129,12 +134,8 @@
     @import "../assets/sass/utils/variables";
     @import "../assets/sass/utils/mixins";
 
-    [v-cloak] {
-        display: none;
-    }
-
     .large, .thin {
-        padding: $content-padding;
+        padding: 0 $content-padding 0 $content-padding;
         display: flex;
         flex-direction: column;
     }
@@ -147,6 +148,26 @@
         width: $thin-width;
     }
 
+    .breadcrumb {
+        border-top: $border-thickness solid $light-grey;
+        border-bottom: $border-thickness solid $light-grey;
+        background-color: white;
+        margin: $breadcrumb-margin 0 $breadcrumb-margin 0;
+        padding-left: 0;
+
+        &__item {
+            text-transform: uppercase;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        &__divider {
+            margin: 0 $breadcrumb-margin 0 $breadcrumb-margin;
+            text-transform: uppercase;
+        }
+    }
 
     /* ----- VIDEO & PDF -----*/
     .aside-content {
@@ -184,129 +205,124 @@
         @include flex-column-nowrap;
     }
 
-    .lesson_content {
-        overflow: hidden;
-    }
-
     .lesson-title {
         color: $color-primary;
-        font-size: 3rem;
+        font-size: nth($title-size, 1)+1rem;
         font-weight: bold;
+        margin-top: map-get($margins, medium);
     }
 
-    .lesson_content >>> h1 {
-            font-size: $h1-size;
-            color: $color-accent;
-    }
+    .lesson_content {
+        overflow: hidden;
 
-    .lesson_content >>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
-        font-size: $h2-size;
-        font-weight: bold;
-        color: $color-secondary;
-        padding-bottom: 3px;
-    }
+        &>>> h1 {
+            font-size: nth($title-size, 4);
+        }
 
-    .lesson_content >>> h3 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
-        font-size: $h3-size;
-        font-weight: bold;
-        color: $color-secondary;
-    }
+        &>>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+            font-size: nth($title-size, 2);
+            font-weight: bold;
+            color: $color-secondary;
+            padding-bottom: 3px;
+        }
 
-    .lesson_content >>> h4 {
-        font-size: $h4-size;
-        color: $color-secondary;
-    }
+        &>>> h3 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+            font-size: nth($title-size, 3);
+            font-weight: bold;
+            color: $color-secondary;
+        }
 
-    .lesson_content >>> h5 {
-        font-size: $h5-size;
-        color: $color-secondary;
-    }
+        &>>> h4 {
+            font-size: nth($title-size, 4);
+            color: $color-secondary;
+        }
 
-    .lesson_content >>> h6 {
-        font-size: $h6-size;
-        color: $color-secondary;
-    }
+        &>>> h5 {
+            font-size: nth($title-size, 5);
+            color: $color-secondary;
+        }
 
-    .lesson_content >>> p {
-        text-align: justify;
-    }
+        &>>> h6 {
+            font-size: nth($title-size, 6);
+            color: $color-secondary;
+        }
 
-    .lesson_content >>> .language-java, .lesson_content >>> .language-html {
-        color: #4D515C;
-        padding: 5px;
-        background-color: $code-background;
-    }
+        &>>> p {
+            text-align: justify;
+        }
 
-    .lesson_content >>> .hljs-keyword {
-        color: $code-keyword;
-    }
+        &>>> .language-java, &>>> .language-html {
+            color: #4D515C;
+            padding: 5px;
+            background-color: $code-background;
+        }
 
-    .lesson_content >>> .hljs-string {
-        color: $code-string;
-    }
+        &>>> .hljs-keyword {
+            color: $code-keyword;
+        }
 
-    .lesson_content >>> .hljs-comment {
-        color: $code-comment;
-    }
+        &>>> .hljs-string {
+            color: $code-string;
+        }
 
-    .lesson_content >>> .hljs-tag {
-        color: $code-tag;
-    }
+        &>>> .hljs-comment {
+            color: $code-comment;
+        }
 
-    .lesson_content >>> .hljs-attr {
-        color: $code-attribute;
-    }
+        &>>> .hljs-tag {
+            color: $code-tag;
+        }
 
-    .lesson_content >>> .info, .lesson_content >>> .success, .lesson_content >>> .warning, .lesson_content >>> .error {
-        border-radius: 5px;
-        padding: 3px;
-        margin: 5px;
-    }
+        &>>> .hljs-attr {
+            color: $code-attribute;
+        }
 
-    .lesson_content >>> .info {
-        background-color: $information !important;
-    }
+        &>>> .info, &>>> .success, &>>> .warning, &>>> .error {
+            border-radius: 5px;
+            padding: 3px;
+            margin: 5px;
+        }
 
-    .lesson_content >>> .success {
-        background-color: $success !important;
-    }
+        &>>> .info {
+            background-color: $information !important;
+        }
 
-    .lesson_content >>> .warning {
-        background-color: $warning !important;
-    }
+        &>>> .success {
+            background-color: $success !important;
+        }
 
-    .lesson_content >>> .error {
-        background-color: $error !important;
-    }
+        &>>> .warning {
+            background-color: $warning !important;
+        }
 
-    .lesson_content >>> blockquote > p::before {
-        content: '" ';
-    }
+        &>>> .error {
+            background-color: $error !important;
+        }
 
-    .lesson_content >>> blockquote > p::after {
-        content: ' "';
-    }
+        &>>> blockquote > p::before {
+            content: '" ';
+        }
 
-    .lesson_content >>> blockquote > p {
-        font-style: italic;
-    }
+        &>>> blockquote > p::after {
+            content: ' "';
+        }
 
-    .lesson_content >>> strong {
-        text-decoration: underline;
-    }
+        &>>> blockquote > p {
+            font-style: italic;
+        }
 
-    .lesson_content >>> ol li {
-        list-style: decimal;
-    }
+        &>>> strong {
+            text-decoration: underline;
+        }
 
-    .lesson_content >>> img {
-        margin-left: $content-padding;
-    }
+        &>>> ol li {
+            list-style: decimal;
+        }
 
-    .breadcrumbs {
-        border-top: $border-thickness solid $light-grey;
-        border-bottom: $border-thickness solid $light-grey;
-        margin-bottom: 20px;
+        &>>> img {
+            margin-left: $content-padding;
+        }
+        
     }
 
 </style>

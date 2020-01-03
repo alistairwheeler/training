@@ -23,7 +23,7 @@
 
     export default {
         name: 'ItemList',
-        props: ["itemType", "categoryPath"],
+        props: ["categoryPath"],
         data: () => ({
             listToDisplay: [],
             redirectToLesson: false,
@@ -33,15 +33,17 @@
                 'categoriesAsListItems',
                 'allCategoriesLoaded',
                 'allChildrenAsItemList',
+                'childrenCategories',
+                'childrenLessons',
                 'allItemsLoaded',
             ])
         },
         methods: {
 
             onListItemClicked(item) {
-                if(item.itemType === CATEGORY){
+                if (item.itemType === CATEGORY) {
                     this.$router.push('/courses' + item.path);
-                } else if (item.itemType === CONTENT){
+                } else if (item.itemType === CONTENT) {
                     this.$router.push('/lessonItem' + item.path)
                 } else {
                     console.error("there is an error on the itemType, it is : " + item.itemType)
@@ -50,35 +52,30 @@
         },
         async created() {
 
-            if(this.categoryPath === ''){ //Displaying every category
-                console.log("Loading everyCategory");
-                let payload = {
-                    smp: this.$smp,
-                    categoryPath: this.categoryPath
-                };
-                if(this.allCategoriesLoaded && this.allItemsLoaded){
-                    this.listToDisplay = this.categoriesAsListItems;
+            let payload = {
+                smp: this.$smp,
+                categoryPath: this.categoryPath
+            };
+            if (this.categoryPath === '') { //Displaying every category
+                if (this.allCategoriesLoaded && this.allItemsLoaded) {
+                    this.listToDisplay.push(...this.categoriesAsListItems);
                 } else {
                     await this.$store.dispatch('fetchCategories', payload)
-                        .then(() => { this.listToDisplay = this.categoriesAsListItems }).then(() => console.log(this.listToDisplay));
+                        .then(() => this.listToDisplay.push(...this.categoriesAsListItems));
                 }
             } else {
-                console.log("Loading children of a category");
-                let payload = {
-                    smp: this.$smp,
-                    categoryPath: this.categoryPath
-                };
-
-                if (this.allCategoriesLoaded && this.allItemsLoaded){
-                    this.listToDisplay = this.allChildrenAsItemList(this.categoryPath);
+                if (this.allCategoriesLoaded && this.allItemsLoaded) {
+                    this.listToDisplay.push(...this.childrenCategories(this.categoryPath));
+                    this.listToDisplay.push(...this.childrenLessons(this.categoryPath));
                 } else {
                     await this.$store.dispatch('getCategoriesFromParent', payload)
                         .then(() => this.$store.dispatch('getLessonsFromCategory', payload))
-                        .then(() => this.listToDisplay = this.allChildrenAsItemList(this.categoryPath)).then(() => console.log(this.listToDisplay));
+                        .then(() => {
+                            this.listToDisplay.push(...this.childrenCategories(this.categoryPath));
+                            this.listToDisplay.push(...this.childrenLessons(this.categoryPath));
+                        })
                 }
             }
-
-
         }
     }
 </script>
@@ -94,52 +91,48 @@
     }
 
     .item-prev {
-        width: 100%;
         min-height: 200px;
         display: flex;
-        margin-bottom: 30px;
         position: relative;
+        margin-bottom: map-get($margins, medium);
         transform: scale(1);
-        transition: transform 400ms;
+        transition: transform $long-hover-duration;
 
         &:hover {
             transform: scale(1.01);
-            transition: transform 200ms;
+            transition: transform $short-hover-duration;
         }
 
         &__name {
-            font-size: 1.6rem;
+            font-size: nth($title-size, 4);
         }
 
-        &__picture-container{
-            width: 30%;
+        &__picture-container {
+            width: $preview-pic-container-width;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         &__picture {
-            height: 70%;
-            width: 80%;
-            border: solid $light-black 0.3px;
+            height: $preview-pic-height;
+            width: $preview-pic-width;
         }
 
         &__info-container {
-            width: 70%;
+            width: 100%-$preview-pic-container-width;
             padding-top: 25px;
 
         }
 
         &__short-description {
-            font-size: 1.2rem;
+            font-size: nth($title-size, 5);
         }
 
         &__long-description {
-            padding-right: 10px;
-            font-size: 1rem;
+            padding-right: map-get($paddings, medium);
+            font-size: nth($title-size, 5);
         }
     }
-
-
 
 </style>

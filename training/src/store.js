@@ -2,8 +2,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {ListItem} from "./Models/ListItem";
-import {Lesson} from "./Models/Lesson";
-import {convertSmpTreeView, sortLessonIDs} from "./Helper";
 import {Category} from "./Models/Category";
 import {ContentItem} from "./Models/ContentItem";
 
@@ -11,143 +9,190 @@ Vue.use(Vuex);
 
 //Store pattern made with vuex
 
-//It serves as the unique source of truth for the application, to make easier to communicate information to other components
+//It serves as the unique source of truth for the application, to make easier the communication of information between components
 
 export default new Vuex.Store({
     state: {
-        //OLD MODEL
-        displayedLesson: {},
-        courses: [],
-        lessons: [],
-        currentLessonId: 0,
-        currentSectionId: 0,
-        currentCourseId: 0,
-        allLessonsLoaded: false,
-        drawer: false,
-        otherLessonsIDs: [],
-        treeViewItems: [],
-
-        //NEW MODEL
+        hierarchy: [],
         categories: [],
         items: [],
+        displayLessonPath: '',
         allCategoriesLoaded: false,
         allItemsLoaded: false,
+        drawerOpen: false,
     },
+
     getters: {
         //NEW MODEL
-        allCategoriesLoaded: state => {
-            return state.allCategoriesLoaded;
+        drawerOpen: state => {
+            return state.drawerOpen
         },
 
-        getLessonWithPath : state => lessonPath => {
-            return state.items.find(item => item.path === lessonPath)
+        allCategoriesLoaded: state => {
+            return state.allCategoriesLoaded;
         },
 
         allItemsLoaded: state => {
             return state.allItemsLoaded;
         },
 
+        getLessonWithPath: state => lessonPath => {
+            return state.items.find(item => item.path === lessonPath)
+        },
+
         categoriesAsListItems: (state) => {
-            return state.categories.map(category => ListItem.convertCategoryToListItem(category))
+            return state.categories.map(category => ListItem.convertCategory(category))
         },
 
-        contentItemsAsListItems: (state) => {
-            return state.items.map(item => ListItem.convertContentItemToListItem(item));
+        childrenCategories: state => motherPath => {
+            if (motherPath[0] !== '/')
+                motherPath = '/' + motherPath;
+            return state.categories
+                .filter(category => category.parentPath === motherPath)
+                .map(category => ListItem.convertCategory(category));
         },
 
-        contentItemsFromCategoryAsItemList: (state) => (categoryPath) => {
-            let filteredItems = state.items.filter(item => item.categoryPath.includes(categoryPath));
-            return filteredItems.map(item => ListItem.convertContentItemToListItem(item))
+        childrenLessons: state => motherPath => {
+            console.log("childrenLessons");
+            if (motherPath[0] !== '/')
+                motherPath = '/' + motherPath;
+            return state.items
+                .filter(item => item.categoryPath === motherPath)
+                .map(item => ListItem.convertContentItem(item));
         },
 
-        allChildrenAsItemList: (state) => (categoryPath) => {
-            let children = state.categories
-                .filter(cat => cat.path.includes(categoryPath + '/'))
-                .map(cat => ListItem.convertCategoryToListItem(cat));
-
-            state.items
-                .filter(item => item.categoryPath.includes(categoryPath))
-                .map(item => children.push(ListItem.convertContentItemToListItem(item)));
-            return children;
+        nextLessonPath: (state, getters) => {
+            console.log("nextLessonPath");
+            let currentPath = state.displayLessonPath;
+            console.log("currentPath : " + currentPath);
+            let sisterLessons = getters.sisterLessons(currentPath);
+            let currentIndex = sisterLessons.findIndex(lesson => lesson.path === currentPath);
+            if (currentIndex === sisterLessons.length - 1) {
+                return undefined
+            } else {
+                return sisterLessons[currentIndex + 1].path;
+            }
         },
 
-        ancestorCategories : (state) => {
-            return state.categories.filter(cat => cat.parentId === undefined)
-                .map(ancestorCategory => ListItem.convertCategoryToListItem(ancestorCategory));
+        previousLessonPath: (state, getters) => {
+            let currentPath = state.displayLessonPath;
+            let sisterLessons = getters.sisterLessons(currentPath);
+            let currentIndex = sisterLessons.findIndex(lesson => lesson.path === currentPath);
+            if (currentIndex === 0) {
+                return undefined
+            } else {
+                return sisterLessons[currentIndex - 1].path;
+            }
         },
 
-        //OLD MODEL
-        drawer: state => {
-          return state.drawer;
+        sisterLessons: (state, getters) => (lessonPath) => {
+            console.log("sisterLessons");
+            console.log("lessonPath : " + lessonPath);
+            let parents = getters.parentsList(lessonPath);
+            let directParent = parents[parents.length - 1];
+            console.log("directPrent.path : " + directParent.path);
+            return getters.childrenLessons(directParent.path)
+                .sort((lsn1, lsn2) => {
+                    return parseInt(lsn1.order) - parseInt(lsn2.order)
+                });
         },
 
-        treeViewItems: state => {
-            return state.treeViewItems;
+        parentsList: state => lessonPath => {
+            console.log("parentsList");
+            let parents = [];
+            let obj = {};
+            state.hierarchy.forEach(ancestor => {
+                if (lessonPath.includes(ancestor.trnCatPath)) {
+                    obj.title = ancestor.trnCatTitle;
+                    obj.path = ancestor.trnCatPath;
+                    parents.push(obj);
+                    parents.push(...Category.findParentsOfLesson(ancestor, lessonPath));
+                }
+            });
+            return parents;
         },
 
-        displayedLesson: state => {
-            return state.displayedLesson
+        breadCrumb: state => lessonPath => {
+            console.log("breadCrumb() " + lessonPath);
+            let breadCrumbItems = [];
+            let obj = {};
+            state.hierarchy.forEach(ancestor => {
+                console.log(ancestor.trnCatTitle);
+                if (lessonPath.includes(ancestor.trnCatPath)) {
+                    console.log(ancestor.trnCatTitle + " is included in the path");
+                    obj.title = ancestor.trnCatTitle;
+                    obj.path = ancestor.trnCatPath;
+                    breadCrumbItems.push(obj);
+                    breadCrumbItems.push(...Category.findLessonBreadCrumb(ancestor, lessonPath));
+                } else {
+                    console.log(ancestor.trnCatTitle + " is not included in the path")
+                }
+            });
+            console.log(breadCrumbItems);
+            return breadCrumbItems;
         },
+
+        hierarchy: state => {
+            return state.hierarchy;
+        },
+
+        treeView: (state) => {
+            let treeView = [];
+            state.hierarchy.map(ancestorCategory => treeView.push(Category.convertExtCategoryToTreeView(ancestorCategory)));
+            return treeView
+        },
+
     },
 
     mutations: {
-        //NEW MODEL
-        ALL_CATEGORIES_LOADED(state, choice){
+        UPDATE_DRAWER_OPEN(state, choice) {
+            state.drawerOpen = choice;
+        },
+
+        ALL_CATEGORIES_LOADED(state, choice) {
             state.allCategoriesLoaded = choice;
         },
 
-        ALL_ITEMS_LOADED(state, choice){
+        ALL_ITEMS_LOADED(state, choice) {
             state.allItemsLoaded = choice;
         },
 
-        PUSH_CATEGORY(state, category){
-            if(state.categories.find(elt => elt.row_id === category.row_id) === undefined){
+        PUSH_CATEGORY(state, category) {
+            if (state.categories.find(elt => elt.row_id === category.row_id) === undefined) {
                 state.categories.push(category);
-            } else{
+            } else {
                 console.log("category already in the store")
             }
         },
 
-        PUSH_ITEM(state, item){
-            if(state.items.find(elt => elt.row_id === item.row_id) === undefined){
+        PUSH_ITEM(state, item) {
+            if (state.items.find(elt => elt.row_id === item.row_id) === undefined) {
                 state.items.push(item);
-            } else{
+            } else {
                 console.log("item already in the store")
             }
         },
 
-        //OLD MODEL
-        UPDATE_DRAWER(state, choice){
-            state.drawer = choice;
+        UPDATE_HIERARCHY(state, hierarchy) {
+            state.hierarchy = hierarchy;
         },
 
-        UPDATE_TREE_VIEW_ITEMS(state, treeViewItems) {
-            Vue.set(state, 'treeViewItems', treeViewItems)
-        },
-
-        UPDATE_DISPLAYED_LESSON(state, lesson) {
-            Vue.set(state, 'displayedLesson', lesson);
+        UPDATE_DISPLAYED_LESSON_PATH(state, lessonPath) {
+            Vue.set(state, 'displayLessonPath', lessonPath);
         },
 
     },
 
     actions: {
-        updateDisplayedLesson({commit}, lesson) {
-            console.log(lesson);
-            commit('UPDATE_DISPLAYED_LESSON', lesson);
-        },
-
-        //NEW MODEL
         async fetchCategories({commit}, payload) {
             return new Promise((resolve, reject) => {
                 let category = payload.smp.getBusinessObject("TrnCategory");
                 category.search(() => {
                     if (category.list) {
                         category.list.forEach(smpCategory => {
-                            console.log(smpCategory);
                             commit('PUSH_CATEGORY', new Category(smpCategory))
                         });
-                        commit('ALL_LESSONS_LOADED', true);
+                        commit('ALL_CATEGORIES_LOADED', true);
                         resolve(category.list);
                     } else {
                         reject("Could not load the categories");
@@ -173,13 +218,14 @@ export default new Vuex.Store({
         async fetchContentItem({commit}, payload) {
             return new Promise((resolve, reject) => {
                 let lesson = payload.smp.getBusinessObject("TrnLesson");
-                lesson.get(smpLesson => {
-                    if (smpLesson) {
-                        commit('PUSH_ITEM', new ContentItem(smpLesson));
-                        resolve(smpLesson);
+                lesson.search(() => {
+                    if (lesson.list) {
+                        let lsn = new ContentItem(lesson.list[0]);
+                        commit('PUSH_ITEM', lsn);
+                        resolve(lsn);
                     } else
                         reject("Could not load the lesson");
-                }, {trnLsnPath: payload.itemPath})
+                }, {"trnLsnPath": payload.itemPath})
             })
         },
 
@@ -212,8 +258,7 @@ export default new Vuex.Store({
             });
         },
 
-        async getChildrenOf({commit}, payload){
-            console.log("getting children of : " + payload.parentId);
+        async getChildrenOf({commit}, payload) {
             let children = [];
             let categoriesPromise = new Promise((resolve, reject) => {
                 let category = payload.smp.getBusinessObject("TrnCategory");
@@ -247,19 +292,159 @@ export default new Vuex.Store({
             Promise.all([categoriesPromise, lessonsPromise]).then(() => console.log(children))
         },
 
-        async fetchTreeViewFromCourse(context, payload) {
-            console.log("fetchTreeView");
-            console.log(payload);
+        async fetchHierarchy({commit}, payload) {
+            let placeHolderHierarchy = [
+                {
+                    "trnCatId": null,
+                    "trnCatOrder": 1010,
+                    "trnCatDescription": "1",
+                    "trnCatId__trnCatTitle": null,
+                    "trnCatTitle": "cat1",
+                    "trnCatPath": "/cat1",
+                    "categories": [
+                        {
+                            "trnCatId": "11",
+                            "trnCatOrder": 1020,
+                            "trnCatDescription": "2",
+                            "trnCatId__trnCatTitle": "cat1",
+                            "trnCatTitle": "cat2",
+                            "trnCatPath": "/cat1/cat2",
+                            "categories": [
+                                {
+                                    "trnCatId": "12",
+                                    "trnCatOrder": 1030,
+                                    "trnCatDescription": "3",
+                                    "trnCatId__trnCatTitle": "cat2",
+                                    "trnCatTitle": "cat3",
+                                    "trnCatPath": "/cat1/cat2/cat3",
+                                    "categories": [
+                                        {
+                                            "trnCatId": "13",
+                                            "trnCatOrder": 1040,
+                                            "trnCatDescription": "4",
+                                            "trnCatId__trnCatTitle": "cat3",
+                                            "trnCatTitle": "cat4",
+                                            "trnCatPath": "/cat1/cat2/cat3/cat4",
+                                            "row_id": "14",
+                                            "trnCatPicture": null,
+                                            "trnCatId__trnCatPath": "/cat1/cat2/cat3",
+                                            "lessons": [
+                                                {
+                                                    "trnLsnPath": "/cat1/cat2/cat3/cat4/lecon3",
+                                                    "trnLsnOrder": 300,
+                                                    "trnLsnCatId__trnCatPath": "/cat1/cat2/cat3/cat4",
+                                                    "trnLsnTitle": "Lecon 3",
+                                                    "trnLsnDescription": "Une leçon pour la catégorie enfant 1, qui avait envie d'être maman",
+                                                    "trnLsnVideoUrl": null,
+                                                    "trnLsnContent": "<h1> je suis un titre de niveau 1<\/h1>",
+                                                    "trnLsnCatId__trnCatTitle": "cat4",
+                                                    "row_id": "3",
+                                                    "trnLsnCatId": "14"
+                                                },
+                                                {
+                                                    "trnLsnPath": "/cat1/cat2/cat3/cat4/lecon1",
+                                                    "trnLsnOrder": 10,
+                                                    "trnLsnCatId__trnCatPath": "/cat1/cat2/cat3/cat4",
+                                                    "trnLsnTitle": "Lecon1",
+                                                    "trnLsnDescription": "LeconRecursive1",
+                                                    "trnLsnVideoUrl": null,
+                                                    "trnLsnContent": null,
+                                                    "trnLsnCatId__trnCatTitle": "cat4",
+                                                    "row_id": "7",
+                                                    "trnLsnCatId": "14"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "row_id": "13",
+                                    "trnCatPicture": null,
+                                    "trnCatId__trnCatPath": "/cat1/cat2"
+                                }
+                            ],
+                            "row_id": "12",
+                            "trnCatPicture": null,
+                            "trnCatId__trnCatPath": "/cat1"
+                        }
+                    ],
+                    "row_id": "11",
+                    "trnCatPicture": null,
+                    "trnCatId__trnCatPath": null
+                },
+                {
+                    "trnCatId": null,
+                    "trnCatOrder": 200,
+                    "trnCatDescription": "Une deuxième catégorie pour plus de diversité",
+                    "trnCatId__trnCatTitle": null,
+                    "trnCatTitle": "Catégorie 2",
+                    "trnCatPath": "/catgorie2",
+                    "categories": [
+                        {
+                            "trnCatId": "5",
+                            "trnCatOrder": 100,
+                            "trnCatDescription": "Première catégorie créée pour utilisation dans le front Simplicité",
+                            "trnCatId__trnCatTitle": "Catégorie 2",
+                            "trnCatTitle": "Catégorie1",
+                            "trnCatPath": "/catgorie2/catgorie1",
+                            "categories": [
+                                {
+                                    "trnCatId": "4",
+                                    "trnCatOrder": 300,
+                                    "trnCatDescription": "Une catégorie enfant pour tester ce feature",
+                                    "trnCatId__trnCatTitle": "Catégorie1",
+                                    "trnCatTitle": "Enfant 1",
+                                    "trnCatPath": "/catgorie2/catgorie1/enfant1",
+                                    "row_id": "6",
+                                    "trnCatPicture": null,
+                                    "trnCatId__trnCatPath": "/catgorie2/catgorie1"
+                                }
+                            ],
+                            "row_id": "4",
+                            "trnCatPicture": null,
+                            "trnCatId__trnCatPath": "/catgorie2",
+                            "lessons": [
+                                {
+                                    "trnLsnPath": "/catgorie2/catgorie1/titre1",
+                                    "trnLsnOrder": 1010,
+                                    "trnLsnCatId__trnCatPath": "/catgorie2/catgorie1",
+                                    "trnLsnTitle": "Titre 1",
+                                    "trnLsnDescription": "Description 1",
+                                    "trnLsnVideoUrl": null,
+                                    "trnLsnContent": null,
+                                    "trnLsnCatId__trnCatTitle": "Catégorie1",
+                                    "row_id": "4",
+                                    "trnLsnCatId": "4"
+                                }
+                            ]
+                        }
+                    ],
+                    "row_id": "5",
+                    "trnCatPicture": null,
+                    "trnCatId__trnCatPath": null,
+                    "lessons": [
+                        {
+                            "trnLsnPath": "/catgorie2/titre2",
+                            "trnLsnOrder": 1020,
+                            "trnLsnCatId__trnCatPath": "/catgorie2",
+                            "trnLsnTitle": "Titre 2",
+                            "trnLsnDescription": "Description 2",
+                            "trnLsnVideoUrl": null,
+                            "trnLsnContent": null,
+                            "trnLsnCatId__trnCatTitle": "Catégorie 2",
+                            "row_id": "5",
+                            "trnLsnCatId": "5"
+                        }
+                    ]
+                }
+            ];
+            console.log("fetchHierarchy");
             return new Promise((resolve, reject) => {
-                payload.smp.treeview((treeView) => {
-                    console.log(treeView);
-                    let convertedTreeView = convertSmpTreeView(treeView.list);
-                    context.commit('UPDATE_TREE_VIEW_ITEMS', convertedTreeView);
-                    context.commit('UPDATE_OTHER_LESSONS_IDs', sortLessonIDs(convertedTreeView));
-                    resolve(convertedTreeView)
-                }, 'lrnTreeView', {service: 'page', object: 'LrnPlan', rowid: payload.courseId, child: 'LrnPart'})
-            });
+                let url = payload.smp.getExternalObjectURL('TrnExternalTreeView');
+                payload.smp.getExternalObject(response => {
+                    commit('UPDATE_HIERARCHY', placeHolderHierarchy);
+                    resolve(placeHolderHierarchy);
+                }, 'TrnExternalTreeView');
+            })
         },
-
     }
+
 });

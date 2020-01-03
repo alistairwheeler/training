@@ -1,9 +1,9 @@
 <template>
     <div id="lesson-item-wrapper">
         <div id="wrapper">
-            <h1 >Tous les cours disponibles :</h1>
+            <h1 class="courses-title">Tous les cours disponibles :</h1>
 
-            <ItemList itemType="courses" :category-path="categoryPath"></ItemList>
+            <ItemList :category-path="categoryPath"></ItemList>
 
         </div>
     </div>
@@ -22,8 +22,8 @@
         //LIFECYCLE HOOKS
         created() {
             console.log("Courses CREATED");
-            let splittedPath = this.$router.currentRoute.path.split("courses/");
-            this.categoryPath = splittedPath[1] ? ("/" + splittedPath[1]) : '';
+            let splittedRoutePath = this.$router.currentRoute.path.split("courses/");
+            this.categoryPath = splittedRoutePath[1] ? splittedRoutePath[1] : '';
         },
     }
 </script>
@@ -46,7 +46,12 @@
     }
 
     h1 {
-        margin-top: 20px;
+        margin-top: map-get($margins, medium);
         color: $color-secondary;
+    }
+
+    .courses-title {
+        margin-top: map-get($margins, medium);
+        margin-bottom: map-get($margins, medium);
     }
 </style>
