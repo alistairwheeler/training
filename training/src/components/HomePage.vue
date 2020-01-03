@@ -10,23 +10,31 @@
                 <div class="heading">
                     <h1 class="heading__title">Simplicite Software Training Platform</h1>
                     <p class="heading__promotion">
-                        Learn to master the Simplicite platform to help your company build <span class="highlighted"> powerful applications</span>, at <span class="highlighted"> lightning speed</span></p>
+                        Learn to master the Simplicite platform to help your company build <span class="highlighted"> powerful applications</span>,
+                        at <span class="highlighted"> lightning speed</span></p>
 
-                       <p class="heading__promotion"> This training will help you understand the basics of how
-                        our platform works and teach you the <span class="highlighted"> good practices</span> to become a great application designer </p>
+                    <p class="heading__promotion"> This training will help you understand the basics of how
+                        our platform works and teach you the <span class="highlighted"> good practices</span> to become
+                        a great application designer </p>
 
                 </div>
             </div>
             <nav>
                 <ul class="__links">
                     <li>
-                        <v-btn x-large class="text-white" link color="primary" @click="redirectTo('https://simplicite.fr/')">Discover our offers </v-btn>
+                        <v-btn x-large class="text-white" link color="primary"
+                               @click="redirectTo('https://simplicite.fr/')">Discover our offers
+                        </v-btn>
                     </li>
                     <li>
-                        <v-btn x-large class="text-white" link color="primary" @click="redirectTo('https://docs.simplicite.io/')"> Read the Documentation</v-btn>
+                        <v-btn x-large class="text-white" link color="primary"
+                               @click="redirectTo('https://docs.simplicite.io/')"> Read the Documentation
+                        </v-btn>
                     </li>
                     <li>
-                        <v-btn x-large class="text-white" link color="primary" @click="redirectTo('https://simplicite.fr/cas-clients/')">Watch Examples </v-btn>
+                        <v-btn x-large class="text-white" link color="primary"
+                               @click="redirectTo('https://simplicite.fr/cas-clients/')">Watch Examples
+                        </v-btn>
                     </li>
                 </ul>
             </nav>
@@ -93,7 +101,7 @@
 
     nav {
         margin-top: $content-padding;
-        width: 60%;
+        width: 80%;
         align-self: center;
 
         .__links {

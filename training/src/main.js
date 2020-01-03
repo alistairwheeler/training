@@ -5,7 +5,15 @@ import VueRouter from 'vue-router' //Documentation + Guide : https://router.vuej
 import vuetify from './plugins/vuetify' //Documentation + Guide : https://vuetifyjs.com/en/getting-started/quick-start
 import Vuex from 'vuex' //Documentation + Guide : https://vuex.vuejs.org/guide/
 import VueHighlightJS from 'vue-highlightjs'
-Vue.use(VueHighlightJS)
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+//3. Importing the router from router.js :
+import router from './router'
+//4. Importing the Store instance from store.js :
+import store from './store'
+
+Vue.use(VueAxios, axios);
+Vue.use(VueHighlightJS);
 
 Vue.config.productionTip = false;
 
@@ -19,11 +27,6 @@ if (process.env.NODE_ENV === "development") {
 }
 else
   Vue.prototype.$smp = new Simplicite.Ajax('/app', 'api', 'designer', 'simplicite');
-
-//3. Importing the router from router.js :
-import router from './router'
-//4. Importing the Store instance from store.js :
-import store from './store'
 
 //5. Creating the Vue instance with the router, the store and el:'#app' as the root instance of vue
 new Vue({

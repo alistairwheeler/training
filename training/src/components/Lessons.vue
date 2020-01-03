@@ -40,11 +40,11 @@
 
             //If the user wants the lessons from a specific course
             if (this.$route.params.courseId) {
-                console.log("courseId : " +this.$route.params.courseId );
+                //console.log("courseId : " +this.$route.params.courseId );
                 this.courseID = parseInt(this.$route.params.courseId);
-            } else if(this.$route.params.sectionId){
-                console.log("sectionId : " +this.$route.params.sectionId );
-                this.lessonsOrSections='sections';
+            } else if (this.$route.params.sectionId) {
+                //console.log("sectionId : " +this.$route.params.sectionId );
+                this.lessonsOrSections = 'sections';
                 this.courseID = parseInt(this.$route.params.sectionId);
             } else { //If the user is wants to look at all the lessons
                 this.courseID = 0;
