@@ -4,7 +4,6 @@
 
             <v-treeview
                     :items="this.treeView"
-                    :active="this.activeItem"
                     active-class="treeview-lesson--active"
                     open-all
                     open-on-click

@@ -113,7 +113,6 @@ export default new Vuex.Store({
         },
 
         breadCrumb: state => lessonPath => {
-            console.log("breadCrumb() " + lessonPath);
             let breadCrumbItems = [];
             let obj = {};
             state.hierarchy.forEach(ancestor => {
@@ -128,7 +127,6 @@ export default new Vuex.Store({
                     console.log(ancestor.trnCatTitle + " is not included in the path")
                 }
             });
-            console.log(breadCrumbItems);
             return breadCrumbItems;
         },
 
@@ -445,6 +443,35 @@ export default new Vuex.Store({
                 }, 'TrnExternalTreeView');
             })
         },
+
+        async fetchPicturesURLs({commit}, payload) {
+            console.log('fetchPicture()' + payload.lessonId);
+            let image_ids = [];
+            return new Promise((resolve, reject) => {
+                let picture = payload.smp.getBusinessObject("TrnPicture");
+                picture.search(() => {
+                    console.log("picture")
+                    console.log(picture)
+                    if (picture.list) {
+                        resolve(picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)))
+                    } else
+                        reject("Impossible to fetch the pictures")
+                }, {'trnPicLsnId': payload.lessonId})
+            });
+        },
+
+        exemplePictureFetching() {
+            return new Promise(function (resolve, reject) {
+                var usr = smpAccess.app.getBusinessObject("RMUser");
+                usr.get(function () {
+                    console.log(JSON.stringify(usr.item, null, 4));
+                    disp(smpAccess.app.imageURL("RMUser", "usr_image_id", smpAccess.app.grant.userid, usr.item.usr_image_id.id, false));
+                    resolve();
+                }, smpAccess.app.grant.userid, {inlineDocs: 'infos'});
+            });
+        }
+
+
     }
 
 });
