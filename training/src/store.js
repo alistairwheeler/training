@@ -40,6 +40,15 @@ export default new Vuex.Store({
             return state.items.find(item => item.path === lessonPath)
         },
 
+        ancestorCategoriesAsListItems: (state) => {
+            let ancestors = [];
+            state.categories.map(category => {
+                if(category.parentId === null)
+                    ancestors.push(ListItem.convertCategory(category))
+            });
+            return ancestors
+        },
+
         categoriesAsListItems: (state) => {
             return state.categories.map(category => ListItem.convertCategory(category))
         },
@@ -199,50 +208,7 @@ export default new Vuex.Store({
             });
         },
 
-        async getCategoriesFromParent({commit}, payload) {
-            return new Promise((resolve, reject) => {
-                let category = payload.smp.getBusinessObject("TrnCategory");
-                category.search(() => {
-                    if (category.list) {
-                        category.list.forEach(smpCategory => commit('PUSH_CATEGORY', new Category(smpCategory)));
-                        resolve(category.list);
-                    } else {
-                        reject("Could not load the categories");
-                    }
-                }, {"trnCatPath": payload.categoryPath})
-            });
-        },
-
-        async fetchContentItem({commit}, payload) {
-            return new Promise((resolve, reject) => {
-                let lesson = payload.smp.getBusinessObject("TrnLesson");
-                lesson.search(() => {
-                    if (lesson.list) {
-                        let lsn = new ContentItem(lesson.list[0]);
-                        commit('PUSH_ITEM', lsn);
-                        resolve(lsn);
-                    } else
-                        reject("Could not load the lesson");
-                }, {"trnLsnPath": payload.itemPath})
-            })
-        },
-
-        async getLessons(context, smp) {
-            return new Promise((resolve, reject) => {
-                let lesson = smp.getBusinessObject("TrnLesson");
-                lesson.search(() => {
-                    if (lesson.list) {
-                        lesson.list.forEach(smpLesson => context.commit('PUSH_ITEM', new ContentItem(smpLesson)));
-                        context.commit('ALL_ITEMS_LOADED', true);
-                        resolve(lesson.list);
-                    } else {
-                        reject("Could not load the lessons");
-                    }
-                }, {})
-            });
-        },
-
-        async getLessonsFromCategory({commit}, payload) {
+        async fetchLessonsFromCategory({commit}, payload) {
             return new Promise((resolve, reject) => {
                 let lesson = payload.smp.getBusinessObject("TrnLesson");
                 lesson.search(() => {
@@ -256,7 +222,21 @@ export default new Vuex.Store({
             });
         },
 
-        async getChildrenOf({commit}, payload) {
+        async fetchLesson({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                let lesson = payload.smp.getBusinessObject("TrnLesson");
+                lesson.search(() => {
+                    if (lesson.list) {
+                        let lsn = new ContentItem(lesson.list[0]);
+                        commit('PUSH_ITEM', lsn);
+                        resolve(lsn);
+                    } else
+                        reject("Could not load the lesson");
+                }, {"trnLsnPath": payload.itemPath})
+            })
+        },
+
+        async fetchChildrenOf({commit}, payload) {
             let children = [];
             let categoriesPromise = new Promise((resolve, reject) => {
                 let category = payload.smp.getBusinessObject("TrnCategory");
@@ -286,8 +266,7 @@ export default new Vuex.Store({
                     }
                 }, {"trnLsnCatId": payload.parentId})
             });
-
-            Promise.all([categoriesPromise, lessonsPromise]).then(() => console.log(children))
+            return await Promise.all([categoriesPromise, lessonsPromise])
         },
 
         async fetchHierarchy({commit}, payload) {
@@ -444,9 +423,8 @@ export default new Vuex.Store({
             })
         },
 
-        async fetchPicturesURLs({commit}, payload) {
-            console.log('fetchPicture()' + payload.lessonId);
-            let image_ids = [];
+        async fetchLessonsPictureURLs({commit}, payload) {
+            console.log('fetchLessonsPictureURLs() ' + payload.lessonId);
             return new Promise((resolve, reject) => {
                 let picture = payload.smp.getBusinessObject("TrnPicture");
                 picture.search(() => {
@@ -460,17 +438,19 @@ export default new Vuex.Store({
             });
         },
 
-        exemplePictureFetching() {
-            return new Promise(function (resolve, reject) {
-                var usr = smpAccess.app.getBusinessObject("RMUser");
-                usr.get(function () {
-                    console.log(JSON.stringify(usr.item, null, 4));
-                    disp(smpAccess.app.imageURL("RMUser", "usr_image_id", smpAccess.app.grant.userid, usr.item.usr_image_id.id, false));
-                    resolve();
-                }, smpAccess.app.grant.userid, {inlineDocs: 'infos'});
+        async fetchCategoryPictureURLs({commit}, payload) {
+            // console.log('fetchCategoryPictureURLs()' + payload.categoryId);
+            return new Promise((resolve, reject) => {
+                let categoryPicture = payload.smp.getBusinessObject("TrnCategoryPicture");
+                categoryPicture.search(() => {
+                    if (categoryPicture.list) {
+                        let map = categoryPicture.list.map(pic => payload.smp.imageURL("TrnCategoryPicture", "trnCtpImage", pic.row_id, pic.trnCtpImage, false));
+                        resolve(map[0])
+                    } else
+                        reject("Impossible to fetch the pictures")
+                }, {'trnCtpCatId': payload.categoryId})
             });
-        }
-
+        },
 
     }
 

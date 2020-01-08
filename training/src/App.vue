@@ -104,7 +104,7 @@
                     this.$router.push('/lessonItem/' + path).catch(err => console.error(err))
                 } else {
                     this.shakeElement("next-button");
-                    this.showMessage("Il n'y a plus de leçons dans ce cours")
+                    this.showMessage("Vous êtes à la dernière leçon de cette catégorie")
                 }
             },
 
@@ -117,7 +117,7 @@
                     this.$router.push('/lessonItem/' + path)
                 } else {
                     this.shakeElement("previous-button");
-                    this.showMessage("Il n'y a plus de leçons dans ce cours")
+                    this.showMessage("Vous êtes à la première leçon de cette catégorie")
                 }
             },
 

@@ -27,11 +27,8 @@
                 <v-carousel
                         hide-delimiters
                         show-arrows-on-hover
-                        cycle
-                        interval="10000"
-                        progress
                         height="100%">
-                    <v-carousel-item v-for="(url, index) in picturesURL"
+                    <v-carousel-item v-for="(url, index) in urlList"
                                      :key="index"
                                      :src="url">
                     </v-carousel-item>
@@ -60,7 +57,7 @@
         name: 'LessonItem',
         data: () => ({
             lessonToDisplay: {},
-            picturesURL: [],
+            urlList: [],
         }),
         computed: {
             ...mapGetters([
@@ -81,15 +78,13 @@
                 this.lessonToDisplay.title = contentItem.title;
                 this.lessonToDisplay.Content = contentItem.content;
                 this.lessonToDisplay.videoUrl = contentItem.videoUrl;
-                console.log("contentItem.videoUrl")
-                console.log(contentItem.videoUrl)
                 this.$store.commit('UPDATE_DISPLAYED_LESSON_PATH', contentItem.path);
                 let payload = {
                     smp: this.$smp,
                     lessonId: contentItem.row_id,
                 };
-                this.$store.dispatch('fetchPicturesURLs', payload)
-                    .then(urlList => this.picturesURL = urlList)
+                this.$store.dispatch('fetchLessonsPictureURLs', payload)
+                    .then(urlList => this.urlList = urlList)
                     .catch(err => console.error(err))
             },
 
@@ -114,7 +109,7 @@
                     this.displayLesson(contentItem);
                 } else {
                     payload.itemPath = lessonPath;
-                    this.$store.dispatch('fetchContentItem', payload)
+                    this.$store.dispatch('fetchLesson', payload)
                         .then(contentItem => {
                             this.displayLesson(contentItem)
                         });
