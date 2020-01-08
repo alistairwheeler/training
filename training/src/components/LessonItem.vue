@@ -84,7 +84,10 @@
                     lessonId: contentItem.row_id,
                 };
                 this.$store.dispatch('fetchLessonsPictureURLs', payload)
-                    .then(urlList => this.urlList = urlList)
+                    .then(urlList => {
+                        //console.log(urlList)
+                        this.urlList = urlList
+                    })
                     .catch(err => console.error(err))
             },
 

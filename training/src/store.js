@@ -414,27 +414,25 @@ export default new Vuex.Store({
                 }
             ];
             console.log("fetchHierarchy");
-            return new Promise((resolve, reject) => {
-                let url = payload.smp.getExternalObjectURL('TrnExternalTreeView');
-                payload.smp.getExternalObject(response => {
+            console.log(payload.smp)
+            return new Promise(async (resolve, reject) => {
+                const treeViewURL = payload.smp.getExternalObjectURL('TrnExternalTreeView');
                     commit('UPDATE_HIERARCHY', placeHolderHierarchy);
                     resolve(placeHolderHierarchy);
-                }, 'TrnExternalTreeView');
             })
         },
 
         async fetchLessonsPictureURLs({commit}, payload) {
-            console.log('fetchLessonsPictureURLs() ' + payload.lessonId);
+            console.log(payload)
+            //console.log('fetchLessonsPictureURLs() ' + payload.lessonId);
             return new Promise((resolve, reject) => {
                 let picture = payload.smp.getBusinessObject("TrnPicture");
-                picture.search(() => {
-                    console.log("picture")
-                    console.log(picture)
+                picture.search(async () => {
                     if (picture.list) {
-                        resolve(picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)))
+                        resolve(await picture.list.map(pic => payload.smp.dataURL(pic.trnPicImage)))
                     } else
                         reject("Impossible to fetch the pictures")
-                }, {'trnPicLsnId': payload.lessonId})
+                }, {'trnPicLsnId': payload.lessonId},  { inlineDocs: true })
             });
         },
 
@@ -442,13 +440,12 @@ export default new Vuex.Store({
             // console.log('fetchCategoryPictureURLs()' + payload.categoryId);
             return new Promise((resolve, reject) => {
                 let categoryPicture = payload.smp.getBusinessObject("TrnCategoryPicture");
-                categoryPicture.search(() => {
+                categoryPicture.search(async () => {
                     if (categoryPicture.list) {
-                        let map = categoryPicture.list.map(pic => payload.smp.imageURL("TrnCategoryPicture", "trnCtpImage", pic.row_id, pic.trnCtpImage, false));
-                        resolve(map[0])
+                        resolve(await categoryPicture.list.map(pic => payload.smp.dataURL(pic.trnCtpImage))[0])
                     } else
                         reject("Impossible to fetch the pictures")
-                }, {'trnCtpCatId': payload.categoryId})
+                }, {'trnCtpCatId': payload.categoryId}, { inlineDocs: true })
             });
         },
 
