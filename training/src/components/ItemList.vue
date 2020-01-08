@@ -2,7 +2,16 @@
     <div class="item-list-wrapper">
         <v-card class="item-prev" @click="onListItemClicked(item)" v-for="item in listToDisplay" :key="item.row_id">
             <div class="item-prev__picture-container">
-                <img class="item-prev__picture" src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
+                <!--                <img class="item-prev__picture"
+                                     src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
+                                     alt="course logo"/>-->
+                <img v-if="item.pictureUrl !== undefined"
+                     class="item-prev__picture"
+                     :src="item.pictureUrl"
+                     alt="course logo"/>
+                <img v-else
+                     class="item-prev__picture"
+                     src="./../../public/Logo_Simplicite_Noir.png"
                      alt="course logo"/>
             </div>
 
@@ -31,6 +40,7 @@
         computed: {
             ...mapGetters([
                 'categoriesAsListItems',
+                'ancestorCategoriesAsListItems',
                 'allCategoriesLoaded',
                 'allChildrenAsItemList',
                 'childrenCategories',
@@ -49,6 +59,47 @@
                     console.error("there is an error on the itemType, it is : " + item.itemType)
                 }
             },
+
+            async addPictureToCategories(categoryList) {
+                const urlPromises = categoryList.map(async category => {
+                    return this.getCategoryPicture(category);
+                });
+                return await Promise.all(urlPromises)
+                    .then(urlArray => {
+                        urlArray.forEach((url, index) => categoryList[index].pictureUrl = url);
+                        return categoryList;
+                    }).catch(err => console.log(err));
+
+            },
+
+            async getCategoryPicture(category) {
+                const payload = {
+                    smp: this.$smp,
+                    categoryId: category.row_id
+                };
+                return this.$store.dispatch('fetchCategoryPictureURLs', payload)
+            },
+
+            async addPictureToLessons(lessonList) {
+                const urlPromises = lessonList.map(async lesson => {
+                    return this.getLessonPicture(lesson);
+                });
+                return await Promise.all(urlPromises)
+                    .then(urlArray => {
+                        urlArray.forEach((url, index) => lessonList[index].pictureUrl = url[0]);
+                        return lessonList;
+                    }).catch(err => console.log(err));
+
+            },
+
+            async getLessonPicture(lesson) {
+                const payload = {
+                    smp: this.$smp,
+                    lessonId: lesson.row_id
+                };
+                return this.$store.dispatch('fetchLessonsPictureURLs', payload)
+            },
+
         },
         async created() {
 
@@ -57,24 +108,29 @@
                 categoryPath: this.categoryPath
             };
             if (this.categoryPath === '') { //Displaying every category
-                if (this.allCategoriesLoaded && this.allItemsLoaded) {
-                    this.listToDisplay.push(...this.categoriesAsListItems);
+                console.log("Displaying every category");
+                if (this.allCategoriesLoaded) {
+                    await this.addPictureToCategories(this.ancestorCategoriesAsListItems)
+                        .then(categoryList => this.listToDisplay.push(...categoryList));
                 } else {
                     await this.$store.dispatch('fetchCategories', payload)
-                        .then(() => this.listToDisplay.push(...this.categoriesAsListItems));
+                        .then(async () => {
+                            return await this.addPictureToCategories(this.ancestorCategoriesAsListItems)
+                        })
+                        .then(categoryList => this.listToDisplay.push(...categoryList))
                 }
             } else {
-                if (this.allCategoriesLoaded && this.allItemsLoaded) {
-                    this.listToDisplay.push(...this.childrenCategories(this.categoryPath));
-                    this.listToDisplay.push(...this.childrenLessons(this.categoryPath));
-                } else {
-                    await this.$store.dispatch('getCategoriesFromParent', payload)
-                        .then(() => this.$store.dispatch('getLessonsFromCategory', payload))
-                        .then(() => {
-                            this.listToDisplay.push(...this.childrenCategories(this.categoryPath));
-                            this.listToDisplay.push(...this.childrenLessons(this.categoryPath));
-                        })
-                }
+                await this.$store.dispatch('fetchCategories', payload)
+                    .then(() => this.$store.dispatch('fetchLessonsFromCategory', payload))
+                    .then(async () => {
+                        await this.addPictureToCategories(this.childrenCategories(this.categoryPath))
+                            .then(categoryList => this.listToDisplay.push(...categoryList));
+                        await this.addPictureToLessons(this.childrenLessons(this.categoryPath))
+                            .then(lessonList => this.listToDisplay.push(...lessonList));
+                    })
+            }
+            if (this.listToDisplay.length === 0) {
+                console.error("Nothing to display in this category")
             }
         }
     }
