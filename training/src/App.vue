@@ -9,8 +9,8 @@
                     open-on-click
                     item-key="path"
                     return-object>
-                <template slot="label" slot-scope="props">
-                    <p @click="navigateToLesson(props.item)">{{props.item.name}}</p>
+                <template  slot="label" slot-scope="props">
+                    <p class="treeView-item" @click="navigateToLesson(props.item)">{{props.item.name}}</p>
                 </template>
             </v-treeview>
 
@@ -209,4 +209,7 @@
         outline: none;
     }
 
+    .treeView-item {
+        padding-top: map-get($paddings, medium)+1px;
+    }
 </style>
