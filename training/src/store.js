@@ -125,15 +125,11 @@ export default new Vuex.Store({
             let breadCrumbItems = [];
             let obj = {};
             state.hierarchy.forEach(ancestor => {
-                console.log(ancestor.trnCatTitle);
                 if (lessonPath.includes(ancestor.trnCatPath)) {
-                    console.log(ancestor.trnCatTitle + " is included in the path");
                     obj.title = ancestor.trnCatTitle;
                     obj.path = ancestor.trnCatPath;
                     breadCrumbItems.push(obj);
                     breadCrumbItems.push(...Category.findLessonBreadCrumb(ancestor, lessonPath));
-                } else {
-                    console.log(ancestor.trnCatTitle + " is not included in the path")
                 }
             });
             return breadCrumbItems;
@@ -414,7 +410,6 @@ export default new Vuex.Store({
                 }
             ];
             console.log("fetchHierarchy");
-            console.log(payload.smp)
             return new Promise(async (resolve, reject) => {
                 const treeViewURL = payload.smp.getExternalObjectURL('TrnExternalTreeView');
                     commit('UPDATE_HIERARCHY', placeHolderHierarchy);
@@ -423,7 +418,6 @@ export default new Vuex.Store({
         },
 
         async fetchLessonsPictureURLs({commit}, payload) {
-            console.log(payload)
             //console.log('fetchLessonsPictureURLs() ' + payload.lessonId);
             return new Promise((resolve, reject) => {
                 let picture = payload.smp.getBusinessObject("TrnPicture");

@@ -1,8 +1,8 @@
 <template>
-    <div id="lesson-item-wrapper" >
+    <div id="lesson-item-wrapper">
         <div v-bind:class="{large: !openDrawer, 'thin': openDrawer}">
 
-            <h1 class="lesson-title">{{lessonToDisplay.title}}</h1>
+            <h1 class="lesson-title">{{this.lessonToDisplay.title}}</h1>
 
             <ul class="breadcrumb">
                 <li class="breadcrumb__item"
@@ -16,8 +16,9 @@
                 </li>
             </ul>
 
-            <div class="lesson_content" v-if="lessonToDisplay.Content">
-                <div class="html-content" v-highlightjs v-html="lessonToDisplay.Content"></div>
+            <div class="lesson_content"
+                 v-if="this.lessonToDisplay.content"
+                 v-html="this.lessonToDisplay.content">
             </div>
 
         </div>
@@ -76,23 +77,22 @@
         methods: {
             displayLesson(contentItem) {
                 this.lessonToDisplay.title = contentItem.title;
-                this.lessonToDisplay.Content = contentItem.content;
+                this.lessonToDisplay.content = contentItem.content;
+                console.log(this.lessonToDisplay.content);
                 this.lessonToDisplay.videoUrl = contentItem.videoUrl;
                 this.$store.commit('UPDATE_DISPLAYED_LESSON_PATH', contentItem.path);
                 let payload = {
                     smp: this.$smp,
                     lessonId: contentItem.row_id,
                 };
-                this.$store.dispatch('fetchLessonsPictureURLs', payload)
-                    .then(urlList => {
-                        //console.log(urlList)
-                        this.urlList = urlList
-                    })
+                this.$store
+                    .dispatch('fetchLessonsPictureURLs', payload)
+                    .then(urlList => this.urlList = urlList)
                     .catch(err => console.error(err))
             },
 
             breadCrumbItemClicked(categoryPath, index, length) {
-                if(index !== length-1){
+                if (index !== length - 1) {
                     this.$router.push('/courses/' + categoryPath).catch(err => console.error(err));
                 }
             },
@@ -132,23 +132,28 @@
     @import "../assets/sass/utils/variables";
     @import "../assets/sass/utils/mixins";
 
-    .large, .thin {
-        padding: 0 $content-padding 0 $content-padding;
+    #lesson-item-wrapper {
         display: flex;
-        flex-direction: column;
-    }
 
-    .large {
-        width: $large-width;
-    }
+        .large, .thin {
+            padding: 0 $content-padding 0 $content-padding;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .thin {
-        width: $thin-width;
+        .large {
+            width: $large-width;
+        }
+
+        .thin {
+            width: $thin-width;
+        }
+
     }
 
     .breadcrumb {
-        border-top: $border-thickness solid $light-grey;
-        border-bottom: $border-thickness solid $light-grey;
+        border-top: $regular-thickness solid $light-grey;
+        border-bottom: $regular-thickness solid $light-grey;
         background-color: white;
         margin: $breadcrumb-margin 0 $breadcrumb-margin 0;
         padding-left: 0;
@@ -156,7 +161,7 @@
         &__item {
             text-transform: uppercase;
 
-            &:hover{
+            &:hover {
                 cursor: pointer;
             }
         }
@@ -195,14 +200,6 @@
     }
 
     /* ----- LESSON CONTENT ----- */
-    #lesson-item-wrapper {
-        display: flex;
-    }
-
-    .lesson-content__lrn-outcomes, .lesson_content {
-        @include flex-column-nowrap;
-    }
-
     .lesson-title {
         color: $color-primary;
         font-size: nth($title-size, 1)+1rem;
@@ -211,116 +208,116 @@
     }
 
     .lesson_content {
+        @include flex-column-nowrap;
         overflow: hidden;
 
-        &>>> h1 {
-            font-size: nth($title-size, 4);
+        & ::v-deep h1 {
+            font-size: nth($title-size, 1);
         }
 
-        &>>> h2 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+        & ::v-deep h2 { /* ::v-deep is used instead of >>> because we are using sass (with scss syntax). it is a deep selector to apply styles ot the v-html content*/
             font-size: nth($title-size, 2);
             font-weight: bold;
             color: $color-secondary;
-            padding-bottom: 3px;
         }
 
-        &>>> h3 { /*Syntax needed because of view loader : https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors*/
+        & ::v-deep h3 {
             font-size: nth($title-size, 3);
             font-weight: bold;
             color: $color-secondary;
         }
 
-        &>>> h4 {
+        & ::v-deep h4 {
             font-size: nth($title-size, 4);
             color: $color-secondary;
         }
 
-        &>>> h5 {
+        & ::v-deep h5 {
             font-size: nth($title-size, 5);
             color: $color-secondary;
         }
 
-        &>>> h6 {
+        & ::v-deep h6 {
             font-size: nth($title-size, 6);
             color: $color-secondary;
         }
 
-        &>>> p {
+        & ::v-deep p {
             text-align: justify;
         }
 
-        &>>> .language-java, &>>> .language-html {
-            color: #4D515C;
-            padding: 5px;
+        & ::v-deep .language-java, & ::v-deep .language-html {
+            color: $code-regular-text;
+            padding: map-get($paddings, small);
             background-color: $code-background;
         }
 
-        &>>> .hljs-keyword {
+        & ::v-deep .hljs-keyword {
             color: $code-keyword;
         }
 
-        &>>> .hljs-string {
+        & ::v-deep .hljs-string {
             color: $code-string;
         }
 
-        &>>> .hljs-comment {
+        & ::v-deep .hljs-comment {
             color: $code-comment;
         }
 
-        &>>> .hljs-tag {
+        & ::v-deep .hljs-tag {
             color: $code-tag;
         }
 
-        &>>> .hljs-attr {
+        & ::v-deep .hljs-attr {
             color: $code-attribute;
         }
 
-        &>>> .info, &>>> .success, &>>> .warning, &>>> .error {
-            border-radius: 5px;
-            padding: 3px;
-            margin: 5px;
+        & ::v-deep .info, & ::v-deep .success, & ::v-deep .warning, & ::v-deep .error {
+            border-radius: $regular-radius;
+            padding: map-get($paddings, x-small);
+            margin: map-get($margins, x-small);
         }
 
-        &>>> .info {
+        & ::v-deep .info {
             background-color: $information !important;
         }
 
-        &>>> .success {
+        & ::v-deep .success {
             background-color: $success !important;
         }
 
-        &>>> .warning {
+        & ::v-deep .warning {
             background-color: $warning !important;
         }
 
-        &>>> .error {
+        & ::v-deep .error {
             background-color: $error !important;
         }
 
-        &>>> blockquote > p::before {
+        & ::v-deep blockquote > p::before {
             content: '" ';
         }
 
-        &>>> blockquote > p::after {
+        & ::v-deep blockquote > p::after {
             content: ' "';
         }
 
-        &>>> blockquote > p {
+        & ::v-deep blockquote > p {
             font-style: italic;
         }
 
-        &>>> strong {
+        & ::v-deep strong {
             text-decoration: underline;
         }
 
-        &>>> ol li {
+        & ::v-deep ol li {
             list-style: decimal;
         }
 
-        &>>> img {
+        & ::v-deep img {
             margin-left: $content-padding;
         }
-        
+
     }
 
 </style>
