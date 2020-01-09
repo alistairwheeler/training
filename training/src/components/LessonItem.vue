@@ -1,5 +1,5 @@
 <template>
-    <div id="lesson-item-wrapper">
+    <div id="wrapper">
         <div v-bind:class="{large: !openDrawer, 'thin': openDrawer}">
 
             <h1 class="lesson-title">{{this.lessonToDisplay.title}}</h1>
@@ -132,7 +132,7 @@
     @import "../assets/sass/utils/variables";
     @import "../assets/sass/utils/mixins";
 
-    #lesson-item-wrapper {
+    #wrapper {
         display: flex;
 
         .large, .thin {

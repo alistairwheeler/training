@@ -1,12 +1,11 @@
 <template>
-    <div id="lesson-item-wrapper">
         <div id="wrapper">
-            <h1 class="courses-title">Tous les cours disponibles :</h1>
 
-            <ItemList :category-path="categoryPath"></ItemList>
+           <!-- <h1 class="list-title">Tous les cours disponibles :</h1> -->
+
+            <ItemList class="element-list" :category-path="categoryPath"/>
 
         </div>
-    </div>
 </template>
 
 <script>
@@ -33,16 +32,15 @@
 
     @import "../assets/sass/utils/variables";
 
-    #lesson-item-wrapper {
+    #wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: map-get($paddings, x-large);
     }
 
-    #wrapper {
+    .element-list {
         width: 80%;
-        display: flex;
-        flex-direction: column;
     }
 
     h1 {
@@ -50,7 +48,7 @@
         color: $color-secondary;
     }
 
-    .courses-title {
+    .list-title {
         margin-top: map-get($margins, medium);
         margin-bottom: map-get($margins, medium);
     }

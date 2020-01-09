@@ -11,7 +11,7 @@
                 Return to courses
             </v-btn>
 
-            <ItemList :itemType="lessonsOrSections" :course-id="courseID"></ItemList>
+            <ItemList :itemType="lessonsOrSections" :course-id="courseID"/>
 
         </div>
     </div>
