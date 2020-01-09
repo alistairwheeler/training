@@ -1,5 +1,5 @@
 <template>
-    <div class="item-list-wrapper">
+    <div class="wrapper"> <!-- Here in case we want to add something to this view -->
         <v-card class="item-prev" @click="onListItemClicked(item)" v-for="item in listToDisplay" :key="item.row_id">
             <div class="item-prev__picture-container">
                 <!--                <img class="item-prev__picture"
@@ -141,9 +141,9 @@
 
     @import "../assets/sass/utils/variables";
 
-    .item-list-wrapper {
+    .wrapper {
         display: flex;
-        flex-direction: column;
+        flex-flow: column nowrap;
     }
 
     .item-prev {

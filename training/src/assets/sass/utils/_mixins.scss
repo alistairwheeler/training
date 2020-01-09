@@ -3,7 +3,7 @@
   margin: 0;
 }
 
-@mixin flex-column-nowrap($flex: flex, $orientation: column, $wrap: nowrap){
+@mixin flex-column-nowrap($flex: flex, $orientation: column, $wrap: nowrap) {
   display: $flex;
   flex-flow: $orientation $wrap;
 }

@@ -1,5 +1,4 @@
 <template>
-    <div id="homepage-container">
         <div id="outer-div">
             <div class="row-1">
                 <div id="video-wrapper">
@@ -39,7 +38,6 @@
                 </ul>
             </nav>
         </div>
-    </div>
 </template>
 
 <script>
@@ -59,14 +57,10 @@
     @import "../assets/sass/utils/variables";
     @import "../assets/sass/utils/mixins";
 
-    #homepage-container {
-        @include flex-column-nowrap;
-        align-items: center;
-    }
-
     #outer-div {
         @include flex-column-nowrap;
         margin-top: 5vh;
+        align-items: center;
     }
 
     .row-1 {

@@ -1,7 +1,7 @@
 <template>
-        <div id="not-found">
-                <h1 class="mx-auto">404 NOT FOUND, sorry, this page doesn't exist</h1>
-        </div>
+    <div id="wrapper">
+        <h1 class="mx-auto">404 NOT FOUND, sorry, this page doesn't exist</h1>
+    </div>
 
 </template>
 
@@ -21,11 +21,11 @@
         font-size: $h1-size;
     }
 
-    #not-found {
-            height: 80vh;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+    #wrapper {
+        height: 80vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

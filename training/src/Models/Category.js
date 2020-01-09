@@ -79,7 +79,7 @@ export class Category {
      * @param extCategory The category in which to research the breadCrumbItems
      * @param lessonPath The lessonPath identifying the lesson to search for
      */
-    static findParentsOfLesson(extCategory, lessonPath){
+    static findParentsOfLesson(extCategory, lessonPath) {
         console.log("findParentsOfLesson");
         let parents = [];
         let obj = {};

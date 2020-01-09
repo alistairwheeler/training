@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 export class ListItem {
-    constructor(row_id, order, title, shortDescription, longDescription, itemType , path){
+    constructor(row_id, order, title, shortDescription, longDescription, itemType, path) {
         this.row_id = row_id;
         this.order = order;
         this.title = title;
@@ -12,7 +12,7 @@ export class ListItem {
 
     static convertCategory(category) {
         return new ListItem(parseInt(category.row_id), parseInt(category.order), category.title, "Description d'une Catégorie",
-                            category.description, CATEGORY, category.path);
+            category.description, CATEGORY, category.path);
     }
 
     static convertContentItem(item) {
@@ -21,5 +21,6 @@ export class ListItem {
     }
 
 }
-    export const CATEGORY = "category";
-    export const CONTENT = "content";
+
+export const CATEGORY = "category";
+export const CONTENT = "content";
