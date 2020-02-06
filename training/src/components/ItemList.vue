@@ -77,7 +77,7 @@
                     smp: this.$smp,
                     categoryId: category.row_id
                 };
-                return this.$store.dispatch('fetchCategoryPictureURLs', payload)
+                return this.$store.dispatch('fetchCategoryPicture', payload)
             },
 
             async addPictureToLessons(lessonList) {

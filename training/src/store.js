@@ -430,7 +430,19 @@ export default new Vuex.Store({
             });
         },
 
-        async fetchCategoryPictureURLs({commit}, payload) {
+        async fetchCategoryPicture({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                let picture = payload.smp.getBusinessObject("TrnCategory");
+                picture.search(async () => {
+                    if (picture.list) {
+                        resolve(await picture.list.map(pic => payload.smp.dataURL(pic.trnCatPicture)))
+                    } else
+                        reject("Impossible to fetch the pictures")
+                }, {'row_id': payload.categoryId},  { inlineDocs: true })
+            });
+        },
+
+        /*async fetchCategoryPictureURLs({commit}, payload) {
             // console.log('fetchCategoryPictureURLs()' + payload.categoryId);
             return new Promise((resolve, reject) => {
                 let categoryPicture = payload.smp.getBusinessObject("TrnCategoryPicture");
@@ -441,8 +453,7 @@ export default new Vuex.Store({
                         reject("Impossible to fetch the pictures")
                 }, {'trnCtpCatId': payload.categoryId}, { inlineDocs: true })
             });
-        },
-
+        },*/
     }
 
 });
