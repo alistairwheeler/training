@@ -435,7 +435,9 @@ export default new Vuex.Store({
                 let picture = payload.smp.getBusinessObject("TrnCategory");
                 picture.search(async () => {
                     if (picture.list) {
-                        resolve(await picture.list.map(pic => payload.smp.dataURL(pic.trnCatPicture)))
+                        resolve(await picture.list.map(pic => {
+                            pic.trnCatPicture!=null ? payload.smp.dataURL(pic.trnCatPicture) : null;
+                        }))
                     } else
                         reject("Impossible to fetch the pictures")
                 }, {'row_id': payload.categoryId},  { inlineDocs: true })
