@@ -24,6 +24,7 @@ Vue.use(Vuex);
 //2. Use the simplicite API :
 if (process.env.NODE_ENV === "development") {
   Vue.prototype.$smp = new Simplicite.Ajax('https://maxime2.dev.simplicite.io/app', 'api', 'designer', 'simplicite');
+  Vue.prototype.$smp.setDebugHandlerActive(true);
 }
 else
   Vue.prototype.$smp = new Simplicite.Ajax('https://maxime2.dev.simplicite.io/app', 'api', 'designer', 'simplicite');

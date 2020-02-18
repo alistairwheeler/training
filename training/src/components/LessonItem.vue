@@ -78,7 +78,6 @@
             displayLesson(contentItem) {
                 this.lessonToDisplay.title = contentItem.title;
                 this.lessonToDisplay.content = contentItem.content;
-                console.log(this.lessonToDisplay.content);
                 this.lessonToDisplay.videoUrl = contentItem.videoUrl;
                 this.$store.commit('UPDATE_DISPLAYED_LESSON_PATH', contentItem.path);
                 let payload = {
