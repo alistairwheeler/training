@@ -41,7 +41,7 @@
         <!-- Sizes your content based upon application components -->
         <v-content class="content">
             <!-- Provides the application the proper gutter -->
-            <v-container pa-0 mt-1 fluid class="router-container-2" v-on:test-event="logMessage()">
+            <v-container pa-0 mt-1 fluid class="router-container-2 fill-page" v-on:test-event="logMessage()">
                 <router-view :key="$route.fullPath"></router-view>
                 <!-- This makes the page reload when the url changes(check api doc for more info) -->
                 <v-snackbar id="snackbar" v-model="snackBar" :timeout="snbTimeOut">
@@ -160,6 +160,11 @@
     .content {
         width: 100%;
         background-color: white;
+    }
+
+    .fill-page{
+        /* Added so the router-vue for lessons can inherit the 100% height */
+        height:100%;
     }
 
     .simplicite-logo:hover {
