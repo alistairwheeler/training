@@ -13,19 +13,24 @@
 
             <div class="lesson_content" v-if="this.lessonToDisplay.content" v-html="this.lessonToDisplay.content"></div>
         </div>
-        <div class="fix-box">
+        <div class="fix-box" style="padding:0;">
             <div class="vflex">
                 <div class="fix-box">
-                   <Carousel/>
+                   <Carousel v-bind:images="urlList"/>
                     <!-- <v-carousel style="width:700px;height:400px;">
                         <v-carousel-item v-for="(url, index) in urlList" :key="index" :src="url" />
                     </v-carousel> -->
                 </div>
                 <div class="fix-box">
-                    <video controls muted class="video">
-                        <source src="https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm"
-                            type="video/webm" />Sorry, your browser doesn't support embedded videos.
+                  <!-- <div class="video-wrapper">
+                    <video controls muted class="video" width="200">
+                      <source src="http://dl5.webmfiles.org/big-buck-bunny_trailer.webm" type="video/webm" />
+                        <source src="https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm" type="video/webm" /> 
+                        Sorry, your browser doesn't support embedded videos.
                     </video>
+                  </div> -->
+                  TODO : Video element breaks flexbox 50% flex-basis :-( <br/>
+                  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Controlling_Ratios_of_Flex_Items_Along_the_Main_Ax">Understand this deeply</a>
                 </div>
             </div>
         </div>
@@ -130,15 +135,24 @@ export default {
 }
 
 .fix-box {
-  margin: 0.5em;
-  flex: 1 1 50%;
+  border: 1px dotted grey;
+  padding: 0.5em;
+  flex: 1 0 50%;
   overflow: scroll;
 }
 
-.video {
-  max-width: 90%;
-  max-height: 90%;
+.video-wrapper{
+    max-height: 100%;
+  min-height: 100%;
+  
+  width:100%;
+  max-width:100%;
+
 }
+
+// .video {
+//  width:50%;
+// }
 
 .breadcrumb {
   border-top: $regular-thickness solid $light-grey;
