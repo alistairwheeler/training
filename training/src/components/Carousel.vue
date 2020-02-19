@@ -80,8 +80,6 @@ img{
   height: 100%;
   position: relative;
   margin: 0;
-  border: 1px solid #ccc;
-  box-shadow: 2px 2px 10px #ccc;
   overflow: hidden;
 }
 .content {
