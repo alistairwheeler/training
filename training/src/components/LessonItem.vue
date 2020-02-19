@@ -1,40 +1,25 @@
 <template>
-    <div class="hflex">
-        <div class="fix-box">
-            <!-- <h1 class="lesson-title">{{this.lessonToDisplay.title}}</h1> -->
-
-            <ul class="breadcrumb">
-                <li class="breadcrumb__item" v-for="(item, index) in this.breadCrumbItems" :key="index"
-                    @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)">
-                    <span>{{item.title}}</span>
-                    <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
-                </li>
-            </ul>
-
-            <div class="lesson_content" v-if="this.lessonToDisplay.content" v-html="this.lessonToDisplay.content"></div>
-        </div>
-        <div class="fix-box" style="padding:0;">
-            <div class="vflex">
-                <div class="fix-box">
-                   <Carousel v-bind:images="urlList"/>
-                    <!-- <v-carousel style="width:700px;height:400px;">
-                        <v-carousel-item v-for="(url, index) in urlList" :key="index" :src="url" />
-                    </v-carousel> -->
-                </div>
-                <div class="fix-box">
-                  <!-- <div class="video-wrapper">
-                    <video controls muted class="video" width="200">
-                      <source src="http://dl5.webmfiles.org/big-buck-bunny_trailer.webm" type="video/webm" />
-                        <source src="https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm" type="video/webm" /> 
-                        Sorry, your browser doesn't support embedded videos.
-                    </video>
-                  </div> -->
-                  TODO : Video element breaks flexbox 50% flex-basis :-( <br/>
-                  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Controlling_Ratios_of_Flex_Items_Along_the_Main_Ax">Understand this deeply</a>
-                </div>
-            </div>
-        </div>
+  <div class="grid-lesson">
+    <div class="grid-item grid-item-content">
+      <ul class="breadcrumb">
+          <li class="breadcrumb__item" v-for="(item, index) in this.breadCrumbItems" :key="index"
+              @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)">
+              <span>{{item.title}}</span>
+              <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
+          </li>
+      </ul>
+      <div class="lesson_content" v-if="this.lessonToDisplay.content" v-html="this.lessonToDisplay.content"></div>
     </div>
+    <div class="grid-item grid-item-media">
+      <Carousel v-bind:images="urlList"/>
+    </div>
+    <div class="grid-item grid-item-video">
+      <video controls muted class="video">
+        <source src="http://dl5.webmfiles.org/big-buck-bunny_trailer.webm" type="video/webm" />
+        Sorry, your browser doesn't support embedded videos.
+      </video>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -118,48 +103,49 @@ export default {
 @import "../assets/sass/utils/variables";
 @import "../assets/sass/utils/mixins";
 
-/* https://jsfiddle.net/scampano/exr53hns */
-.hflex {
+.grid-lesson {
   position: absolute;
-  display: flex;
-  flex-flow: row;
-  max-height: 100%;
-  min-height: 100%;
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  grid-template-rows: repeat(2, 50%);
 }
 
-.vflex {
-  display: flex;
-  flex-flow: column;
-  max-height: 100%;
-  min-height: 100%;
-}
-
-.fix-box {
-  border: 1px dotted grey;
+.grid-item{
+  margin: 1em;
   padding: 0.5em;
-  flex: 1 0 50%;
   overflow: scroll;
+  box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
 }
 
-.video-wrapper{
-    max-height: 100%;
-  min-height: 100%;
-  
-  width:100%;
-  max-width:100%;
-
+.grid-item-content{
+  grid-column: 1;
+  grid-row: 1 / 3;
+  padding: 1em;
 }
 
-// .video {
-//  width:50%;
-// }
+.grid-item-media{
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.grid-item-video{
+  grid-column: 2;
+  grid-row: 2;
+}
+
+video{
+  height: 100%;
+  width: 100%;
+}
 
 .breadcrumb {
-  border-top: $regular-thickness solid $light-grey;
   border-bottom: $regular-thickness solid $light-grey;
   background-color: white;
-  margin: $breadcrumb-margin 0 $breadcrumb-margin 0;
-  padding-left: 0;
+  // margin: $breadcrumb-margin 0 $breadcrumb-margin 0;
+  padding: 0.3em;
 
   &__item {
     text-transform: uppercase;
