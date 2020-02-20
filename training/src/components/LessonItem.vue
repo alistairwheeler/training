@@ -8,7 +8,7 @@
               <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
           </li>
       </ul>
-      <div class="lesson_content" v-if="this.lessonToDisplay.content" v-html="this.lessonToDisplay.content"></div>
+      <div class="lesson_content" v-highlightjs v-if="this.lessonToDisplay.content" v-html="this.lessonToDisplay.content"></div>
     </div>
     <div class="grid-item grid-item-media">
       <Carousel v-bind:images="urlList"/>
@@ -208,33 +208,6 @@ video{
 
   & ::v-deep p {
     text-align: justify;
-  }
-
-  & ::v-deep .language-java,
-  & ::v-deep .language-html {
-    color: $code-regular-text;
-    padding: map-get($paddings, small);
-    background-color: $code-background;
-  }
-
-  & ::v-deep .hljs-keyword {
-    color: $code-keyword;
-  }
-
-  & ::v-deep .hljs-string {
-    color: $code-string;
-  }
-
-  & ::v-deep .hljs-comment {
-    color: $code-comment;
-  }
-
-  & ::v-deep .hljs-tag {
-    color: $code-tag;
-  }
-
-  & ::v-deep .hljs-attr {
-    color: $code-attribute;
   }
 
   & ::v-deep .info,
