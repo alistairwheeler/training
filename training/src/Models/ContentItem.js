@@ -1,14 +1,13 @@
 export class ContentItem {
     constructor({
-                    row_id, trnLsnOrder, trnLsnTitle, trnLsnDescription, trnLsnVideoUrl, trnLsnHtmlContent, trnLsnPath,
+                    row_id, trnLsnOrder, trnLsnTitle, trnLsnDescription, trnLsnVideo, trnLsnHtmlContent, trnLsnPath,
                     trnLsnCatId, trnLsnCatId__trnCatTitle, trnLsnCatId__trnCatPath
                 }) {
         this.row_id = parseInt(row_id);
         this.order = trnLsnOrder;
         this.title = trnLsnTitle;
         this.description = trnLsnDescription;
-        this.videoUrl = trnLsnVideoUrl;
-        this.videoUrl = trnLsnVideoUrl;
+        this.video = trnLsnVideo;
         this.content = trnLsnHtmlContent;
         this.path = trnLsnPath;
         this.categoryId = trnLsnCatId;

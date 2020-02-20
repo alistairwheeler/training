@@ -14,8 +14,7 @@
       <Carousel v-bind:images="urlList"/>
     </div>
     <div class="grid-item grid-item-video">
-      <video controls muted class="video">
-        <source src="http://dl5.webmfiles.org/big-buck-bunny_trailer.webm" type="video/webm" />
+      <video controls muted :src="lessonToDisplay.video"  class="video">
         Sorry, your browser doesn't support embedded videos.
       </video>
     </div>
@@ -49,7 +48,7 @@ export default {
     displayLesson(contentItem) {
       this.lessonToDisplay.title = contentItem.title;
       this.lessonToDisplay.content = contentItem.content;
-      this.lessonToDisplay.videoUrl = contentItem.videoUrl;
+      this.lessonToDisplay.video = this.$smp.documentURL("TrnLesson", "trnLsnVideo", contentItem.row_id, contentItem.video);
       this.$store.commit("UPDATE_DISPLAYED_LESSON_PATH", contentItem.path);
       let payload = {
         smp: this.$smp,
