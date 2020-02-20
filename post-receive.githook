@@ -2,4 +2,4 @@
 touch  /tmp/training-hook.log
 exec &>> /tmp/training-hook.log
 echo "Hook post-receive"
-sudo su maxime2 -c '/var/git/misc/training.git/hooks/post-receive.sh'
+sudo su simplicite -c '/var/git/misc/training.git/hooks/post-receive.sh'

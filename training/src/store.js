@@ -24,127 +24,99 @@ export default new Vuex.Store({
 
     getters: {
         //NEW MODEL
-        drawerOpen: state => {
-            return state.drawerOpen
-        },
-
-        allCategoriesLoaded: state => {
-            return state.allCategoriesLoaded;
-        },
-
-        allItemsLoaded: state => {
-            return state.allItemsLoaded;
-        },
-
-        getLessonWithPath: state => lessonPath => {
-            return state.items.find(item => item.path === lessonPath)
-        },
-
-        ancestorCategoriesAsListItems: (state) => {
-            let ancestors = [];
-            state.categories.map(category => {
-                if(category.parentId === null)
-                    ancestors.push(ListItem.convertCategory(category))
-            });
-            return ancestors
-        },
-
-        categoriesAsListItems: (state) => {
-            return state.categories.map(category => ListItem.convertCategory(category))
-        },
-
-        childrenCategories: state => motherPath => {
-            if (motherPath[0] !== '/')
-                motherPath = '/' + motherPath;
-            return state.categories
-                .filter(category => category.parentPath === motherPath)
-                .map(category => ListItem.convertCategory(category));
-        },
-
-        childrenLessons: state => motherPath => {
-            console.log("childrenLessons");
-            if (motherPath[0] !== '/')
-                motherPath = '/' + motherPath;
-            return state.items
-                .filter(item => item.categoryPath === motherPath)
-                .map(item => ListItem.convertContentItem(item));
-        },
-
-        nextLessonPath: (state, getters) => {
-            console.log("nextLessonPath");
-            let currentPath = state.displayLessonPath;
-            console.log("currentPath : " + currentPath);
-            let sisterLessons = getters.sisterLessons(currentPath);
-            let currentIndex = sisterLessons.findIndex(lesson => lesson.path === currentPath);
-            if (currentIndex === sisterLessons.length - 1) {
-                return undefined
-            } else {
-                return sisterLessons[currentIndex + 1].path;
-            }
-        },
-
-        previousLessonPath: (state, getters) => {
-            let currentPath = state.displayLessonPath;
-            let sisterLessons = getters.sisterLessons(currentPath);
-            let currentIndex = sisterLessons.findIndex(lesson => lesson.path === currentPath);
-            if (currentIndex === 0) {
-                return undefined
-            } else {
-                return sisterLessons[currentIndex - 1].path;
-            }
-        },
-
-        sisterLessons: (state, getters) => (lessonPath) => {
-            console.log("sisterLessons");
-            console.log("lessonPath : " + lessonPath);
-            let parents = getters.parentsList(lessonPath);
-            let directParent = parents[parents.length - 1];
-            console.log("directPrent.path : " + directParent.path);
-            return getters.childrenLessons(directParent.path)
-                .sort((lsn1, lsn2) => {
-                    return parseInt(lsn1.order) - parseInt(lsn2.order)
+        drawerOpen: 
+            state => state.drawerOpen,
+        allCategoriesLoaded:
+            state => state.allCategoriesLoaded,
+        allItemsLoaded:
+            state => state.allItemsLoaded,
+        getLessonWithPath:
+            state => lessonPath => state.items.find(item => item.path === lessonPath),
+        ancestorCategoriesAsListItems: 
+            state => {
+                let ancestors = [];
+                state.categories.map(category => {
+                    if(category.parentId === null)
+                        ancestors.push(ListItem.convertCategory(category))
                 });
-        },
-
-        parentsList: state => lessonPath => {
-            console.log("parentsList");
-            let parents = [];
-            let obj = {};
-            state.hierarchy.forEach(ancestor => {
-                if (lessonPath.includes(ancestor.trnCatPath)) {
-                    obj.title = ancestor.trnCatTitle;
-                    obj.path = ancestor.trnCatPath;
-                    parents.push(obj);
-                    parents.push(...Category.findParentsOfLesson(ancestor, lessonPath));
-                }
-            });
-            return parents;
-        },
-
-        breadCrumb: state => lessonPath => {
-            let breadCrumbItems = [];
-            let obj = {};
-            state.hierarchy.forEach(ancestor => {
-                if (lessonPath.includes(ancestor.trnCatPath)) {
-                    obj.title = ancestor.trnCatTitle;
-                    obj.path = ancestor.trnCatPath;
-                    breadCrumbItems.push(obj);
-                    breadCrumbItems.push(...Category.findLessonBreadCrumb(ancestor, lessonPath));
-                }
-            });
-            return breadCrumbItems;
-        },
-
-        hierarchy: state => {
-            return state.hierarchy;
-        },
-
-        treeView: (state) => {
-            let treeView = [];
-            state.hierarchy.map(ancestorCategory => treeView.push(Category.convertExtCategoryToTreeView(ancestorCategory)));
-            return treeView
-        },
-
+                return ancestors
+            },
+        categoriesAsListItems: 
+            state => state.categories.map(category => ListItem.convertCategory(category)),
+        childrenCategories: 
+            state => motherPath => {
+                if (motherPath[0] !== '/')
+                    motherPath = '/' + motherPath;
+                return state.categories
+                    .filter(category => category.parentPath === motherPath)
+                    .map(category => ListItem.convertCategory(category));
+            },
+        childrenLessons: 
+            state => motherPath => {
+                if (motherPath[0] !== '/')
+                    motherPath = '/' + motherPath;
+                return state.items
+                    .filter(item => item.categoryPath === motherPath)
+                    .map(item => ListItem.convertContentItem(item));
+            },
+        nextLessonPath: 
+            (state, getters) => {
+                let currentPath = state.displayLessonPath;
+                let sisterLessons = getters.sisterLessons(currentPath);
+                let currentIndex = sisterLessons.findIndex(lesson => lesson.path === currentPath);
+                return currentIndex === sisterLessons.length - 1 ? undefined : sisterLessons[currentIndex + 1].path;
+            },
+        previousLessonPath: 
+            (state, getters) => {
+                let currentPath = state.displayLessonPath;
+                let sisterLessons = getters.sisterLessons(currentPath);
+                let currentIndex = sisterLessons.findIndex(lesson => lesson.path === currentPath);
+                return currentIndex === 0 ? undefined : sisterLessons[currentIndex - 1].path;
+            },
+        sisterLessons: 
+            (state, getters) => (lessonPath) => {
+                let parents = getters.parentsList(lessonPath);
+                let directParent = parents[parents.length - 1];
+                return getters.childrenLessons(directParent.path).sort((lsn1, lsn2) => parseInt(lsn1.order) - parseInt(lsn2.order));
+            },
+        parentsList: 
+            state => lessonPath => {
+                let parents = [];
+                let obj = {};
+                state.hierarchy.forEach(ancestor => {
+                    if (lessonPath.includes(ancestor.trnCatPath)) {
+                        obj.title = ancestor.trnCatTitle;
+                        obj.path = ancestor.trnCatPath;
+                        parents.push(obj);
+                        parents.push(...Category.findParentsOfLesson(ancestor, lessonPath));
+                    }
+                });
+                return parents;
+            },
+        breadCrumb: 
+            state => lessonPath => {
+                let breadCrumbItems = [];
+                let obj = {};
+                state.hierarchy.forEach(ancestor => {
+                    if (lessonPath.includes(ancestor.trnCatPath)) {
+                        obj.title = ancestor.trnCatTitle;
+                        obj.path = ancestor.trnCatPath;
+                        breadCrumbItems.push(obj);
+                        breadCrumbItems.push(...Category.findLessonBreadCrumb(ancestor, lessonPath));
+                    }
+                });
+                return breadCrumbItems;
+            },
+        hierarchy: 
+            state => state.hierarchy,
+        treeView: 
+            state => {
+                let treeView = [];
+                //console.log(JSON.stringify(state.hierarchy, null, 4));
+                state.hierarchy.map(ancestorCategory => treeView.push(Category.convertExtCategoryToTreeView(ancestorCategory)));
+                //console.log(JSON.stringify(treeView, null, 4));
+                return treeView
+            },
     },
 
     mutations: {
@@ -266,154 +238,11 @@ export default new Vuex.Store({
         },
 
         async fetchHierarchy({commit}, payload) {
-            let placeHolderHierarchy = [
-                {
-                    "trnCatId": null,
-                    "trnCatOrder": 1010,
-                    "trnCatDescription": "1",
-                    "trnCatId__trnCatTitle": null,
-                    "trnCatTitle": "cat1",
-                    "trnCatPath": "/cat1",
-                    "categories": [
-                        {
-                            "trnCatId": "11",
-                            "trnCatOrder": 1020,
-                            "trnCatDescription": "2",
-                            "trnCatId__trnCatTitle": "cat1",
-                            "trnCatTitle": "cat2",
-                            "trnCatPath": "/cat1/cat2",
-                            "categories": [
-                                {
-                                    "trnCatId": "12",
-                                    "trnCatOrder": 1030,
-                                    "trnCatDescription": "3",
-                                    "trnCatId__trnCatTitle": "cat2",
-                                    "trnCatTitle": "cat3",
-                                    "trnCatPath": "/cat1/cat2/cat3",
-                                    "categories": [
-                                        {
-                                            "trnCatId": "13",
-                                            "trnCatOrder": 1040,
-                                            "trnCatDescription": "4",
-                                            "trnCatId__trnCatTitle": "cat3",
-                                            "trnCatTitle": "cat4",
-                                            "trnCatPath": "/cat1/cat2/cat3/cat4",
-                                            "row_id": "14",
-                                            "trnCatPicture": null,
-                                            "trnCatId__trnCatPath": "/cat1/cat2/cat3",
-                                            "lessons": [
-                                                {
-                                                    "trnLsnPath": "/cat1/cat2/cat3/cat4/lecon3",
-                                                    "trnLsnOrder": 300,
-                                                    "trnLsnCatId__trnCatPath": "/cat1/cat2/cat3/cat4",
-                                                    "trnLsnTitle": "Lecon 3",
-                                                    "trnLsnDescription": "Une leçon pour la catégorie enfant 1, qui avait envie d'être maman",
-                                                    "trnLsnVideoUrl": null,
-                                                    "trnLsnContent": "<h1> je suis un titre de niveau 1<\/h1>",
-                                                    "trnLsnCatId__trnCatTitle": "cat4",
-                                                    "row_id": "3",
-                                                    "trnLsnCatId": "14"
-                                                },
-                                                {
-                                                    "trnLsnPath": "/cat1/cat2/cat3/cat4/lecon1",
-                                                    "trnLsnOrder": 10,
-                                                    "trnLsnCatId__trnCatPath": "/cat1/cat2/cat3/cat4",
-                                                    "trnLsnTitle": "Lecon1",
-                                                    "trnLsnDescription": "LeconRecursive1",
-                                                    "trnLsnVideoUrl": null,
-                                                    "trnLsnContent": null,
-                                                    "trnLsnCatId__trnCatTitle": "cat4",
-                                                    "row_id": "7",
-                                                    "trnLsnCatId": "14"
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "row_id": "13",
-                                    "trnCatPicture": null,
-                                    "trnCatId__trnCatPath": "/cat1/cat2"
-                                }
-                            ],
-                            "row_id": "12",
-                            "trnCatPicture": null,
-                            "trnCatId__trnCatPath": "/cat1"
-                        }
-                    ],
-                    "row_id": "11",
-                    "trnCatPicture": null,
-                    "trnCatId__trnCatPath": null
-                },
-                {
-                    "trnCatId": null,
-                    "trnCatOrder": 200,
-                    "trnCatDescription": "Une deuxième catégorie pour plus de diversité",
-                    "trnCatId__trnCatTitle": null,
-                    "trnCatTitle": "Catégorie 2",
-                    "trnCatPath": "/catgorie2",
-                    "categories": [
-                        {
-                            "trnCatId": "5",
-                            "trnCatOrder": 100,
-                            "trnCatDescription": "Première catégorie créée pour utilisation dans le front Simplicité",
-                            "trnCatId__trnCatTitle": "Catégorie 2",
-                            "trnCatTitle": "Catégorie1",
-                            "trnCatPath": "/catgorie2/catgorie1",
-                            "categories": [
-                                {
-                                    "trnCatId": "4",
-                                    "trnCatOrder": 300,
-                                    "trnCatDescription": "Une catégorie enfant pour tester ce feature",
-                                    "trnCatId__trnCatTitle": "Catégorie1",
-                                    "trnCatTitle": "Enfant 1",
-                                    "trnCatPath": "/catgorie2/catgorie1/enfant1",
-                                    "row_id": "6",
-                                    "trnCatPicture": null,
-                                    "trnCatId__trnCatPath": "/catgorie2/catgorie1"
-                                }
-                            ],
-                            "row_id": "4",
-                            "trnCatPicture": null,
-                            "trnCatId__trnCatPath": "/catgorie2",
-                            "lessons": [
-                                {
-                                    "trnLsnPath": "/catgorie2/catgorie1/titre1",
-                                    "trnLsnOrder": 1010,
-                                    "trnLsnCatId__trnCatPath": "/catgorie2/catgorie1",
-                                    "trnLsnTitle": "Titre 1",
-                                    "trnLsnDescription": "Description 1",
-                                    "trnLsnVideoUrl": null,
-                                    "trnLsnContent": null,
-                                    "trnLsnCatId__trnCatTitle": "Catégorie1",
-                                    "row_id": "4",
-                                    "trnLsnCatId": "4"
-                                }
-                            ]
-                        }
-                    ],
-                    "row_id": "5",
-                    "trnCatPicture": null,
-                    "trnCatId__trnCatPath": null,
-                    "lessons": [
-                        {
-                            "trnLsnPath": "/catgorie2/titre2",
-                            "trnLsnOrder": 1020,
-                            "trnLsnCatId__trnCatPath": "/catgorie2",
-                            "trnLsnTitle": "Titre 2",
-                            "trnLsnDescription": "Description 2",
-                            "trnLsnVideoUrl": null,
-                            "trnLsnContent": null,
-                            "trnLsnCatId__trnCatTitle": "Catégorie 2",
-                            "row_id": "5",
-                            "trnLsnCatId": "5"
-                        }
-                    ]
-                }
-            ];
-            console.log("fetchHierarchy");
             return new Promise(async (resolve, reject) => {
-                const treeViewURL = payload.smp.getExternalObjectURL('TrnExternalTreeView');
-                    commit('UPDATE_HIERARCHY', placeHolderHierarchy);
-                    resolve(placeHolderHierarchy);
+                payload.smp._call(undefined, "/api/ext/TrnExternalTreeView", undefined, r=>{
+                    commit('UPDATE_HIERARCHY', r);
+                    resolve(r);
+                });
             })
         },
 
@@ -423,10 +252,10 @@ export default new Vuex.Store({
                 let picture = payload.smp.getBusinessObject("TrnPicture");
                 picture.search(async () => {
                     if (picture.list) {
-                        resolve(await picture.list.map(pic => payload.smp.dataURL(pic.trnPicImage)))
+                        resolve(await picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)))
                     } else
                         reject("Impossible to fetch the pictures")
-                }, {'trnPicLsnId': payload.lessonId},  { inlineDocs: true })
+                }, {'trnPicLsnId': payload.lessonId})
             });
         },
 
@@ -435,7 +264,9 @@ export default new Vuex.Store({
                 let picture = payload.smp.getBusinessObject("TrnCategory");
                 picture.search(async () => {
                     if (picture.list) {
-                        resolve(await picture.list.map(pic => payload.smp.dataURL(pic.trnCatPicture)))
+                        resolve(await picture.list.map(pic => {
+                            pic.trnCatPicture!=null ? payload.smp.dataURL(pic.trnCatPicture) : null;
+                        }))
                     } else
                         reject("Impossible to fetch the pictures")
                 }, {'row_id': payload.categoryId},  { inlineDocs: true })
