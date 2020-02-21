@@ -4,6 +4,7 @@
 
             <v-treeview
                     :items="this.treeView"
+                    v-if="this.treeView"
                     active-class="treeview-lesson--active"
                     open-all
                     open-on-click
@@ -41,8 +42,8 @@
         <!-- Sizes your content based upon application components -->
         <v-content class="content">
             <!-- Provides the application the proper gutter -->
-            <v-container pa-0 mt-1 fluid class="router-container-2 fill-page" v-on:test-event="logMessage()">
-                <router-view :key="$route.fullPath"></router-view>
+            <v-container pa-0 mt-1 fluid class="router-container-2 fill-page">
+                <router-view :key="$route.fullPath" v-if="$store.state.treeLoaded"></router-view>
                 <!-- This makes the page reload when the url changes(check api doc for more info) -->
                 <v-snackbar id="snackbar" v-model="snackBar" :timeout="snbTimeOut">
                     <span id="snb-text"> {{snbText}} </span>
@@ -81,7 +82,8 @@
         },
         methods: {
             checkIfRouteIsLesson() {
-                return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
+                return true;
+                //return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
             },
 
             navigateToLesson(item) {
@@ -142,6 +144,13 @@
                 this.snackBar = true;
             },
         },
+        async beforeCreate(){
+            this.$smp.login(()=>{console.log("LOGGED IN")});
+        },
+        async created() {
+            this.$store.dispatch('fetchHierarchy', {smp: this.$smp});
+            this.$store.dispatch('fetchTree', {smp: this.$smp});
+        }
     };
 </script>
 

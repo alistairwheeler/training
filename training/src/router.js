@@ -3,6 +3,7 @@ import LessonItem from "./components/LessonItem"
 import HomePage from "./components/HomePage"
 import Courses from "./components/Courses"
 import Lessons from "./components/Lessons"
+import PageNotFound from "./components/PageNotFound"
 
 //1. Routes definition
 const routes = [
@@ -14,7 +15,7 @@ const routes = [
     { path: '/lessons', component: Lessons },
     { path: '/lessonItem/*', component: LessonItem },
     //This route is last in the list because it can override the other ones (because it matches all routes)
-    { path: '/*', component: HomePage }
+    { path: '/*', component: PageNotFound }
 ];
 
 //2. Exporting the router instance

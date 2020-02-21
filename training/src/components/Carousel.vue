@@ -2,23 +2,15 @@
 <!-- https://github.com/codepo8/simple-carousel/blob/master/carousel-images.html -->
 <template>
   <div class="carouselbox active">
-          <!-- <ol class="content">
-            <li><img src="http://lorempixel.com/200/200" alt="1"></li>
-            <li><img src="http://lorempixel.com/199/200" alt="2"></li>
-            <li><img src="http://lorempixel.com/200/199" alt="3"></li>
-            <li><img src="http://lorempixel.com/199/199" alt="4"></li>
-        </ol> -->
     <ol class="content">
-      <li v-for="(url, index) in images" v-bind:key="index">
-        <img :src="url" alt="Image"/>
-      </li>
+      <li class="current"><img :src="currentImg"></li>
     </ol>
     <div class="buttons">
-      <button v-on:click="navigate(-1)">
+      <button v-on:click="navigate2(-1)">
         ◀
         <span class="offscreen">Previous</span>
       </button>
-      <button @click="navigate(1)">
+      <button @click="navigate2(1)">
         <span class="offscreen">Next</span> ▶
       </button>
     </div>
@@ -30,40 +22,21 @@ export default {
   name: "Carousel",
   props: ["images"],
   data: () => ({
-    box: null,
-    counter: 0,
-    items: [],
-    current: null
+    counter: 0
   }),
-  methods: {
-    init: function() {
-      // Define the global counter, the items and the
-      // current item
-      this.items = this.$el.querySelectorAll(".content li");
-      this.current = this.items[0];
-
-      //this.box.classList.add("active");
-
-      // show the first element
-      // (when direction is 0 counter doesn't change)
-      this.navigate(0);
-    },
-    navigate: function(direction) {
-      // hide the old current list item
-      this.current.classList.remove("current");
-
-      // calculate the new position
-      this.counter = (this.counter + direction) % this.images.length;
-      this.counter = this.counter < 0 ? this.images.length - 1 : this.counter;
-
-      // set new current element
-      // and add CSS class
-      this.current = this.items[this.counter];
-      this.current.classList.add("current");
+  computed: {
+    currentImg: function() {
+      return this.images[this.counter];
     }
   },
-  async updated() {
-    this.init();
+  methods: {
+    isCurrent: function(idx){
+      return idx==this.counter;
+    },
+    navigate2: function(direction){
+      this.counter = (this.counter + direction) % this.images.length;
+      this.counter = this.counter < 0 ? this.images.length - 1 : this.counter;
+    }
   }
 };
 </script>

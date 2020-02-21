@@ -18,7 +18,7 @@
 
     h1 {
         color: black;
-        font-size: $h1-size;
+        // font-size: $h1-size;
     }
 
     #wrapper {

@@ -32,7 +32,7 @@ else
 
 // Login is necessary to get resources and make authenticated webservice calls.
 // TODO probably not the best place to do the login ?
-Vue.prototype.$smp.login(function success(){
+//Vue.prototype.$smp.login(function success(){
   
   //5. Creating the Vue instance with the router, the store and el:'#app' as the root instance of vue
   new Vue({
@@ -43,8 +43,8 @@ Vue.prototype.$smp.login(function success(){
     router: router,
   }).$mount('#app');
 
-}, function error(){
-  alert("error connecting to simplicite");
-});
+// }, function error(){
+//   alert("error connecting to simplicite");
+// });
 
 

@@ -1,22 +1,25 @@
 <template>
-  <div class="grid-lesson">
-    <div class="grid-item grid-item-content">
-      <ul class="breadcrumb">
-          <li class="breadcrumb__item" v-for="(item, index) in this.breadCrumbItems" :key="index"
-              @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)">
-              <span>{{item.title}}</span>
-              <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
-          </li>
-      </ul>
-      <div class="lesson_content" v-highlightjs v-if="this.lessonToDisplay.content" v-html="this.lessonToDisplay.content"></div>
-    </div>
-    <div class="grid-item grid-item-media">
-      <Carousel v-bind:images="urlList"/>
-    </div>
-    <div class="grid-item grid-item-video">
-      <video controls muted :src="lessonToDisplay.video"  class="video">
-        Sorry, your browser doesn't support embedded videos.
-      </video>
+  <div >
+    <div class="grid-lesson">
+      <div class="grid-item grid-item-content">
+        <ul class="breadcrumb">
+            <li class="breadcrumb__item" v-for="(item, index) in this.breadCrumbItems" :key="index"
+                @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)">
+                <span>{{item.title}}</span>
+                <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
+            </li>
+        </ul>
+        <div class="lesson_content" v-highlightjs v-if="this.currentLesson.trnLsnHtmlContent" v-html="this.currentLesson.trnLsnHtmlContent"></div>
+      </div>
+      <div class="grid-item grid-item-media">
+        <Carousel v-bind:images="this.currentLessonImages" v-if="hasImages"/>
+      </div>
+      <div class="grid-item grid-item-video">
+        <!-- Do NOT prelead anything to keep app snappy -->
+        <video controls muted :src="videoUrl" preload="none" class="video" v-if="videoUrl">
+          Sorry, your browser doesn't support embedded videos.
+        </video>
+      </div>
     </div>
   </div>
 </template>
@@ -30,11 +33,11 @@ export default {
   name: "LessonItem",
   components: {Carousel},
   data: () => ({
-    lessonToDisplay: {},
-    urlList: []
+    urlList: [],
+    lesson: false
   }),
   computed: {
-    ...mapGetters(["getLessonWithPath", "hierarchy", "breadCrumb"]),
+    ...mapGetters(["breadCrumb", "getLessonFromPath", "currentLesson", "currentLessonImages"]),
     openDrawer: function() {
       return this.$store.getters.drawerOpen;
     },
@@ -42,24 +45,18 @@ export default {
       return this.breadCrumb(
         this.$router.currentRoute.path.split("lessonItem")[1]
       );
+    },
+    videoUrl: function(){
+      if(this.currentLesson && this.currentLesson.trnLsnVideo)
+        return this.$smp.documentURL("TrnLesson", "trnLsnVideo", this.currentLesson.row_id, this.currentLesson.trnLsnVideo);
+      else
+        return false;
+    },
+    hasImages: function(){
+      return this.currentLessonImages.length > 0;
     }
   },
   methods: {
-    displayLesson(contentItem) {
-      this.lessonToDisplay.title = contentItem.title;
-      this.lessonToDisplay.content = contentItem.content;
-      this.lessonToDisplay.video = this.$smp.documentURL("TrnLesson", "trnLsnVideo", contentItem.row_id, contentItem.video);
-      this.$store.commit("UPDATE_DISPLAYED_LESSON_PATH", contentItem.path);
-      let payload = {
-        smp: this.$smp,
-        lessonId: contentItem.row_id
-      };
-      this.$store
-        .dispatch("fetchLessonsPictureURLs", payload)
-        .then(urlList => (this.urlList = urlList))
-        .catch(err => console.error(err));
-    },
-
     breadCrumbItemClicked(categoryPath, index, length) {
       if (index !== length - 1) {
         this.$router
@@ -71,28 +68,18 @@ export default {
   async created() {
     let splitted = this.$router.currentRoute.path.split("lessonItem");
     let lessonPath = splitted[1] ? splitted[1] : "";
-    let payload = {
-      smp: this.$smp
-    };
-
-    this.$store.commit("UPDATE_DRAWER_OPEN", true);
-
-    if (lessonPath !== "") {
-      let contentItem = this.getLessonWithPath(lessonPath);
-      if (contentItem !== undefined) {
-        this.displayLesson(contentItem);
-      } else {
-        payload.itemPath = lessonPath;
-        this.$store.dispatch("fetchLesson", payload).then(contentItem => {
-          this.displayLesson(contentItem);
-        });
-      }
-      this.$store
-        .dispatch("fetchHierarchy", payload)
-        .catch(err => console.error(err));
-    } else {
-      console.error("error on the path of the lesson" + lessonPath);
-    }
+    let lesson = this.getLessonFromPath(lessonPath);
+    
+    if(!lesson)
+      this.$router.push('/404');
+    else
+      this.$store.dispatch("loadLesson", {
+        smp: this.$smp,
+        lessonId: lesson.row_id
+      });
+  },
+  async beforeDestroy(){
+    this.$store.commit('UNLOAD_LESSON');
   }
 };
 </script>
