@@ -1,6 +1,13 @@
 <template>
     <div class="wrapper"> <!-- Here in case we want to add something to this view -->
-        <v-card class="item-prev" @click="onListItemClicked(item)" v-for="item in listToDisplay" :key="item.row_id">
+        <v-treeview
+                activatable
+                hoverable
+                shaped
+                :items="this.convertTreeViewToArray(this.tree)">
+        </v-treeview>
+
+        <v-card class="item-prev" @click="onListItemClicked(item)" v-for="item in listToDisplay" :key="item.row_id + item.name">
             <div class="item-prev__picture-container">
                 <!--                <img class="item-prev__picture"
                                      src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
@@ -16,8 +23,8 @@
             </div>
 
             <div class="item-prev__info-container">
-                <h2 class="item-prev__name">{{item.title}}</h2>
-                <p class="item-prev__long-description">{{item.longDescription}}</p>
+                <h2 class="item-prev__name">{{item.name}}</h2>
+                <p class="item-prev__long-description">{{item.description}}</p>
             </div>
         </v-card>
     </div>
@@ -28,7 +35,6 @@
 
     import {mapGetters} from 'vuex'
     import {CATEGORY, CONTENT} from "../Models/ListItem";
-
 
     export default {
         name: 'ItemList',
@@ -46,10 +52,11 @@
                 'childrenCategories',
                 'childrenLessons',
                 'allItemsLoaded',
+                'tree',
+                'treeAsArray',
             ])
         },
         methods: {
-
             onListItemClicked(item) {
                 if (item.itemType === CATEGORY) {
                     this.$router.push('/courses' + item.path);
@@ -100,14 +107,71 @@
                 return this.$store.dispatch('fetchLessonsPictureURLs', payload)
             },
 
+            convertTreeViewToArray(treeView) {
+                let rootCategories = [];
+                for(let category in treeView){
+                    console.log(treeView[category].row_id)
+                    rootCategories.push(this.convertCategoryToTreeViewElement(treeView[category]));
+                }
+                return rootCategories;
+            },
+
+            convertCategoryToTreeViewElement(category){
+                let tvCategory = {};
+                //1. Convert this category
+                tvCategory.id = category.row_id;
+                tvCategory.name = category.trnCatTitle;
+                tvCategory.path = category.trnCatPath;
+                tvCategory.description = category.trnCatDescription;
+                tvCategory.itemType = CATEGORY;
+                tvCategory.children = [];
+
+                //2. Find children categories and convert them
+                if(category.categories){ //TODO: check in a different way if there is a "categories" field in the object
+                    tvCategory.categories = [];
+                    for(let cat in category.categories){
+                        tvCategory.children.push(this.convertCategoryToTreeViewElement(category.categories[cat]))
+                        //To use if we decide to not use a vuetify treeview to display the hierarchy
+                        //tvCategory.categories.push(this.convertCategoryToTreeViewElement(category.categories[cat]))
+                    }
+                }
+
+                //3. Find children lessons and convert them
+                if(category.lessons){ //TODO: check in a different way if there is a "lessons" field in the object
+                    tvCategory.lessons = [];
+                    for(let lsn in category.lessons){
+                        tvCategory.children.push(this.convertLessonToTreeViewElement(category.lessons[lsn]))
+
+                        //To use if we decide to not use a vuetify treeview to display the hierarchy
+                        // tvCategory.lessons.push(this.convertLessonToTreeViewElement(category.lessons[lsn]))
+                    }
+                }
+                return tvCategory;
+            },
+
+            convertLessonToTreeViewElement(lesson){
+                //console.log("CONVERTING LESSON TO TV : ")
+                return ({
+                    id: lesson.row_id,
+                    name: lesson.trnLsnTitle,
+                    path: lesson.trnLsnPath,
+                    description: lesson.trnLsnPath,
+                    itemType: CONTENT,
+                })
+            },
         },
         async created() {
-
+            console.log("ITEMLIST CREATED. treeview : ");
             let payload = {
                 smp: this.$smp,
                 categoryPath: this.categoryPath
             };
-            if (this.categoryPath === '') { //Displaying every category
+
+            //TODO: Use the tree object in the store to populate the screen
+            this.listToDisplay.push(...this.convertTreeViewToArray(this.tree))
+
+
+/*            if (this.categoryPath === '') { //Displaying every category
                 console.log("Displaying every category");
                 if (this.allCategoriesLoaded) {
                     await this.addPictureToCategories(this.ancestorCategoriesAsListItems)
@@ -131,7 +195,7 @@
             }
             if (this.listToDisplay.length === 0) {
                 console.error("Nothing to display in this category")
-            }
+            }*/
         }
     }
 </script>

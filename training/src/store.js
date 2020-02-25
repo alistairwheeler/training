@@ -148,7 +148,12 @@ export default new Vuex.Store({
         currentLesson:
             state => state.currentLesson,
         currentLessonImages:
-            state => state.currentLessonImages
+            state => state.currentLessonImages,
+        tree:
+            state => state.tree,
+
+        //GETTERS TO DEVELOP WITH THE NE TREEVIEW
+
     },
 
     mutations: {
@@ -218,6 +223,8 @@ export default new Vuex.Store({
         async fetchTree({commit}, payload) {
             return new Promise(async (resolve, reject) => {
                 payload.smp._call(undefined, "/ext/TrnTreeService", undefined, r=>{
+                    console.log("treeview");
+                    console.log(r);
                     commit('UPDATE_TREE', r);
                     resolve();
                 });
@@ -294,7 +301,8 @@ export default new Vuex.Store({
                 category.search(() => {
                     if (category.list) {
                         category.list.forEach(smpCategory => {
-                            commit('PUSH_CATEGORY', new Category(smpCategory))
+                            commit('PUSH_CATEGORY', smpCategory)
+                            //commit('PUSH_CATEGORY', new Category(smpCategory))
                         });
                         commit('ALL_CATEGORIES_LOADED', true);
                         resolve(category.list);
@@ -310,7 +318,8 @@ export default new Vuex.Store({
                 let lesson = payload.smp.getBusinessObject("TrnLesson");
                 lesson.search(() => {
                     if (lesson.list) {
-                        lesson.list.forEach(smpLesson => commit('PUSH_ITEM', new ContentItem(smpLesson)));
+                        lesson.list.forEach(smpLesson => commit('PUSH_ITEM', smpLesson));
+                        //lesson.list.forEach(smpLesson => commit('PUSH_ITEM', new ContentItem(smpLesson)));
                         resolve(lesson.list);
                     } else {
                         reject("Could not load the lessons");
@@ -324,7 +333,8 @@ export default new Vuex.Store({
                 let lesson = payload.smp.getBusinessObject("TrnLesson");
                 lesson.search(() => {
                     if (lesson.list) {
-                        let lsn = new ContentItem(lesson.list[0]);
+                        let lsn = lesson.list[0];
+                        //let lsn = new ContentItem(lesson.list[0]);
                         commit('PUSH_ITEM', lsn);
                         resolve(lsn);
                     } else
@@ -340,8 +350,10 @@ export default new Vuex.Store({
                 category.search(() => {
                     if (category.list) {
                         category.list.forEach(smpCategory => {
-                            children.push(new Category(smpCategory));
-                            commit('PUSH_CATEGORY', new Category(smpCategory))
+                            children.push(smpCategory);
+                            commit('PUSH_CATEGORY', smpCategory)
+                            //children.push(new Category(smpCategory));
+                            //commit('PUSH_CATEGORY', new Category(smpCategory))
                         });
                         resolve(category.list);
                     } else {
@@ -354,8 +366,10 @@ export default new Vuex.Store({
                 lesson.search(() => {
                     if (lesson.list) {
                         lesson.list.forEach(smpLesson => {
-                            children.push(new ContentItem(smpLesson));
-                            commit('PUSH_ITEM', new ContentItem(smpLesson))
+                            children.push(smpLesson);
+                            commit('PUSH_ITEM', smpLesson)
+                            //children.push(new ContentItem(smpLesson));
+                            //commit('PUSH_ITEM', new ContentItem(smpLesson))
                         });
                         resolve(lesson.list);
                     } else {
@@ -379,6 +393,9 @@ export default new Vuex.Store({
                 }, {'row_id': payload.categoryId},  { inlineDocs: true })
             });
         },
-    }
+    },
+
+
+
 
 });

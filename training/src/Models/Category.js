@@ -46,7 +46,7 @@ export class Category {
      * composed of the title and the path of the breadCrumbItems.
      * @param extCategory
      * @param lessonPath
-     * @returns {Array}
+     * @returns {Array} containing the parents names + paths
      */
     static findLessonBreadCrumb(extCategory, lessonPath) {
         let parents = [];
@@ -78,6 +78,7 @@ export class Category {
      * Returns an array made of the breadCrumbItems of a provided lesson (its path is provided)
      * @param extCategory The category in which to research the breadCrumbItems
      * @param lessonPath The lessonPath identifying the lesson to search for
+     * @returns {Array} containing the parents
      */
     static findParentsOfLesson(extCategory, lessonPath) {
         console.log("findParentsOfLesson");
