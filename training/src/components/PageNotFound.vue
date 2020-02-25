@@ -8,6 +8,9 @@
 <script>
     export default {
         name: 'PageNotFound',
+        created() {
+            //TODO : Unset several parameters : currentLesson, currentLessonImages etc ...
+        }
     }
 </script>
 

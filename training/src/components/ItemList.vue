@@ -128,7 +128,7 @@
 
                 //2. Find children categories and convert them
                 if(category.categories){ //TODO: check in a different way if there is a "categories" field in the object
-                    tvCategory.categories = [];
+                    //tvCategory.categories = [];
                     for(let cat in category.categories){
                         tvCategory.children.push(this.convertCategoryToTreeViewElement(category.categories[cat]))
                         //To use if we decide to not use a vuetify treeview to display the hierarchy
@@ -138,7 +138,7 @@
 
                 //3. Find children lessons and convert them
                 if(category.lessons){ //TODO: check in a different way if there is a "lessons" field in the object
-                    tvCategory.lessons = [];
+                    //tvCategory.lessons = [];
                     for(let lsn in category.lessons){
                         tvCategory.children.push(this.convertLessonToTreeViewElement(category.lessons[lsn]))
 
@@ -150,7 +150,6 @@
             },
 
             convertLessonToTreeViewElement(lesson){
-                //console.log("CONVERTING LESSON TO TV : ")
                 return ({
                     id: lesson.row_id,
                     name: lesson.trnLsnTitle,

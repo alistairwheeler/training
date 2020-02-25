@@ -3,8 +3,8 @@
         <v-navigation-drawer v-if="checkIfRouteIsLesson()" app clipped v-model="this.drawerOpen">
 
             <v-treeview
-                    :items="this.treeView"
-                    v-if="this.treeView"
+                    v-if="this.treeAsVuetifyTree"
+                    :items="this.treeAsVuetifyTree"
                     active-class="treeview-lesson--active"
                     open-all
                     open-on-click
@@ -33,9 +33,9 @@
                 <v-icon>mdi-skip-next</v-icon>
             </v-btn>
 
-            <v-toolbar-items>
+            <!--<v-toolbar-items>
                 <v-btn text to="/courses">Cours</v-btn>
-            </v-toolbar-items>
+            </v-toolbar-items>-->
 
         </v-app-bar>
 
@@ -59,6 +59,7 @@
     /* eslint-disable no-console */
 
     import {mapGetters} from "vuex";
+    import {CATEGORY, LESSON} from "./Helper";
 
     export default {
         name: 'App',
@@ -75,9 +76,12 @@
         computed: {
             ...mapGetters([
                 'treeView',
+                'getLessonFromPath',
+                'currentLesson',
                 'drawerOpen',
                 'nextLessonPath',
                 'previousLessonPath',
+                'treeAsVuetifyTree',
             ])
         },
         methods: {
@@ -87,10 +91,10 @@
             },
 
             navigateToLesson(item) {
-                if (item.type === "category") {
+                if (item.type === CATEGORY) {
                     console.log("ITEM IS A CATEGORY, can't navigate there if you want the tree to be foldable")
                     //this.$router.push('/courses/'+ item.path).catch(() => console.log("Navigation Duplicated"))
-                } else if (item.type === "contentItem") {
+                } else if (item.type === LESSON) {
                     this.$router.push('/lessonItem' + item.path).catch(() => console.log("Navigation Duplicated"))
                 } else {
                     console.error("Error with the item type - not matching category or contentItem")
@@ -98,11 +102,10 @@
             },
 
             navigateToNextLesson() {
-                let nextPath = this.nextLessonPath;
+                let nextPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnNext;
                 console.log(`nextPath : ${nextPath}`);
-                if (nextPath !== undefined) {
+                if (nextPath !== undefined && nextPath !== "null") {
                     let path = nextPath.toString().substring(1);
-                    console.log(`pushing to ${path}`);
                     this.$router.push('/lessonItem/' + path).catch(err => console.error(err))
                 } else {
                     this.shakeElement("next-button");
@@ -111,21 +114,20 @@
             },
 
             navigateToPreviousLesson() {
-                let previousPath = this.previousLessonPath;
+                let previousPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnPrevious;
                 console.log(`previousPath : ${previousPath}`);
-                if (previousPath !== undefined) {
+                if (previousPath !== undefined && previousPath !== "null") {
                     let path = previousPath.toString().substring(1);
-                    console.log(`pushing to ${path}`);
                     this.$router.push('/lessonItem/' + path)
                 } else {
                     this.shakeElement("previous-button");
-                    this.showMessage("Vous êtes à la première leçon de cette catégorie")
+                    this.showMessage('Vous êtes à la première leçon de cette catégorie')
                 }
             },
 
             navigateHome() {
                 this.$router.push('/home')
-                    .catch(() => console.log("Navigation Duplicated"));
+                    .catch(() => console.log('Navigation Duplicated'));
             },
 
             openOrCloseDrawer() {
@@ -148,8 +150,11 @@
             this.$smp.login(()=>{console.log("LOGGED IN")});
         },
         async created() {
-            this.$store.dispatch('fetchHierarchy', {smp: this.$smp});
             this.$store.dispatch('fetchTree', {smp: this.$smp});
+        },
+        async mounted() {
+            console.log("mounted")
+            console.log(this.treeAsTreeView)
         }
     };
 </script>

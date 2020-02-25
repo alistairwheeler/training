@@ -147,7 +147,7 @@ video{
   }
 }
 
-/* ----- LESSON CONTENT ----- */
+/* ----- LESSON LESSON ----- */
 .lesson-title {
   color: $color-primary;
   font-size: nth($title-size, 1) + 1rem;
