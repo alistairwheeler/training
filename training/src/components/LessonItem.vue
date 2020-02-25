@@ -2,7 +2,7 @@
   <div >
     <div class="grid-lesson">
       <div class="grid-item grid-item-content">
-        <ul class="breadcrumb">
+        <ul class="breadcrumb" v-if="this.hasCurrentLesson">
             <li class="breadcrumb__item" v-for="(item, index) in this.breadCrumbItems" :key="index"
                 @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)">
                 <span>{{item.title}}</span>
@@ -37,11 +37,11 @@ export default {
     lesson: false
   }),
   computed: {
-    ...mapGetters(["breadCrumb", "getLessonFromPath", "currentLesson", "currentLessonImages"]),
+    ...mapGetters(["breadCrumb", "breadCrumbItems", "getLessonFromPath", "currentLesson", "currentLessonImages"]),
     openDrawer: function() {
       return this.$store.getters.drawerOpen;
     },
-    breadCrumbItems: function() {
+    breadCrumbItems2: function() {
       return this.breadCrumb(
         this.$router.currentRoute.path.split("lessonItem")[1]
       );
@@ -54,6 +54,9 @@ export default {
     },
     hasImages: function(){
       return this.currentLessonImages.length > 0;
+    },
+    hasCurrentLesson: function(){
+      return this.currentLesson;
     }
   },
   methods: {
