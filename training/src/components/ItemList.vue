@@ -4,7 +4,7 @@
                 activatable
                 hoverable
                 shaped
-                :items="this.convertTreeViewToArray(this.tree)">
+                :items="this.treeAsVuetifyTree">
         </v-treeview>
 
         <v-card class="item-prev" @click="onListItemClicked(item)" v-for="item in listToDisplay" :key="item.row_id + item.name">
@@ -34,7 +34,7 @@
     /* eslint-disable no-unused-vars,no-console */
 
     import {mapGetters} from 'vuex'
-    import {CATEGORY, LESSON} from "../Helper";
+    import {CATEGORY, LESSON, convertTreeToArray} from "../Helper";
 
     export default {
         name: 'ItemList',
@@ -45,15 +45,8 @@
         }),
         computed: {
             ...mapGetters([
-                'categoriesAsListItems',
-                'ancestorCategoriesAsListItems',
-                'allCategoriesLoaded',
-                'allChildrenAsItemList',
-                'childrenCategories',
-                'childrenLessons',
-                'allItemsLoaded',
                 'tree',
-                'treeAsArray',
+                'treeAsVuetifyTree,'
             ])
         },
         methods: {
@@ -106,58 +99,6 @@
                 };
                 return this.$store.dispatch('fetchLessonsPictureURLs', payload)
             },
-
-            convertTreeViewToArray(treeView) {
-                let rootCategories = [];
-                for(let category in treeView){
-                    console.log(treeView[category].row_id)
-                    rootCategories.push(this.convertCategoryToTreeViewElement(treeView[category]));
-                }
-                return rootCategories;
-            },
-
-            convertCategoryToTreeViewElement(category){
-                let tvCategory = {};
-                //1. Convert this category
-                tvCategory.id = category.row_id;
-                tvCategory.name = category.trnCatTitle;
-                tvCategory.path = category.trnCatPath;
-                tvCategory.description = category.trnCatDescription;
-                tvCategory.itemType = CATEGORY;
-                tvCategory.children = [];
-
-                //2. Find children categories and convert them
-                if(category.categories){ //TODO: check in a different way if there is a "categories" field in the object
-                    //tvCategory.categories = [];
-                    for(let cat in category.categories){
-                        tvCategory.children.push(this.convertCategoryToTreeViewElement(category.categories[cat]))
-                        //To use if we decide to not use a vuetify treeview to display the hierarchy
-                        //tvCategory.categories.push(this.convertCategoryToTreeViewElement(category.categories[cat]))
-                    }
-                }
-
-                //3. Find children lessons and convert them
-                if(category.lessons){ //TODO: check in a different way if there is a "lessons" field in the object
-                    //tvCategory.lessons = [];
-                    for(let lsn in category.lessons){
-                        tvCategory.children.push(this.convertLessonToTreeViewElement(category.lessons[lsn]))
-
-                        //To use if we decide to not use a vuetify treeview to display the hierarchy
-                        // tvCategory.lessons.push(this.convertLessonToTreeViewElement(category.lessons[lsn]))
-                    }
-                }
-                return tvCategory;
-            },
-
-            convertLessonToTreeViewElement(lesson){
-                return ({
-                    id: lesson.row_id,
-                    name: lesson.trnLsnTitle,
-                    path: lesson.trnLsnPath,
-                    description: lesson.trnLsnPath,
-                    itemType: LESSON,
-                })
-            },
         },
         async created() {
             console.log("ITEMLIST CREATED. treeview : ");
@@ -167,7 +108,7 @@
             };
 
             //TODO: Use the tree object in the store to populate the screen
-            this.listToDisplay.push(...this.convertTreeViewToArray(this.tree))
+            this.listToDisplay.push(...convertTreeToArray(this.tree))
 
 
 /*            if (this.categoryPath === '') { //Displaying every category
