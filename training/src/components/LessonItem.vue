@@ -10,16 +10,22 @@
             </li>
         </ul>
         <div class="lesson_content" v-highlightjs v-if="this.currentLesson.trnLsnHtmlContent" v-html="this.currentLesson.trnLsnHtmlContent"></div>
+        <div class="empty-content">
+          <h1>Ce Chapitre est en construction, revenez plus tard ! </h1>
+          <a href="/home"><button>Retour à la page d'accueil</button></a>
+        </div>
       </div>
 
       <div class="grid-item grid-item-media">
         <Carousel v-bind:images="this.currentLessonImages" v-if="hasImages"/>
+        <img class="empty-image" src="../../public/empty.png" v-else>
       </div>
       <div class="grid-item grid-item-video">
         <!-- Do NOT prelead anything to keep app snappy -->
         <video controls muted :src="videoUrl" preload="none" class="video" v-if="videoUrl">
           Sorry, your browser doesn't support embedded videos.
         </video>
+        <img class="empty-image" src="../../public/empty.png" v-else>
       </div>
     </div>
   </div>
@@ -106,7 +112,7 @@ export default {
 .grid-item{
   margin: 1em;
   //padding: 0.5em;
-
+  box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
 
 }
 
@@ -114,6 +120,7 @@ export default {
   grid-column: 1;
   grid-row: 1 / 3;
   padding: 1em;
+  overflow: scroll;
 }
 
 .grid-item-media{
@@ -133,6 +140,11 @@ export default {
 video{
   height: 100%;
   width: 100%;
+}
+
+.empty-image {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .breadcrumb {
@@ -254,4 +266,21 @@ video{
   }
 }
 
+.empty-content {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-self: center;
+  align-items: center;
+
+  button {
+    padding: 20px;
+    font-size: 1.5rem;
+    border: solid $color-primary 2px;
+    border-radius: $regular-radius;
+
+    &:hover {
+      background-color: #4fc3f7;
+    }
+  }
+}
 </style>

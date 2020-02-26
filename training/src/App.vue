@@ -22,7 +22,6 @@
                 </template>
                 <template v-slot:label="{ item }">
                         <span v-if="item.name" @click="navigateToLesson(item)" class="tree-element__label"> {{item.name}} </span>
-
                 </template>
             </v-treeview>
 
@@ -77,12 +76,8 @@
         components: {},
         data: () => ({
             snackBar: false,
-            snbTimeOut: 1200,
+            snbTimeOut: 1500,
             snbText: '',
-            /*activeItem: [
-                '/cat1/cat2/cat3/cat4/lecon1',
-            ],*/
-
         }),
         computed: {
             ...mapGetters([
@@ -104,7 +99,11 @@
             navigateToLesson(item) {
                 console.log(item)
                 if (item.type === CATEGORY) {
+                    console.log(item.children.length)
                     console.log("ITEM IS A CATEGORY, can't navigate there if you want the tree to be foldable")
+                    if (item.children.length <=0) {
+                        this.showMessage("Cette catégorie est en construction, Revenez bientôt !")
+                    }
                     //this.$router.push('/courses/'+ item.path).catch(() => console.log("Navigation Duplicated"))
                 } else if (item.type === LESSON) {
                     this.$router.push('/lessonItem' + item.path).catch(() => console.log("Navigation Duplicated"))
