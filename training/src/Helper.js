@@ -100,8 +100,6 @@ export function convertLessonToVuetify(lesson){
     })
 }
 
-
-
 /**
  * Returns an array made of the breadCrumbItems for a lesson, aka parents + lesson. The objects in the array are
  * composed of the title and the path of the breadCrumbItems.

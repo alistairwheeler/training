@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {Category} from "./Models/Category";
 //import {convertTreeToArray, convertTreeToVuetify, findLessonBreadCrumb, findParentsOfLesson} from "./Helper";
 
 Vue.use(Vuex);
@@ -29,7 +28,7 @@ export default new Vuex.Store({
         //NEW MODEL
         drawerOpen: 
             state => state.drawerOpen,
-        dawerActive:
+        drawerActive:
             state => state.currentLesson ? [state.currentLesson.trnLsnPath] : [],
         treeLoaded:
             state => state.treeLoaded,

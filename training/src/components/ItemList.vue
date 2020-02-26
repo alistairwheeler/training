@@ -34,7 +34,7 @@
     /* eslint-disable no-unused-vars,no-console */
 
     import {mapGetters} from 'vuex'
-    import {CATEGORY, CONTENT} from "../Models/ListItem";
+    import {CATEGORY, LESSON} from "../Helper";
 
     export default {
         name: 'ItemList',
@@ -60,7 +60,7 @@
             onListItemClicked(item) {
                 if (item.itemType === CATEGORY) {
                     this.$router.push('/courses' + item.path);
-                } else if (item.itemType === CONTENT) {
+                } else if (item.itemType === LESSON) {
                     this.$router.push('/lessonItem' + item.path)
                 } else {
                     console.error("there is an error on the itemType, it is : " + item.itemType)
@@ -155,7 +155,7 @@
                     name: lesson.trnLsnTitle,
                     path: lesson.trnLsnPath,
                     description: lesson.trnLsnPath,
-                    itemType: CONTENT,
+                    itemType: LESSON,
                 })
             },
         },
