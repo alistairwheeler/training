@@ -1,6 +1,6 @@
 <template>
     <v-app class="app">
-        <v-navigation-drawer v-if="checkIfRouteIsLesson()" app clipped v-model="this.drawerOpen">
+        <v-navigation-drawer v-if="checkIfRouteIsLesson()" app clipped dark color="primary" v-model="this.drawerOpen">
 
             <v-treeview
                     v-if="this.treeAsVuetifyTree"
@@ -10,14 +10,25 @@
                     open-on-click
                     item-key="path"
                     return-object>
-                <template  slot="label" slot-scope="props">
+<!--                <template  slot="label" slot-scope="props">
                     <p class="treeView-item" @click="navigateToLesson(props.item)">{{props.item.name}}</p>
+                </template>-->
+                <template v-slot:prepend="{ item }">
+                    <div class="tree-image">
+                        <v-icon>
+                            {{ item.type === "category" ? 'mdi-book-open-page-variant' : 'mdi-file-document-outline' }}
+                        </v-icon>
+                    </div>
+                </template>
+                <template v-slot:label="{ item }">
+                        <span v-if="item.name" @click="navigateToLesson(item)" class="tree-element__label"> {{item.name}} </span>
+
                 </template>
             </v-treeview>
 
         </v-navigation-drawer>
 
-        <v-app-bar app color="primary" dark clipped-left>
+        <v-app-bar app color="primary" dark clipped-left flat>
 
             <v-app-bar-nav-icon @click="openOrCloseDrawer" v-if="checkIfRouteIsLesson()"></v-app-bar-nav-icon>
 
@@ -33,7 +44,7 @@
                 <v-icon>mdi-skip-next</v-icon>
             </v-btn>
 
-            <!--<v-toolbar-items>
+<!--            <v-toolbar-items>
                 <v-btn text to="/courses">Cours</v-btn>
             </v-toolbar-items>-->
 
@@ -91,6 +102,7 @@
             },
 
             navigateToLesson(item) {
+                console.log(item)
                 if (item.type === CATEGORY) {
                     console.log("ITEM IS A CATEGORY, can't navigate there if you want the tree to be foldable")
                     //this.$router.push('/courses/'+ item.path).catch(() => console.log("Navigation Duplicated"))

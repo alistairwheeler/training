@@ -1,17 +1,7 @@
 <template>
-    <div class="wrapper"> <!-- Here in case we want to add something to this view -->
-        <v-treeview
-                activatable
-                hoverable
-                shaped
-                :items="this.treeAsVuetifyTree">
-        </v-treeview>
-
+    <div id="courses-wrapper" class="wrapper"> <!-- Here in case we want to add something to this view -->
         <v-card class="item-prev" @click="onListItemClicked(item)" v-for="item in listToDisplay" :key="item.row_id + item.name">
             <div class="item-prev__picture-container">
-                <!--                <img class="item-prev__picture"
-                                     src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
-                                     alt="course logo"/>-->
                 <img v-if="item.pictureUrl !== undefined"
                      class="item-prev__picture"
                      :src="item.pictureUrl"
@@ -27,6 +17,7 @@
                 <p class="item-prev__long-description">{{item.description}}</p>
             </div>
         </v-card>
+
     </div>
 </template>
 
@@ -34,7 +25,7 @@
     /* eslint-disable no-unused-vars,no-console */
 
     import {mapGetters} from 'vuex'
-    import {CATEGORY, LESSON, convertTreeToArray} from "../Helper";
+    import {CATEGORY, LESSON} from "../Helper";
 
     export default {
         name: 'ItemList',
@@ -46,14 +37,14 @@
         computed: {
             ...mapGetters([
                 'tree',
-                'treeAsVuetifyTree,'
+                'treeAsVuetifyTree',
             ])
         },
         methods: {
             onListItemClicked(item) {
-                if (item.itemType === CATEGORY) {
+                if (item.type === CATEGORY) {
                     this.$router.push('/courses' + item.path);
-                } else if (item.itemType === LESSON) {
+                } else if (item.type === LESSON) {
                     this.$router.push('/lessonItem' + item.path)
                 } else {
                     console.error("there is an error on the itemType, it is : " + item.itemType)
@@ -99,16 +90,46 @@
                 };
                 return this.$store.dispatch('fetchLessonsPictureURLs', payload)
             },
+
+            generatePlan(category){
+                console.log("============ GENERATING DETAILS ===========");
+                let title = document.createTextNode(category.trnCatTitle);
+                let catDescription = document.createTextNode(category.trnCatDescription);
+
+                let details = document.createElement("details");
+                let summary = document.createElement("summary");
+                let span = document.createElement("span");
+                    span.classList.add('map-element__title');
+                span.appendChild(title);
+                summary.append(span)
+                details.append(summary);
+
+                console.log("Details before description : ")
+                console.log(details)
+
+                if(catDescription.wholeText !== "null" && catDescription.wholeText !== "" && catDescription.wholeText !== null) {
+                    let description = document.createElement("h3");
+                    description.appendChild(catDescription);
+                    details.append(description)
+                }
+
+
+                let wrapper = document.getElementById("sitemap");
+                wrapper.append(details);
+
+            }
         },
         async created() {
             console.log("ITEMLIST CREATED. treeview : ");
+            let categoryPath = this.$router.currentRoute.path.split("courses/")[1];
+            console.log(categoryPath)
             let payload = {
                 smp: this.$smp,
                 categoryPath: this.categoryPath
             };
-
             //TODO: Use the tree object in the store to populate the screen
-            this.listToDisplay.push(...convertTreeToArray(this.tree))
+            this.listToDisplay.push(...this.treeAsVuetifyTree)
+
 
 
 /*            if (this.categoryPath === '') { //Displaying every category
@@ -141,13 +162,15 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss">
 
     @import "../assets/sass/utils/variables";
 
     .wrapper {
         display: flex;
         flex-flow: column nowrap;
+        padding: 0;
+        margin: 0;
     }
 
     .item-prev {
@@ -192,6 +215,13 @@
         &__long-description {
             padding-right: map-get($paddings, medium);
             font-size: nth($title-size, 5);
+        }
+    }
+
+    #sitemap {
+        summary {
+            color: green;
+            background-color: orange;
         }
     }
 

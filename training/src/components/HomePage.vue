@@ -38,16 +38,30 @@
                 </ul>
             </nav>
         </div>
+
+
+
+
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+
     export default {
         name: 'HomePage',
+        data: () => ({
+            open: ['public'],
+        }),
         methods: {
             redirectTo(url) {
                 window.location.href = url;
             }
-        }
+        },
+        computed: {
+            ...mapGetters([
+                'treeAsVuetifyTree',
+            ])
+        },
     }
 </script>
 

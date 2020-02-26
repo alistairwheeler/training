@@ -119,7 +119,7 @@ export default new Vuex.Store({
                         id: item.row_id,
                         name: item.trnLsnTitle,
                         path: item.trnLsnPath,
-                        description: item.trnLsnPath,
+                        description: item.trnLsnDescription,
                         type: "lesson",
                     }
                 }
@@ -227,8 +227,4 @@ export default new Vuex.Store({
             });
         },
     },
-
-
-
-
 });
