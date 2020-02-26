@@ -2,6 +2,7 @@
 <!-- https://github.com/codepo8/simple-carousel/blob/master/carousel-images.html -->
 <template>
   <div class="carousel-wrapper">
+
     <div class="carouselbox active">
       <ol class="content">
         <li class="current"><img :src="currentImg"></li>
@@ -10,14 +11,9 @@
     </div>
 
     <div class="buttons">
-      <button v-on:click="navigate2(-1)">
-        ◀
-        <span class="offscreen">Previous</span>
-      </button>
-      <button @click="navigate2(1)">
-        <span class="offscreen">Next</span> ▶
-      </button>
-      <!--<p>{{(counter/this.images.length)+1}} / {{this.images.length+1}}</p>-->
+      <button v-on:click="navigate2(-1)"> ◀ </button>
+      <p class="img-counter">{{(this.counter + 1)}} / {{this.images.length}}</p>
+      <button @click="navigate2(1)"> ▶ </button>
     </div>
   </div>
 
@@ -45,22 +41,25 @@
             }
         },
         mounted() {
-          let box = document.querySelector(".carouselbox");
-          // eslint-disable-next-line no-unused-vars
-          let buttons = document.querySelector(".buttons");
-
-          box.addEventListener('mouseover', () => {
-            buttons.style.visibility = "visible";
-          });
-          box.addEventListener('mouseout', e => {
-            if(!e.relatedTarget.classList.contains('buttons')){
-              buttons.style.visibility = "hidden";
-            }
-
-          });
-          buttons.addEventListener('mouseleave', () => {
+          if(this.images.length <= 1 ){
+            let buttons = document.querySelector(".buttons");
             buttons.style.visibility = "hidden";
-          })
+          } else {
+            let box = document.querySelector(".carouselbox");
+            let buttons = document.querySelector(".buttons");
+            box.addEventListener('mouseover', () => {
+              buttons.style.visibility = "visible";
+            });
+            box.addEventListener('mouseout', e => {
+              if(!e.relatedTarget.classList.contains('buttons')){
+                buttons.style.visibility = "hidden";
+              }
+
+            });
+            buttons.addEventListener('mouseleave', () => {
+              buttons.style.visibility = "hidden";
+            })
+          }
 
         }
     };
@@ -106,30 +105,31 @@
         z-index: 2;
     }
 
-    .carouselbox button {
-        border: none;
-        visibility: hidden;
-    }
+    button {
 
+    }
     .active button {
         visibility: visible;
     }
 
-    .offscreen {
-        position: absolute;
-        left: -2000px;
-    }
-
     .buttons {
-      visibility: hidden;
       width: 100%;
-      padding: 5px 0;
-      background: #eee;
-      text-align: center;
-      z-index: 10;
-      /*position: relative;*/
+      height: 40px;
       position: absolute;
       bottom: 0;
+      padding: 5px 0;
+      text-align: center;
+      background: #eee;
+      z-index: 10;
+      visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .img-counter {
+      height: 100%;
+      margin: 0 $img-counter-margin 0 $img-counter-margin
     }
 
     .active .buttons {

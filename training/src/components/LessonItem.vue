@@ -11,6 +11,7 @@
         </ul>
         <div class="lesson_content" v-highlightjs v-if="this.currentLesson.trnLsnHtmlContent" v-html="this.currentLesson.trnLsnHtmlContent"></div>
       </div>
+
       <div class="grid-item grid-item-media">
         <Carousel v-bind:images="this.currentLessonImages" v-if="hasImages"/>
       </div>
@@ -105,8 +106,8 @@ export default {
 .grid-item{
   margin: 1em;
   //padding: 0.5em;
-  box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
-  border-radius: $media-containers;
+
+
 }
 
 .grid-item-content{
@@ -118,11 +119,15 @@ export default {
 .grid-item-media{
   grid-column: 2;
   grid-row: 1;
+  border-radius: $media-containers;
+  box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
 }
 
 .grid-item-video{
   grid-column: 2;
   grid-row: 2;
+  border-radius: $media-containers;
+  box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
 }
 
 video{
@@ -248,4 +253,5 @@ video{
     margin-left: $content-padding;
   }
 }
+
 </style>
