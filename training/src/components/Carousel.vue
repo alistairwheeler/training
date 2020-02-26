@@ -1,21 +1,26 @@
 <!-- https://christianheilmann.com/2015/04/08/keeping-it-simple-coding-a-carousel/ -->
 <!-- https://github.com/codepo8/simple-carousel/blob/master/carousel-images.html -->
 <template>
+  <div class="carousel-wrapper">
     <div class="carouselbox active">
-        <ol class="content">
-            <li class="current"><img :src="currentImg"></li>
-        </ol>
+      <ol class="content">
+        <li class="current"><img :src="currentImg"></li>
+      </ol>
 
-        <div class="buttons">
-            <button v-on:click="navigate2(-1)">
-                ◀
-                <span class="offscreen">Previous</span>
-            </button>
-            <button @click="navigate2(1)">
-                <span class="offscreen">Next</span> ▶
-            </button>
-        </div>
     </div>
+
+    <div class="buttons">
+      <button v-on:click="navigate2(-1)">
+        ◀
+        <span class="offscreen">Previous</span>
+      </button>
+      <button @click="navigate2(1)">
+        <span class="offscreen">Next</span> ▶
+      </button>
+      <!--<p>{{(counter/this.images.length)+1}} / {{this.images.length+1}}</p>-->
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -38,14 +43,42 @@
                 this.counter = (this.counter + direction) % this.images.length;
                 this.counter = this.counter < 0 ? this.images.length - 1 : this.counter;
             }
+        },
+        mounted() {
+          let box = document.querySelector(".carouselbox");
+          // eslint-disable-next-line no-unused-vars
+          let buttons = document.querySelector(".buttons");
+
+          box.addEventListener('mouseover', () => {
+            buttons.style.visibility = "visible";
+          });
+          box.addEventListener('mouseout', e => {
+            if(!e.relatedTarget.classList.contains('buttons')){
+              buttons.style.visibility = "hidden";
+            }
+
+          });
+          buttons.addEventListener('mouseleave', () => {
+            buttons.style.visibility = "hidden";
+          })
+
         }
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+  @import "../assets/sass/utils/_variables.scss";
     img {
         max-width: 100%;
         max-height: 100%;
+    }
+
+    .carousel-wrapper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      margin: 0;
     }
 
     .carouselbox {
@@ -88,7 +121,15 @@
     }
 
     .buttons {
-
+      visibility: hidden;
+      width: 100%;
+      padding: 5px 0;
+      background: #eee;
+      text-align: center;
+      z-index: 10;
+      /*position: relative;*/
+      position: absolute;
+      bottom: 0;
     }
 
     .active .buttons {
@@ -99,7 +140,7 @@
         z-index: 10;
         /*position: relative;*/
         position: absolute;
-        bottom: 0px;
+        bottom: 0;
     }
 
     .active li {
@@ -122,4 +163,5 @@
         height: 200px;
         display: block;
     }
+
 </style>

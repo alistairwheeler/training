@@ -104,9 +104,9 @@ export default {
 
 .grid-item{
   margin: 1em;
-  padding: 0.5em;
-  overflow: scroll;
+  //padding: 0.5em;
   box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
+  border-radius: $media-containers;
 }
 
 .grid-item-content{
