@@ -45,6 +45,18 @@
                     <v-icon>mdi-skip-next</v-icon>
                 </v-btn>
 
+                <v-btn fab icon class="btn-link" href="http://community.simplicite.io" target="_blank">
+                    <v-icon>mdi-forum</v-icon>
+                </v-btn>
+
+                <v-btn fab icon class="btn-link" href="https://github.com/simplicitesoftware" target="_blank">
+                    <v-icon>mdi-git</v-icon>
+                </v-btn>
+
+                <!-- <v-btn fab icon class="btn-link" href="https://hub.docker.com/u/simplicite/">
+                    <v-icon>mdi-docker</v-icon>
+                </v-btn> -->
+
 <!--            <v-toolbar-items>
                 <v-btn text to="/courses">Cours</v-btn>
             </v-toolbar-items>-->
@@ -213,7 +225,10 @@
 
     .simplicite-logo:hover {
         cursor: pointer;
+    }
 
+    .btn-link:hover{
+        text-decoration: none;
     }
 
     .treeview-section {
