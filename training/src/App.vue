@@ -1,55 +1,64 @@
 <template>
     <v-app class="app">
-        <v-navigation-drawer v-if="checkIfRouteIsLesson()" app clipped v-model="this.drawerOpen">
-
+        <v-navigation-drawer app clipped dark class="navbg" v-model="this.drawerOpen">
             <v-treeview
-                    :items="this.treeView"
-                    v-if="this.treeView"
-                    active-class="treeview-lesson--active"
+                    v-if="this.treeAsVuetifyTree"
+                    :items="this.treeAsVuetifyTree"
+                    activatable
+                    :active="active"
+                    color="white"
                     open-all
+                    shaped
+                    dense
                     open-on-click
                     item-key="path"
+                    @update:active="navigateToLesson"
                     return-object>
-                <template  slot="label" slot-scope="props">
+<!--                <template  slot="label" slot-scope="props">
                     <p class="treeView-item" @click="navigateToLesson(props.item)">{{props.item.name}}</p>
+                </template>-->
+                <template v-slot:prepend="{ item }">
+                    <div class="tree-image">
+                        <v-icon>
+                            {{ item.type === "category" ? 'mdi-book-open-page-variant' : 'mdi-file-document-outline' }}
+                        </v-icon>
+                    </div>
+                </template>
+                <template v-slot:label="{ item }">
+                        <span v-if="item.name" class="tree-element__label"> {{item.name}} </span>
                 </template>
             </v-treeview>
 
         </v-navigation-drawer>
 
-        <v-app-bar app color="primary" dark clipped-left>
+        <v-app-bar app dark class="app-bar-bg" clipped-left flat>
+                <v-app-bar-nav-icon @click="openOrCloseDrawer"></v-app-bar-nav-icon>
 
-            <v-app-bar-nav-icon @click="openOrCloseDrawer" v-if="checkIfRouteIsLesson()"></v-app-bar-nav-icon>
+                <v-toolbar-title id="toolbar-title" class="simplicite-logo" @click="navigateHome()"></v-toolbar-title>
 
-            <v-toolbar-title id="toolbar-title" class="simplicite-logo" @click="navigateHome()">Simplicité
-            </v-toolbar-title>
+                <div class="flex-grow-1"></div>
 
-            <div class="flex-grow-1"></div>
+                <v-btn id="previous-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToPreviousLesson()">
+                    <v-icon>mdi-skip-previous</v-icon>
+                </v-btn>
+                <v-btn id="next-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToNextLesson()">
+                    <v-icon>mdi-skip-next</v-icon>
+                </v-btn>
 
-            <v-btn id="previous-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToPreviousLesson()">
-                <v-icon>mdi-skip-previous</v-icon>
-            </v-btn>
-            <v-btn id="next-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToNextLesson()">
-                <v-icon>mdi-skip-next</v-icon>
-            </v-btn>
-
-            <v-toolbar-items>
+<!--            <v-toolbar-items>
                 <v-btn text to="/courses">Cours</v-btn>
-            </v-toolbar-items>
+            </v-toolbar-items>-->
 
         </v-app-bar>
 
         <!-- Sizes your content based upon application components -->
         <v-content class="content">
-            <!-- Provides the application the proper gutter -->
-            <v-container pa-0 mt-1 fluid class="router-container-2 fill-page">
-                <router-view :key="$route.fullPath" v-if="$store.state.treeLoaded"></router-view>
-                <!-- This makes the page reload when the url changes(check api doc for more info) -->
-                <v-snackbar id="snackbar" v-model="snackBar" :timeout="snbTimeOut">
-                    <span id="snb-text"> {{snbText}} </span>
-                    <v-btn color="#F08A7B" text @click="snackBar = false">FERMER</v-btn>
-                </v-snackbar>
-            </v-container>
+            <router-view :key="$route.fullPath" v-if="$store.state.treeLoaded"></router-view>
+            <!-- This makes the page reload when the url changes(check api doc for more info) -->
+            <v-snackbar id="snackbar" v-model="snackBar" :timeout="snbTimeOut">
+                <span id="snb-text"> {{snbText}} </span>
+                <v-btn color="#F08A7B" text @click="snackBar = false">FERMER</v-btn>
+            </v-snackbar>
         </v-content>
 
     </v-app>
@@ -59,38 +68,45 @@
     /* eslint-disable no-console */
 
     import {mapGetters} from "vuex";
+    import {CATEGORY, LESSON} from "./Helper";
 
     export default {
         name: 'App',
         components: {},
         data: () => ({
             snackBar: false,
-            snbTimeOut: 1200,
+            snbTimeOut: 1500,
             snbText: '',
-            /*activeItem: [
-                '/cat1/cat2/cat3/cat4/lecon1',
-            ],*/
-
+            active: []
         }),
         computed: {
             ...mapGetters([
                 'treeView',
+                'getLessonFromPath',
+                'currentLesson',
                 'drawerOpen',
                 'nextLessonPath',
                 'previousLessonPath',
+                'treeAsVuetifyTree',
             ])
         },
         methods: {
             checkIfRouteIsLesson() {
-                return true;
-                //return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
+                return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
             },
 
             navigateToLesson(item) {
-                if (item.type === "category") {
+                item = item[0];
+                console.log(item)
+                if (item.type === CATEGORY) {
+                    console.log(item.children.length)
                     console.log("ITEM IS A CATEGORY, can't navigate there if you want the tree to be foldable")
+                    if (item.children.length <=0) {
+                        this.$router.push('/404');
+                        //this.showMessage("Cette catégorie est en construction, Revenez bientôt !")
+                    }
                     //this.$router.push('/courses/'+ item.path).catch(() => console.log("Navigation Duplicated"))
-                } else if (item.type === "contentItem") {
+                } else if (item.type === LESSON) {
                     this.$router.push('/lessonItem' + item.path).catch(() => console.log("Navigation Duplicated"))
                 } else {
                     console.error("Error with the item type - not matching category or contentItem")
@@ -98,11 +114,10 @@
             },
 
             navigateToNextLesson() {
-                let nextPath = this.nextLessonPath;
+                let nextPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnNext;
                 console.log(`nextPath : ${nextPath}`);
-                if (nextPath !== undefined) {
+                if (nextPath !== undefined && nextPath !== "null") {
                     let path = nextPath.toString().substring(1);
-                    console.log(`pushing to ${path}`);
                     this.$router.push('/lessonItem/' + path).catch(err => console.error(err))
                 } else {
                     this.shakeElement("next-button");
@@ -111,21 +126,20 @@
             },
 
             navigateToPreviousLesson() {
-                let previousPath = this.previousLessonPath;
+                let previousPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnPrevious;
                 console.log(`previousPath : ${previousPath}`);
-                if (previousPath !== undefined) {
+                if (previousPath !== undefined && previousPath !== "null") {
                     let path = previousPath.toString().substring(1);
-                    console.log(`pushing to ${path}`);
                     this.$router.push('/lessonItem/' + path)
                 } else {
                     this.shakeElement("previous-button");
-                    this.showMessage("Vous êtes à la première leçon de cette catégorie")
+                    this.showMessage('Vous êtes à la première leçon de cette catégorie')
                 }
             },
 
             navigateHome() {
                 this.$router.push('/home')
-                    .catch(() => console.log("Navigation Duplicated"));
+                    .catch(() => console.log('Navigation Duplicated'));
             },
 
             openOrCloseDrawer() {
@@ -148,8 +162,11 @@
             this.$smp.login(()=>{console.log("LOGGED IN")});
         },
         async created() {
-            this.$store.dispatch('fetchHierarchy', {smp: this.$smp});
             this.$store.dispatch('fetchTree', {smp: this.$smp});
+        },
+        async mounted() {
+            console.log("mounted")
+            console.log(this.treeAsTreeView)
         }
     };
 </script>
@@ -166,9 +183,18 @@
         font-family: 'Source Sans Pro', sans-serif;
     }
 
+    .navbg{
+        background: linear-gradient($color-primary,$color-secondary);
+    }
+
+
+    .app-bar-bg{
+        background: linear-gradient(to right, $color-primary 40%,$color-secondary);
+    }
+
     .content {
         width: 100%;
-        background-color: white;
+        background-color: #f6f7eb;
     }
 
     .fill-page{
@@ -176,8 +202,18 @@
         height:100%;
     }
 
+    .simplicite-logo{
+        background-image: url("../public/Logo_Simplicite_Noir.png");
+        background-size: contain;
+        width: 20%;
+        height: 70%;
+        margin: 5px;
+        filter: invert(100%);
+    }
+
     .simplicite-logo:hover {
         cursor: pointer;
+
     }
 
     .treeview-section {
@@ -192,9 +228,9 @@
         border: solid $color-secondary;
     }
 
-    .treeview-lesson--active {
-        color: $light-black;
-        background-color: $treeView-active;
+    .treeview-active {
+        filter: brightness(150%);
+        color: white!important;
     }
 
     #snb-text {

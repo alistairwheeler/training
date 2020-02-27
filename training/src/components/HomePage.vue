@@ -38,16 +38,30 @@
                 </ul>
             </nav>
         </div>
+
+
+
+
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+
     export default {
         name: 'HomePage',
+        data: () => ({
+            open: ['public'],
+        }),
         methods: {
             redirectTo(url) {
                 window.location.href = url;
             }
-        }
+        },
+        computed: {
+            ...mapGetters([
+                'treeAsVuetifyTree',
+            ])
+        },
     }
 </script>
 
@@ -59,8 +73,9 @@
 
     #outer-div {
         @include flex-column-nowrap;
-        margin-top: 5vh;
+        margin: 5vh;
         align-items: center;
+
     }
 
     .row-1 {
@@ -79,6 +94,7 @@
     }
 
     .heading {
+        margin: 3vh;
         display: flex;
         flex-direction: column;
         color: $color-secondary;
