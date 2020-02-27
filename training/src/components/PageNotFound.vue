@@ -8,6 +8,9 @@
 <script>
     export default {
         name: 'PageNotFound',
+        created() {
+            //TODO : Unset several parameters : currentLesson, currentLessonImages etc ...
+        }
     }
 </script>
 
@@ -18,7 +21,7 @@
 
     h1 {
         color: black;
-        font-size: $h1-size;
+        // font-size: $h1-size;
     }
 
     #wrapper {

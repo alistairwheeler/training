@@ -20,6 +20,10 @@ $code-comment: purple;
 $code-tag: darkgreen;
 $code-attribute: darkblue;
 
+
+//BORDER-RADIUS
+$media-containers: 4px;
+
 //PADDING & MARGIN
 $homepage-dividing-width: 50%;
 $aside-width: 50%;
@@ -36,6 +40,8 @@ $long-hover-duration: 400ms;
 $preview-pic-container-width: 30%;
 $preview-pic-width: 70%;
 $preview-pic-height: 80%;
+
+$img-counter-margin: 10px;
 
 $paddings: (x-large: 30px, large: 20px, medium: 10px, small: 5px, x-small: 3px);
 $margins: (large: 40px, medium: 30px, small: 20px, x-small: 5px);

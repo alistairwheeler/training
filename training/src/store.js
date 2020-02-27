@@ -1,9 +1,7 @@
 /* eslint-disable */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {ListItem} from "./Models/ListItem";
-import {Category} from "./Models/Category";
-import {ContentItem} from "./Models/ContentItem";
+//import {convertTreeToArray, convertTreeToVuetify, findLessonBreadCrumb, findParentsOfLesson} from "./Helper";
 
 Vue.use(Vuex);
 
@@ -17,106 +15,94 @@ export default new Vuex.Store({
         categories: [],
         items: [],
         displayLessonPath: '',
-        allCategoriesLoaded: false,
-        allItemsLoaded: false,
-        drawerOpen: false,
+
+        drawerOpen: true,
+        tree: [],
+        vTree: [],
+        treeLoaded: false,
+        currentLesson: false,
+        currentLessonImages: false
     },
 
     getters: {
         //NEW MODEL
         drawerOpen: 
             state => state.drawerOpen,
-        allCategoriesLoaded:
-            state => state.allCategoriesLoaded,
-        allItemsLoaded:
-            state => state.allItemsLoaded,
-        getLessonWithPath:
-            state => lessonPath => state.items.find(item => item.path === lessonPath),
-        ancestorCategoriesAsListItems: 
+        drawerActive:
+            state => state.currentLesson ? [state.currentLesson.trnLsnPath] : [],
+        treeLoaded:
+            state => state.treeLoaded,
+        breadCrumbItems:
             state => {
-                let ancestors = [];
-                state.categories.map(category => {
-                    if(category.parentId === null)
-                        ancestors.push(ListItem.convertCategory(category))
-                });
-                return ancestors
-            },
-        categoriesAsListItems: 
-            state => state.categories.map(category => ListItem.convertCategory(category)),
-        childrenCategories: 
-            state => motherPath => {
-                if (motherPath[0] !== '/')
-                    motherPath = '/' + motherPath;
-                return state.categories
-                    .filter(category => category.parentPath === motherPath)
-                    .map(category => ListItem.convertCategory(category));
-            },
-        childrenLessons: 
-            state => motherPath => {
-                if (motherPath[0] !== '/')
-                    motherPath = '/' + motherPath;
-                return state.items
-                    .filter(item => item.categoryPath === motherPath)
-                    .map(item => ListItem.convertContentItem(item));
-            },
-        nextLessonPath: 
-            (state, getters) => {
-                let currentPath = state.displayLessonPath;
-                let sisterLessons = getters.sisterLessons(currentPath);
-                let currentIndex = sisterLessons.findIndex(lesson => lesson.path === currentPath);
-                return currentIndex === sisterLessons.length - 1 ? undefined : sisterLessons[currentIndex + 1].path;
-            },
-        previousLessonPath: 
-            (state, getters) => {
-                let currentPath = state.displayLessonPath;
-                let sisterLessons = getters.sisterLessons(currentPath);
-                let currentIndex = sisterLessons.findIndex(lesson => lesson.path === currentPath);
-                return currentIndex === 0 ? undefined : sisterLessons[currentIndex - 1].path;
-            },
-        sisterLessons: 
-            (state, getters) => (lessonPath) => {
-                let parents = getters.parentsList(lessonPath);
-                let directParent = parents[parents.length - 1];
-                return getters.childrenLessons(directParent.path).sort((lsn1, lsn2) => parseInt(lsn1.order) - parseInt(lsn2.order));
-            },
-        parentsList: 
-            state => lessonPath => {
-                let parents = [];
-                let obj = {};
-                state.hierarchy.forEach(ancestor => {
-                    if (lessonPath.includes(ancestor.trnCatPath)) {
-                        obj.title = ancestor.trnCatTitle;
-                        obj.path = ancestor.trnCatPath;
-                        parents.push(obj);
-                        parents.push(...Category.findParentsOfLesson(ancestor, lessonPath));
+                let parents = state.currentLesson.trnLsnPath.split('/');
+                parents.splice(0,1);
+                let cursor = state.tree;
+                let path = "";
+                let rslt = [];
+                let finish = false;
+
+                parents.forEach(function(val, idx, array){
+                    path+="/"+val;
+                    let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath==path);
+                    if(foundCat!=undefined){
+                        rslt.push({
+                            title: foundCat.trnCatTitle,
+                            path: foundCat.trnCatPath
+                        });
+                        if(idx==parents.length-2)
+                            cursor = foundCat.lessons;
+                        else 
+                            cursor = foundCat.categories;
+                    }
+                    else if(idx==parents.length-1){
+                        let foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath==path);
+                        if(foundLsn!=undefined){
+                            rslt.push({
+                                title: foundLsn.trnLsnTitle,
+                                path: foundLsn.trnLsnPath
+                            })
+                            finish=true;
+                        }
                     }
                 });
-                return parents;
+                return finish==true?rslt:false;
             },
-        breadCrumb: 
+        getLessonFromPath:
             state => lessonPath => {
-                let breadCrumbItems = [];
-                let obj = {};
-                state.hierarchy.forEach(ancestor => {
-                    if (lessonPath.includes(ancestor.trnCatPath)) {
-                        obj.title = ancestor.trnCatTitle;
-                        obj.path = ancestor.trnCatPath;
-                        breadCrumbItems.push(obj);
-                        breadCrumbItems.push(...Category.findLessonBreadCrumb(ancestor, lessonPath));
+                let parents = lessonPath.split('/');
+                parents.splice(0,1);
+                let cursor = state.tree;
+                let path = "";
+                let foundLsn = undefined;
+
+                parents.forEach(function(val, idx, array){
+                    path+="/"+val;
+                    let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath==path);
+                    if(foundCat!=undefined){
+                        if(idx==parents.length-2)
+                            cursor = foundCat.lessons;
+                        else 
+                            cursor = foundCat.categories;
+                    }
+                    else if(idx==parents.length-1){
+                        foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath==path);
                     }
                 });
-                return breadCrumbItems;
+                return foundLsn;
             },
-        hierarchy: 
-            state => state.hierarchy,
-        treeView: 
-            state => {
-                let treeView = [];
-                //console.log(JSON.stringify(state.hierarchy, null, 4));
-                state.hierarchy.map(ancestorCategory => treeView.push(Category.convertExtCategoryToTreeView(ancestorCategory)));
-                //console.log(JSON.stringify(treeView, null, 4));
-                return treeView
-            },
+        currentLesson:
+            state => state.currentLesson,
+        currentLessonImages:
+            state => state.currentLessonImages,
+        currentLessonImagesLoaded:
+            state => state.currentLessonImages !== false,
+        tree:
+            state => state.tree,
+        treeAsVuetifyTree:
+            state => state.vTree,
+
+        //GETTERS TO DEVELOP WITH THE NEW TREEVIEW
+
     },
 
     mutations: {
@@ -124,147 +110,118 @@ export default new Vuex.Store({
             state.drawerOpen = choice;
         },
 
-        ALL_CATEGORIES_LOADED(state, choice) {
-            state.allCategoriesLoaded = choice;
-        },
+        UPDATE_TREE(state, tree) {
+            state.tree = tree;
+            state.treeLoaded = true;
 
-        ALL_ITEMS_LOADED(state, choice) {
-            state.allItemsLoaded = choice;
-        },
-
-        PUSH_CATEGORY(state, category) {
-            if (state.categories.find(elt => elt.row_id === category.row_id) === undefined) {
-                state.categories.push(category);
-            } else {
-                console.log("category already in the store")
-            }
-        },
-
-        PUSH_ITEM(state, item) {
-            if (state.items.find(elt => elt.row_id === item.row_id) === undefined) {
-                state.items.push(item);
-            } else {
-                console.log("item already in the store")
-            }
-        },
-
-        UPDATE_HIERARCHY(state, hierarchy) {
-            state.hierarchy = hierarchy;
+            //recursive v-tree builder
+            let convertItemToVTree = function(item){
+                if(Object.prototype.hasOwnProperty.call(item, "trnLsnPath")){
+                    return {
+                        id: item.row_id,
+                        name: item.trnLsnTitle,
+                        path: item.trnLsnPath,
+                        description: item.trnLsnDescription,
+                        type: "lesson",
+                    }
+                }
+                else{
+                    var childLessons = item.lessons.map(convertItemToVTree);
+                    var childCategories = item.categories.map(convertItemToVTree);
+                    return {
+                        id: item.row_id,
+                        name: item.trnCatTitle,
+                        path: item.trnCatPath,
+                        description: item.trnCatDescription,
+                        type: "category",
+                        children: [...childCategories, ...childLessons]
+                    };
+                }
+            };
+            state.vTree = state.tree.map(convertItemToVTree);
         },
 
         UPDATE_DISPLAYED_LESSON_PATH(state, lessonPath) {
             Vue.set(state, 'displayLessonPath', lessonPath);
         },
 
+        UPDATE_CURRENT_LESSON(state, lesson){
+            state.currentLesson = lesson;
+        },
+
+        UPDATE_LESSON_IMAGES(state, images){
+			state.currentLessonImages = [];
+            images.forEach(img => state.currentLessonImages.push(img));
+            console.log("--- Lesson images added");
+        },
+
+        UNLOAD_LESSON(state){
+            state.currentLesson = false;
+            state.currentLessonImages = false;
+            console.log("--- Lesson images deleted");
+        }
     },
 
     actions: {
-        async fetchCategories({commit}, payload) {
-            return new Promise((resolve, reject) => {
-                let category = payload.smp.getBusinessObject("TrnCategory");
-                category.search(() => {
-                    if (category.list) {
-                        category.list.forEach(smpCategory => {
-                            commit('PUSH_CATEGORY', new Category(smpCategory))
-                        });
-                        commit('ALL_CATEGORIES_LOADED', true);
-                        resolve(category.list);
-                    } else {
-                        reject("Could not load the categories");
-                    }
-                }, {})
-            });
-        },
+        // Call only once at app creation
 
-        async fetchLessonsFromCategory({commit}, payload) {
-            return new Promise((resolve, reject) => {
-                let lesson = payload.smp.getBusinessObject("TrnLesson");
-                lesson.search(() => {
-                    if (lesson.list) {
-                        lesson.list.forEach(smpLesson => commit('PUSH_ITEM', new ContentItem(smpLesson)));
-                        resolve(lesson.list);
-                    } else {
-                        reject("Could not load the lessons");
-                    }
-                }, {"trnCatId": payload.categoryId})
-            });
-        },
-
-        async fetchLesson({commit}, payload) {
-            return new Promise((resolve, reject) => {
-                let lesson = payload.smp.getBusinessObject("TrnLesson");
-                lesson.search(() => {
-                    if (lesson.list) {
-                        let lsn = new ContentItem(lesson.list[0]);
-                        commit('PUSH_ITEM', lsn);
-                        resolve(lsn);
-                    } else
-                        reject("Could not load the lesson");
-                }, {"trnLsnPath": payload.itemPath})
-            })
-        },
-
-        async fetchChildrenOf({commit}, payload) {
-            let children = [];
-            let categoriesPromise = new Promise((resolve, reject) => {
-                let category = payload.smp.getBusinessObject("TrnCategory");
-                category.search(() => {
-                    if (category.list) {
-                        category.list.forEach(smpCategory => {
-                            children.push(new Category(smpCategory));
-                            commit('PUSH_CATEGORY', new Category(smpCategory))
-                        });
-                        resolve(category.list);
-                    } else {
-                        reject("Could not load the categories");
-                    }
-                }, {"trnCatId": payload.parentId})
-            });
-            let lessonsPromise = new Promise((resolve, reject) => {
-                let lesson = payload.smp.getBusinessObject("TrnLesson");
-                lesson.search(() => {
-                    if (lesson.list) {
-                        lesson.list.forEach(smpLesson => {
-                            children.push(new ContentItem(smpLesson));
-                            commit('PUSH_ITEM', new ContentItem(smpLesson))
-                        });
-                        resolve(lesson.list);
-                    } else {
-                        reject("Could not load the lessons");
-                    }
-                }, {"trnLsnCatId": payload.parentId})
-            });
-            return await Promise.all([categoriesPromise, lessonsPromise])
-        },
-
-        async fetchHierarchy({commit}, payload) {
+        async fetchTree({commit}, payload) {
             return new Promise(async (resolve, reject) => {
-                payload.smp._call(undefined, "/api/ext/TrnExternalTreeView", undefined, r=>{
-                    commit('UPDATE_HIERARCHY', r);
-                    resolve(r);
+                payload.smp._call(undefined, "/ext/TrnTreeService?array=true", undefined, r=>{
+                    commit('UPDATE_TREE', r);
+                    resolve();
                 });
             })
         },
 
-        async fetchLessonsPictureURLs({commit}, payload) {
-            //console.log('fetchLessonsPictureURLs() ' + payload.lessonId);
+        async loadLesson({commit}, payload) {
+            await this.dispatch("loadLessonContent", payload);
+            this.dispatch("loadLessonImages", payload);
+        },
+
+        async loadLessonImages({commit}, payload) {
             return new Promise((resolve, reject) => {
                 let picture = payload.smp.getBusinessObject("TrnPicture");
-                picture.search(async () => {
+                picture.search(function(){
                     if (picture.list) {
-                        resolve(await picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)))
+                        commit('UPDATE_LESSON_IMAGES', picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)));
+                        resolve();
                     } else
                         reject("Impossible to fetch the pictures")
                 }, {'trnPicLsnId': payload.lessonId})
             });
         },
 
+        async loadLessonContent({commit}, payload) {
+            return new Promise(async (resolve, reject) => {
+                let lesson = payload.smp.getBusinessObject("TrnLesson");
+                lesson.get(function(){
+                    commit('UPDATE_CURRENT_LESSON', lesson.item);
+                    resolve();
+                }, payload.lessonId);
+            });
+        },
+
+        async fetchLessonsPictureURLs({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                let picture = payload.smp.getBusinessObject("TrnPicture");
+                picture.search(async () => {
+                    if (picture.list) {
+                        resolve(picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)))
+                    } else
+                        reject("Impossible to fetch the pictures")
+                }, {'trnPicLsnId': payload.lessonId})
+            });
+        },
+
+        // ------
+
         async fetchCategoryPicture({commit}, payload) {
             return new Promise((resolve, reject) => {
                 let picture = payload.smp.getBusinessObject("TrnCategory");
                 picture.search(async () => {
                     if (picture.list) {
-                        resolve(await picture.list.map(pic => {
+                        resolve(picture.list.map(pic => {
                             pic.trnCatPicture!=null ? payload.smp.dataURL(pic.trnCatPicture) : null;
                         }))
                     } else
@@ -272,19 +229,5 @@ export default new Vuex.Store({
                 }, {'row_id': payload.categoryId},  { inlineDocs: true })
             });
         },
-
-        /*async fetchCategoryPictureURLs({commit}, payload) {
-            // console.log('fetchCategoryPictureURLs()' + payload.categoryId);
-            return new Promise((resolve, reject) => {
-                let categoryPicture = payload.smp.getBusinessObject("TrnCategoryPicture");
-                categoryPicture.search(async () => {
-                    if (categoryPicture.list) {
-                        resolve(await categoryPicture.list.map(pic => payload.smp.dataURL(pic.trnCtpImage))[0])
-                    } else
-                        reject("Impossible to fetch the pictures")
-                }, {'trnCtpCatId': payload.categoryId}, { inlineDocs: true })
-            });
-        },*/
-    }
-
+    },
 });
