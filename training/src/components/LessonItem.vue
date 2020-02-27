@@ -2,30 +2,41 @@
   <div >
     <div class="grid-lesson">
       <div class="grid-item grid-item-content">
-        <ul class="breadcrumb" v-if="this.hasCurrentLesson">
+        <div v-if="this.hasCurrentLesson" class="occupy100percent">
+          <ul class="breadcrumb" >
             <li class="breadcrumb__item" v-for="(item, index) in this.breadCrumbItems" :key="index"
-                @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)">
-                <span>{{item.title}}</span>
-                <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
+              @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)">
+              <span>{{item.title}}</span>
+              <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
             </li>
-        </ul>
-        <div class="lesson_content" v-highlightjs v-if="this.currentLesson.trnLsnHtmlContent" v-html="this.currentLesson.trnLsnHtmlContent"></div>
-        <div class="empty-content">
+          </ul>
+          
+          <div class="lesson_content" v-highlightjs v-if="this.currentLesson.trnLsnHtmlContent" v-html="this.currentLesson.trnLsnHtmlContent"></div>
+          <EmptyContent v-else />
+          <!-- <div class="empty-content">
           <h1>Ce Chapitre est en construction, revenez plus tard ! </h1>
           <a href="/home"><button>Retour à la page d'accueil</button></a>
+          </div> -->
         </div>
+        <Spinner v-else></Spinner>
       </div>
 
       <div class="grid-item grid-item-media">
-        <Carousel v-bind:images="this.currentLessonImages" v-if="hasImages"/>
-        <img class="empty-image" src="../../public/empty.png" v-else>
+        <div v-if="this.currentLessonImagesLoaded" class="occupy100percent">
+          <Carousel v-bind:images="this.currentLessonImages" v-if="hasImages"/>
+          <EmptyContent v-else />
+        </div>
+        <Spinner v-else></Spinner>
       </div>
       <div class="grid-item grid-item-video">
-        <!-- Do NOT prelead anything to keep app snappy -->
-        <video controls muted :src="videoUrl" preload="none" class="video" v-if="videoUrl">
-          Sorry, your browser doesn't support embedded videos.
-        </video>
-        <img class="empty-image" src="../../public/empty.png" v-else>
+        <div v-if="this.hasCurrentLesson" class="occupy100percent">
+          <!-- Do NOT prelead anything to keep app snappy -->
+          <video controls muted :src="videoUrl" preload="none" poster="../../public/media.svg" class="occupy100percent" style="object-fit: contain" v-if="videoUrl">
+            Sorry, your browser doesn't support embedded videos.
+          </video>
+          <EmptyContent v-else />
+        </div>
+        <Spinner v-else></Spinner>
       </div>
     </div>
   </div>
@@ -34,17 +45,19 @@
 <script>
 /* eslint-disable no-console,no-unused-vars,no-undef */
 import Carousel from "./Carousel";
+import Spinner from "./Spinner";
+import EmptyContent from "./EmptyContent";
 import { mapGetters } from "vuex";
 
 export default {
   name: "LessonItem",
-  components: {Carousel},
+  components: {Carousel, Spinner, EmptyContent},
   data: () => ({
     urlList: [],
     lesson: false
   }),
   computed: {
-    ...mapGetters(["breadCrumb", "breadCrumbItems", "getLessonFromPath", "currentLesson", "currentLessonImages"]),
+    ...mapGetters(["breadCrumb", "breadCrumbItems", "getLessonFromPath", "currentLesson", "currentLessonImages", "currentLessonImagesLoaded"]),
     openDrawer: function() {
       return this.$store.getters.drawerOpen;
     },
@@ -103,7 +116,6 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: repeat(2, 50%);
@@ -112,15 +124,16 @@ export default {
 .grid-item{
   margin: 1em;
   //padding: 0.5em;
+  background: white;
   box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
-
+  overflow: auto;
 }
 
 .grid-item-content{
   grid-column: 1;
   grid-row: 1 / 3;
   padding: 1em;
-  overflow: scroll;
+  
 }
 
 .grid-item-media{
@@ -137,14 +150,14 @@ export default {
   box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
 }
 
-video{
+.occupy100percent{
   height: 100%;
   width: 100%;
 }
 
-.empty-image {
-  max-width: 100%;
-  max-height: 100%;
+video{
+  height: 100%;
+  width: 100%;
 }
 
 .breadcrumb {
@@ -178,7 +191,6 @@ video{
 .lesson_content {
   @include flex-column-nowrap;
   overflow: hidden;
-  text-align: justify;
 
   & ::v-deep h1 {
     font-size: nth($title-size, 1);
@@ -259,6 +271,10 @@ video{
 
   & ::v-deep ol li {
     list-style: decimal;
+  }
+
+  & ::v-deep ul li {
+    list-style-type: disc;
   }
 
   & ::v-deep img {

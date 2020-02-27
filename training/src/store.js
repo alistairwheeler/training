@@ -21,7 +21,7 @@ export default new Vuex.Store({
         vTree: [],
         treeLoaded: false,
         currentLesson: false,
-        currentLessonImages: []
+        currentLessonImages: false
     },
 
     getters: {
@@ -94,6 +94,8 @@ export default new Vuex.Store({
             state => state.currentLesson,
         currentLessonImages:
             state => state.currentLessonImages,
+        currentLessonImagesLoaded:
+            state => state.currentLessonImages !== false,
         tree:
             state => state.tree,
         treeAsVuetifyTree:
@@ -148,13 +150,14 @@ export default new Vuex.Store({
         },
 
         UPDATE_LESSON_IMAGES(state, images){
+			state.currentLessonImages = [];
             images.forEach(img => state.currentLessonImages.push(img));
             console.log("--- Lesson images added");
         },
 
         UNLOAD_LESSON(state){
             state.currentLesson = false;
-            state.currentLessonImages.splice(0, state.currentLessonImages.length);
+            state.currentLessonImages = false;
             console.log("--- Lesson images deleted");
         }
     },
