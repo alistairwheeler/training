@@ -5,15 +5,15 @@
 
     <div class="carouselbox active">
       <ol class="content">
-        <li class="current"><img :src="currentImg"></li>
+        <li class="current"><img :src="currentImg.filesrc" :download="currentImg.filename"></li>
       </ol>
 
     </div>
 
     <div class="buttons">
-      <button v-on:click="navigate2(-1)"> ◀ </button>
+      <button v-on:click="navigate(-1)"> ◀ </button>
       <p class="img-counter">{{(this.counter + 1)}} / {{this.images.length}}</p>
-      <button @click="navigate2(1)"> ▶ </button>
+      <button @click="navigate(1)"> ▶ </button>
     </div>
   </div>
 
@@ -32,12 +32,18 @@
             }
         },
         methods: {
-            isCurrent: function (idx) {
-                return idx == this.counter;
-            },
-            navigate2: function (direction) {
+            navigate: function (direction) {
                 this.counter = (this.counter + direction) % this.images.length;
                 this.counter = this.counter < 0 ? this.images.length - 1 : this.counter;
+            },
+            displayFile(filename){
+              console.log("Switching carousel to "+filename+" if possible");
+              for(let i=0; i<this.images.length; i++){
+                if(this.images[i].filename==filename){
+                  this.counter = i;
+                  break;
+                }
+              }
             }
         },
         mounted() {

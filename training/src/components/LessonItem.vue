@@ -11,7 +11,7 @@
             </li>
           </ul>
           
-          <div class="lesson_content" v-highlightjs v-if="this.currentLesson.trnLsnHtmlContent" v-html="this.currentLesson.trnLsnHtmlContent"></div>
+          <div class="lesson_content" v-highlightjs v-on:click="lessonClick" v-if="this.currentLesson.trnLsnHtmlContent" v-html="this.currentLesson.trnLsnHtmlContent"></div>
           <EmptyContent v-else />
           <!-- <div class="empty-content">
           <h1>Ce Chapitre est en construction, revenez plus tard ! </h1>
@@ -23,7 +23,7 @@
 
       <div class="grid-item grid-item-media">
         <div v-if="this.currentLessonImagesLoaded" class="occupy100percent">
-          <Carousel v-bind:images="this.currentLessonImages" v-if="hasImages"/>
+          <Carousel v-bind:images="this.currentLessonImages" v-if="hasImages" ref="carousel"/>
           <EmptyContent v-else />
         </div>
         <Spinner v-else></Spinner>
@@ -85,6 +85,13 @@ export default {
         this.$router
           .push("/courses/" + categoryPath)
           .catch(err => console.error(err));
+      }
+    },
+    lessonClick: function(event) {
+      if(event && event.target && event.target.tagName=="A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_")!=-1){
+        event.preventDefault();
+        let imagename = event.target.getAttribute("href").split("#IMG_CLICK_")[1];
+        this.$refs.carousel.displayFile(imagename);
       }
     }
   },

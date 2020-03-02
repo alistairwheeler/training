@@ -11,11 +11,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        hierarchy: [],
-        categories: [],
-        items: [],
-        displayLessonPath: '',
-
         drawerOpen: true,
         tree: [],
         vTree: [],
@@ -23,7 +18,6 @@ export default new Vuex.Store({
         currentLesson: false,
         currentLessonImages: false
     },
-
     getters: {
         //NEW MODEL
         drawerOpen: 
@@ -99,10 +93,7 @@ export default new Vuex.Store({
         tree:
             state => state.tree,
         treeAsVuetifyTree:
-            state => state.vTree,
-
-        //GETTERS TO DEVELOP WITH THE NEW TREEVIEW
-
+            state => state.vTree
     },
 
     mutations: {
@@ -141,30 +132,23 @@ export default new Vuex.Store({
             state.vTree = state.tree.map(convertItemToVTree);
         },
 
-        UPDATE_DISPLAYED_LESSON_PATH(state, lessonPath) {
-            Vue.set(state, 'displayLessonPath', lessonPath);
-        },
-
         UPDATE_CURRENT_LESSON(state, lesson){
             state.currentLesson = lesson;
         },
 
         UPDATE_LESSON_IMAGES(state, images){
-			state.currentLessonImages = [];
+            state.currentLessonImages = [];
             images.forEach(img => state.currentLessonImages.push(img));
-            console.log("--- Lesson images added");
         },
 
         UNLOAD_LESSON(state){
             state.currentLesson = false;
             state.currentLessonImages = false;
-            console.log("--- Lesson images deleted");
         }
     },
 
     actions: {
         // Call only once at app creation
-
         async fetchTree({commit}, payload) {
             return new Promise(async (resolve, reject) => {
                 payload.smp._call(undefined, "/ext/TrnTreeService?array=true", undefined, r=>{
@@ -184,11 +168,15 @@ export default new Vuex.Store({
                 let picture = payload.smp.getBusinessObject("TrnPicture");
                 picture.search(function(){
                     if (picture.list) {
-                        commit('UPDATE_LESSON_IMAGES', picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)));
+                        commit('UPDATE_LESSON_IMAGES', picture.list.map(pic => ({
+                            filename: pic.trnPicImage.name,
+                            filesize: pic.trnPicImage.size,
+                            filesrc: payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage.id, false)
+                        })));
                         resolve();
                     } else
                         reject("Impossible to fetch the pictures")
-                }, {'trnPicLsnId': payload.lessonId})
+                }, {'trnPicLsnId': payload.lessonId}, {inlineDocs: 'infos'})
             });
         },
 
@@ -211,22 +199,6 @@ export default new Vuex.Store({
                     } else
                         reject("Impossible to fetch the pictures")
                 }, {'trnPicLsnId': payload.lessonId})
-            });
-        },
-
-        // ------
-
-        async fetchCategoryPicture({commit}, payload) {
-            return new Promise((resolve, reject) => {
-                let picture = payload.smp.getBusinessObject("TrnCategory");
-                picture.search(async () => {
-                    if (picture.list) {
-                        resolve(picture.list.map(pic => {
-                            pic.trnCatPicture!=null ? payload.smp.dataURL(pic.trnCatPicture) : null;
-                        }))
-                    } else
-                        reject("Impossible to fetch the pictures")
-                }, {'row_id': payload.categoryId},  { inlineDocs: true })
             });
         },
     },
