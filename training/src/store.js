@@ -21,12 +21,12 @@ export default new Vuex.Store({
         vTree: [],
         treeLoaded: false,
         currentLesson: false,
-        currentLessonImages: false
+        currentLessonImages: false,
     },
 
     getters: {
         //NEW MODEL
-        drawerOpen: 
+        drawerOpen:
             state => state.drawerOpen,
         drawerActive:
             state => state.currentLesson ? [state.currentLesson.trnLsnPath] : [],
@@ -35,57 +35,55 @@ export default new Vuex.Store({
         breadCrumbItems:
             state => {
                 let parents = state.currentLesson.trnLsnPath.split('/');
-                parents.splice(0,1);
+                parents.splice(0, 1);
                 let cursor = state.tree;
                 let path = "";
                 let rslt = [];
                 let finish = false;
 
-                parents.forEach(function(val, idx, array){
-                    path+="/"+val;
-                    let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath==path);
-                    if(foundCat!=undefined){
+                parents.forEach(function (val, idx, array) {
+                    path += "/" + val;
+                    let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath == path);
+                    if (foundCat != undefined) {
                         rslt.push({
                             title: foundCat.trnCatTitle,
                             path: foundCat.trnCatPath
                         });
-                        if(idx==parents.length-2)
+                        if (idx == parents.length - 2)
                             cursor = foundCat.lessons;
-                        else 
+                        else
                             cursor = foundCat.categories;
-                    }
-                    else if(idx==parents.length-1){
-                        let foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath==path);
-                        if(foundLsn!=undefined){
+                    } else if (idx == parents.length - 1) {
+                        let foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath == path);
+                        if (foundLsn != undefined) {
                             rslt.push({
                                 title: foundLsn.trnLsnTitle,
                                 path: foundLsn.trnLsnPath
                             })
-                            finish=true;
+                            finish = true;
                         }
                     }
                 });
-                return finish==true?rslt:false;
+                return finish == true ? rslt : false;
             },
         getLessonFromPath:
             state => lessonPath => {
                 let parents = lessonPath.split('/');
-                parents.splice(0,1);
+                parents.splice(0, 1);
                 let cursor = state.tree;
                 let path = "";
                 let foundLsn = undefined;
 
-                parents.forEach(function(val, idx, array){
-                    path+="/"+val;
-                    let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath==path);
-                    if(foundCat!=undefined){
-                        if(idx==parents.length-2)
+                parents.forEach(function (val, idx, array) {
+                    path += "/" + val;
+                    let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath == path);
+                    if (foundCat != undefined) {
+                        if (idx == parents.length - 2)
                             cursor = foundCat.lessons;
-                        else 
+                        else
                             cursor = foundCat.categories;
-                    }
-                    else if(idx==parents.length-1){
-                        foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath==path);
+                    } else if (idx == parents.length - 1) {
+                        foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath == path);
                     }
                 });
                 return foundLsn;
@@ -115,17 +113,17 @@ export default new Vuex.Store({
             state.treeLoaded = true;
 
             //recursive v-tree builder
-            let convertItemToVTree = function(item){
-                if(Object.prototype.hasOwnProperty.call(item, "trnLsnPath")){
+            let convertItemToVTree = function (item) {
+                if (Object.prototype.hasOwnProperty.call(item, "trnLsnPath")) {
                     return {
                         id: item.row_id,
                         name: item.trnLsnTitle,
                         path: item.trnLsnPath,
                         description: item.trnLsnDescription,
                         type: "lesson",
+                        open: true
                     }
-                }
-                else{
+                } else {
                     var childLessons = item.lessons.map(convertItemToVTree);
                     var childCategories = item.categories.map(convertItemToVTree);
                     return {
@@ -134,7 +132,8 @@ export default new Vuex.Store({
                         path: item.trnCatPath,
                         description: item.trnCatDescription,
                         type: "category",
-                        children: [...childCategories, ...childLessons]
+                        children: [...childCategories, ...childLessons],
+                        open: true
                     };
                 }
             };
@@ -145,21 +144,22 @@ export default new Vuex.Store({
             Vue.set(state, 'displayLessonPath', lessonPath);
         },
 
-        UPDATE_CURRENT_LESSON(state, lesson){
+        UPDATE_CURRENT_LESSON(state, lesson) {
             state.currentLesson = lesson;
         },
 
-        UPDATE_LESSON_IMAGES(state, images){
-			state.currentLessonImages = [];
+
+        UPDATE_LESSON_IMAGES(state, images) {
+            state.currentLessonImages = [];
             images.forEach(img => state.currentLessonImages.push(img));
             console.log("--- Lesson images added");
         },
 
-        UNLOAD_LESSON(state){
+        UNLOAD_LESSON(state) {
             state.currentLesson = false;
             state.currentLessonImages = false;
             console.log("--- Lesson images deleted");
-        }
+        },
     },
 
     actions: {
@@ -167,7 +167,7 @@ export default new Vuex.Store({
 
         async fetchTree({commit}, payload) {
             return new Promise(async (resolve, reject) => {
-                payload.smp._call(undefined, "/ext/TrnTreeService?array=true", undefined, r=>{
+                payload.smp._call(undefined, "/ext/TrnTreeService?array=true", undefined, r => {
                     commit('UPDATE_TREE', r);
                     resolve();
                 });
@@ -182,7 +182,7 @@ export default new Vuex.Store({
         async loadLessonImages({commit}, payload) {
             return new Promise((resolve, reject) => {
                 let picture = payload.smp.getBusinessObject("TrnPicture");
-                picture.search(function(){
+                picture.search(function () {
                     if (picture.list) {
                         commit('UPDATE_LESSON_IMAGES', picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)));
                         resolve();
@@ -192,11 +192,11 @@ export default new Vuex.Store({
             });
         },
 
-        async loadLessonContent({commit}, payload) {
+        async loadLessonContent(context, payload) {
             return new Promise(async (resolve, reject) => {
                 let lesson = payload.smp.getBusinessObject("TrnLesson");
-                lesson.get(function(){
-                    commit('UPDATE_CURRENT_LESSON', lesson.item);
+                lesson.get(function () {
+                    context.commit('UPDATE_CURRENT_LESSON', lesson.item);
                     resolve();
                 }, payload.lessonId);
             });
@@ -222,11 +222,11 @@ export default new Vuex.Store({
                 picture.search(async () => {
                     if (picture.list) {
                         resolve(picture.list.map(pic => {
-                            pic.trnCatPicture!=null ? payload.smp.dataURL(pic.trnCatPicture) : null;
+                            pic.trnCatPicture != null ? payload.smp.dataURL(pic.trnCatPicture) : null;
                         }))
                     } else
                         reject("Impossible to fetch the pictures")
-                }, {'row_id': payload.categoryId},  { inlineDocs: true })
+                }, {'row_id': payload.categoryId}, {inlineDocs: true})
             });
         },
     },
