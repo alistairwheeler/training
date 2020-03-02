@@ -6,7 +6,7 @@
                     :items="this.treeAsVuetifyTree"
                     activatable
                     :active="active"
-                    color="white"
+                    active-class="active-node"
                     open-all
                     shaped
                     dense
@@ -89,7 +89,7 @@
             snackBar: false,
             snbTimeOut: 1500,
             snbText: '',
-            active: []
+            active: [this.currentLesson.trnCatPath]
         }),
         computed: {
             ...mapGetters([
@@ -108,6 +108,7 @@
             },
 
             navigateToLesson(item) {
+                console.log(this.active)
                 item = item[0];
                 console.log(item)
                 if (item.type === CATEGORY) {
@@ -276,5 +277,9 @@
 
     .treeView-item {
         padding-top: map-get($paddings, medium)+1px;
+    }
+
+    .active-node {
+        background-color: white;
     }
 </style>
