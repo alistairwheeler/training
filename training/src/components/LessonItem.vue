@@ -35,7 +35,6 @@
         <Spinner v-else></Spinner>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -171,131 +170,154 @@ video{
     &:hover {
       cursor: pointer;
     }
-  }
 
-  &__divider {
-    margin: 0 $breadcrumb-margin 0 $breadcrumb-margin;
-    text-transform: uppercase;
-  }
-}
-
-/* ----- LESSON LESSON ----- */
-.lesson-title {
-  color: $color-primary;
-  font-size: nth($title-size, 1) + 1rem;
-  font-weight: bold;
-  margin-top: map-get($margins, medium);
-}
-
-.lesson_content {
-  @include flex-column-nowrap;
-  overflow: hidden;
-
-  & ::v-deep h1 {
-    font-size: nth($title-size, 1);
-  }
-
-  & ::v-deep h2 {
-    /* ::v-deep is used instead of >>> because we are using sass (with scss syntax). it is a deep selector to apply styles ot the v-html content*/
-    font-size: nth($title-size, 2);
-    font-weight: bold;
-    color: $color-secondary;
-  }
-
-  & ::v-deep h3 {
-    font-size: nth($title-size, 3);
-    font-weight: bold;
-    color: $color-secondary;
-  }
-
-  & ::v-deep h4 {
-    font-size: nth($title-size, 4);
-    color: $color-secondary;
-  }
-
-  & ::v-deep h5 {
-    font-size: nth($title-size, 5);
-    color: $color-secondary;
-  }
-
-  & ::v-deep h6 {
-    font-size: nth($title-size, 6);
-    color: $color-secondary;
-  }
-
-  & ::v-deep p {
-    text-align: justify;
-  }
-
-  & ::v-deep .info,
-  & ::v-deep .success,
-  & ::v-deep .warning,
-  & ::v-deep .error {
-    border-radius: $regular-radius;
-    padding: map-get($paddings, x-small);
-    margin: map-get($margins, x-small);
-  }
-
-  & ::v-deep .info {
-    background-color: $information !important;
-  }
-
-  & ::v-deep .success {
-    background-color: $success !important;
-  }
-
-  & ::v-deep .warning {
-    background-color: $warning !important;
-  }
-
-  & ::v-deep .error {
-    background-color: $error !important;
-  }
-
-  & ::v-deep blockquote > p::before {
-    content: '" ';
-  }
-
-  & ::v-deep blockquote > p::after {
-    content: ' "';
-  }
-
-  & ::v-deep blockquote > p {
-    font-style: italic;
-  }
-
-  & ::v-deep strong {
-    text-decoration: underline;
-  }
-
-  & ::v-deep ol li {
-    list-style: decimal;
-  }
-
-  & ::v-deep ul li {
-    list-style-type: disc;
-  }
-
-  & ::v-deep img {
-    margin-left: $content-padding;
-  }
-}
-
-.empty-content {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-self: center;
-  align-items: center;
-
-  button {
-    padding: 20px;
-    font-size: 1.5rem;
-    border: solid $color-primary 2px;
-    border-radius: $regular-radius;
-
-    &:hover {
-      background-color: #4fc3f7;
+    .occupy100percent {
+        height: 100%;
+        width: 100%;
     }
-  }
-}
+
+    video {
+        height: 100%;
+        width: 100%;
+    }
+
+    .breadcrumb {
+        border-bottom: $regular-thickness solid $light-grey;
+        background-color: white;
+        // margin: $breadcrumb-margin 0 $breadcrumb-margin 0;
+        padding: 0.3em;
+
+        &__item {
+            text-transform: uppercase;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &__divider {
+            margin: 0 $breadcrumb-margin 0 $breadcrumb-margin;
+            text-transform: uppercase;
+        }
+    }
+
+    /* ----- LESSON LESSON ----- */
+    .lesson-title {
+        color: $color-primary;
+        font-size: nth($title-size, 1) + 1rem;
+        font-weight: bold;
+        margin-top: map-get($margins, medium);
+    }
+
+    .lesson_content {
+        @include flex-column-nowrap;
+        overflow: hidden;
+
+        & ::v-deep h1 {
+            font-size: nth($title-size, 1);
+        }
+
+        & ::v-deep h2 {
+            /* ::v-deep is used instead of >>> because we are using sass (with scss syntax). it is a deep selector to apply styles ot the v-html content*/
+            font-size: nth($title-size, 2);
+            font-weight: bold;
+            color: $color-secondary;
+        }
+
+        & ::v-deep h3 {
+            font-size: nth($title-size, 3);
+            font-weight: bold;
+            color: $color-secondary;
+        }
+
+        & ::v-deep h4 {
+            font-size: nth($title-size, 4);
+            color: $color-secondary;
+        }
+
+        & ::v-deep h5 {
+            font-size: nth($title-size, 5);
+            color: $color-secondary;
+        }
+
+        & ::v-deep h6 {
+            font-size: nth($title-size, 6);
+            color: $color-secondary;
+        }
+
+        & ::v-deep p {
+            text-align: justify;
+        }
+
+        & ::v-deep .info,
+        & ::v-deep .success,
+        & ::v-deep .warning,
+        & ::v-deep .error {
+            border-radius: $regular-radius;
+            padding: map-get($paddings, x-small);
+            margin: map-get($margins, x-small);
+        }
+
+        & ::v-deep .info {
+            background-color: $information !important;
+        }
+
+        & ::v-deep .success {
+            background-color: $success !important;
+        }
+
+        & ::v-deep .warning {
+            background-color: $warning !important;
+        }
+
+        & ::v-deep .error {
+            background-color: $error !important;
+        }
+
+        & ::v-deep blockquote > p::before {
+            content: '" ';
+        }
+
+        & ::v-deep blockquote > p::after {
+            content: ' "';
+        }
+
+        & ::v-deep blockquote > p {
+            font-style: italic;
+        }
+
+        & ::v-deep strong {
+            text-decoration: underline;
+        }
+
+        & ::v-deep ol li {
+            list-style: decimal;
+        }
+
+        & ::v-deep ul li {
+            list-style-type: disc;
+        }
+
+        & ::v-deep img {
+            margin-left: $content-padding;
+        }
+    }
+
+    .empty-content {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-self: center;
+        align-items: center;
+
+        button {
+            padding: 20px;
+            font-size: 1.5rem;
+            border: solid $color-primary 2px;
+            border-radius: $regular-radius;
+
+            &:hover {
+                background-color: #4fc3f7;
+            }
+        }
+    }
 </style>

@@ -1,22 +1,23 @@
 <template>
     <v-app class="app">
         <v-navigation-drawer app clipped dark class="navbg" v-model="this.drawerOpen">
+
             <v-treeview
                     v-if="this.treeAsVuetifyTree"
                     :items="this.treeAsVuetifyTree"
-                    activatable
-                    :active="active"
-                    color="white"
-                    open-all
-                    shaped
-                    dense
-                    open-on-click
+                    return-object
                     item-key="path"
+                    activatable
+                    active-class="active-node"
                     @update:active="navigateToLesson"
-                    return-object>
-<!--                <template  slot="label" slot-scope="props">
-                    <p class="treeView-item" @click="navigateToLesson(props.item)">{{props.item.name}}</p>
-                </template>-->
+
+                    open-all
+                    open-on-click
+                    @update:open="openUpdated"
+
+                    shaped
+                    dense >
+
                 <template v-slot:prepend="{ item }">
                     <div class="tree-image">
                         <v-icon>
@@ -24,7 +25,7 @@
                         </v-icon>
                     </div>
                 </template>
-                <template v-slot:label="{ item }">
+                <template v-slot:label="{ item }" >
                         <span v-if="item.name" class="tree-element__label"> {{item.name}} </span>
                 </template>
             </v-treeview>
@@ -89,7 +90,9 @@
             snackBar: false,
             snbTimeOut: 1500,
             snbText: '',
-            active: []
+            active: [],
+            open: ["/tutoriel"],
+            selection: ["/tutoriel/configuration/creermodule"]
         }),
         computed: {
             ...mapGetters([
@@ -97,21 +100,23 @@
                 'getLessonFromPath',
                 'currentLesson',
                 'drawerOpen',
-                'nextLessonPath',
-                'previousLessonPath',
                 'treeAsVuetifyTree',
-            ])
+            ]),
         },
         methods: {
+            openUpdated(openItems) {
+                console.log("openUpdated")
+                console.log(openItems)
+            },
             checkIfRouteIsLesson() {
                 return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
             },
 
-            navigateToLesson(item) {
-                item = item[0];
-                console.log(item)
+            navigateToLesson(activeItems) {
+                let item = activeItems[0];
+                console.log(item);
                 if (item.type === CATEGORY) {
-                    console.log(item.children.length)
+                    console.log(item.children.length);
                     console.log("ITEM IS A CATEGORY, can't navigate there if you want the tree to be foldable")
                     if (item.children.length <=0) {
                         this.$router.push('/404');
@@ -176,10 +181,6 @@
         async created() {
             this.$store.dispatch('fetchTree', {smp: this.$smp});
         },
-        async mounted() {
-            console.log("mounted")
-            console.log(this.treeAsTreeView)
-        }
     };
 </script>
 
@@ -276,5 +277,9 @@
 
     .treeView-item {
         padding-top: map-get($paddings, medium)+1px;
+    }
+
+    .active-node {
+        background-color: white;
     }
 </style>
