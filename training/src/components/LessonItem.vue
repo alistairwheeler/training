@@ -13,10 +13,6 @@
           
           <div class="lesson_content" v-highlightjs v-on:click="lessonClick" v-if="this.currentLesson.trnLsnHtmlContent" v-html="this.currentLesson.trnLsnHtmlContent"></div>
           <EmptyContent v-else />
-          <!-- <div class="empty-content">
-          <h1>Ce Chapitre est en construction, revenez plus tard ! </h1>
-          <a href="/home"><button>Retour à la page d'accueil</button></a>
-          </div> -->
         </div>
         <Spinner v-else></Spinner>
       </div>
@@ -132,6 +128,7 @@ export default {
   margin: 1em;
   //padding: 0.5em;
   background: white;
+  border-radius: $media-containers;
   box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
   overflow: auto;
 }
@@ -140,21 +137,16 @@ export default {
   grid-column: 1;
   grid-row: 1 / 3;
   padding: 1em;
-  
 }
 
 .grid-item-media{
   grid-column: 2;
   grid-row: 1;
-  border-radius: $media-containers;
-  box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
 }
 
 .grid-item-video{
   grid-column: 2;
   grid-row: 2;
-  border-radius: $media-containers;
-  box-shadow: 0px 0px 9px 2px rgba(204,204,204,1);
 }
 
 .occupy100percent{

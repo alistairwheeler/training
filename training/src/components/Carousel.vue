@@ -2,16 +2,13 @@
 <!-- https://github.com/codepo8/simple-carousel/blob/master/carousel-images.html -->
 <template>
   <div class="carousel-wrapper">
-
-    <div class="carouselbox active">
-      <ol class="content">
-        <li class="current"><img :src="currentImg.filesrc" :download="currentImg.filename"></li>
-      </ol>
-
+    <div class="img-holder">
+      <transition>
+        <img :src="currentImg.filesrc" :download="currentImg.filename" v-bind:key="currentImg.filename">
+      </transition>
     </div>
-
     <div class="buttons">
-      <button v-on:click="navigate(-1)"> ◀ </button>
+      <button @click="navigate(-1)"> ◀ </button>
       <p class="img-counter">{{(this.counter + 1)}} / {{this.images.length}}</p>
       <button @click="navigate(1)"> ▶ </button>
     </div>
@@ -51,7 +48,7 @@
             let buttons = document.querySelector(".buttons");
             buttons.style.visibility = "hidden";
           } else {
-            let box = document.querySelector(".carouselbox");
+            let box = document.querySelector(".carousel-wrapper");
             let buttons = document.querySelector(".buttons");
             box.addEventListener('mouseover', () => {
               buttons.style.visibility = "visible";
@@ -72,7 +69,6 @@
 </script>
 
 <style lang="scss" scoped>
-
   @import "../assets/sass/utils/_variables.scss";
     img {
         max-width: 100%;
@@ -84,38 +80,7 @@
       height: 100%;
       position: relative;
       margin: 0;
-    }
-
-    .carouselbox {
-        font-family: helvetica, sans-serif;
-        font-size: 14px;
-        width: 100%;
-        height: 100%;
-        position: relative;
-        margin: 0;
-        overflow: hidden;
-    }
-
-    .content {
-        margin: 0;
-        padding: 0;
-    }
-
-    .content li {
-        font-size: 100px;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        list-style: none;
-        text-align: center;
-        z-index: 2;
-    }
-
-    button {
-
-    }
-    .active button {
-        visibility: visible;
+      overflow: hidden; // avoid transition scrollbar
     }
 
     .buttons {
@@ -138,36 +103,20 @@
       margin: 0 $img-counter-margin 0 $img-counter-margin
     }
 
-    .active .buttons {
-        width: 100%;
-        padding: 5px 0;
-        background: #eee;
-        text-align: center;
-        z-index: 10;
-        /*position: relative;*/
-        position: absolute;
-        bottom: 0;
+    /* Transition */
+    .v-enter, .v-leave-to{
+      transform: scale(0);
+    }
+    .v-enter-to, .v-leave{
+      transform: scale(1);
+    }
+    .v-leave-active{
+      transition-duration: 0.5s;
+    }
+    .v-enter-active{
+      transition-delay: 0.5s;
+      transition-duration: 0.5s;
     }
 
-    .active li {
-        position: absolute;
-        top: 20px;
-        opacity: 0;
-        transform: scale(0);
-        transition: 1s;
-    }
-
-    .active li.current {
-        top: 20px;
-        opacity: 1;
-        transform: scale(1);
-        transition: 1s;
-    }
-
-    .li img {
-        width: 200px;
-        height: 200px;
-        display: block;
-    }
 
 </style>
