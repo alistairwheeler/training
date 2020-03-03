@@ -8,7 +8,8 @@
                     return-object
                     item-key="path"
                     activatable
-                    active-class="active-node"
+                    color="white"
+                    
                     @update:active="navigateToLesson"
 
                     open-all
@@ -277,9 +278,5 @@
 
     .treeView-item {
         padding-top: map-get($paddings, medium)+1px;
-    }
-
-    .active-node {
-        background-color: white;
     }
 </style>
