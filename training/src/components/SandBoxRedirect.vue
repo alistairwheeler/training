@@ -9,11 +9,11 @@
     export default {
         name: 'SandBoxRedirect',
 
-        created() {
+        mounted() {
             let demandId = this.$router.currentRoute.path.split("/sandbox/")[1];
             let baseURL = "https://portalpr.dev.simplicite.io/ext/PorIsdService?identifier=";
             let req = new XMLHttpRequest();
-            req.open("GET", baseURL + demandId, false);
+            req.open("GET", baseURL + demandId, true);
             req.send(null);
             console.log(req.responseText);
         }

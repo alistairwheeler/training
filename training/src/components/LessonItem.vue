@@ -132,7 +132,7 @@
         //padding: 0.5em;
         background: white;
         border-radius: $media-containers;
-        box-shadow: 0px 0px 9px 2px rgba(204, 204, 204, 1);
+        @include box-shadow;
         overflow: auto;
     }
 
