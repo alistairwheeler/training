@@ -5,7 +5,7 @@ import Courses from "./components/Courses"
 import Lessons from "./components/Lessons"
 import PageNotFound from "./components/PageNotFound"
 import SandBoxRedirect from "./components/SandBoxRedirect"
-import SandBoxForm from "./components/SandBoxForm";
+import SandBoxForm from "./components/SandBoxForm"
 
 //1. Routes definition
 const routes = [

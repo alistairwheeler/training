@@ -1,24 +1,23 @@
 //COLORS
 $color-primary: #20477a;
-//$color-primary: #387ED1;
 $color-secondary: #387ED1;
-//$color-secondary: #20477a;
 $color-accent: #3cba3c;
 $light-grey: #eee;
 $light-black: #2B2B2B;
 $black: #222222;
 $treeView-active: #e6eced;
-$information: #e6f4fa;
-$success: #e6fae7;
-$warning: #f5e5d5;
-$error: #ffc9c9;
-$code-background: #F7F7F7;
-$code-regular-text: #4D515C;
-$code-keyword: blue;
-$code-string: darkred;
-$code-comment: purple;
-$code-tag: darkgreen;
-$code-attribute: darkblue;
+$color-information: #e6f4fa;
+$color-success: #e6fae7;
+$color-warning: #f5e5d5;
+$color-error: #ffc9c9;
+
+$color-code-background: #F7F7F7;
+$color-code-regular-text: #4D515C;
+$color-code-keyword: blue;
+$color-code-string: darkred;
+$color-code-comment: purple;
+$color-code-tag: darkgreen;
+$color-code-attribute: darkblue;
 
 
 //BORDER-RADIUS
@@ -46,3 +45,6 @@ $img-counter-margin: 10px;
 $paddings: (x-large: 30px, large: 20px, medium: 10px, small: 5px, x-small: 3px);
 $margins: (large: 40px, medium: 30px, small: 20px, x-small: 5px);
 $title-size: 3rem 2.4rem 2.2rem 1.8rem 1.2rem 1.1rem;
+
+//SANDBOX DEMAND
+$width-sandbox-form: 60%;

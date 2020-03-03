@@ -1,29 +1,30 @@
 <template>
     <div class="sandbox-demand">
         <div class="sandbox-form">
+            <h1 class="sandbox-form__title">Demandez une Sandbox</h1>
             <form >
                 <p class="sandbox-form__element">
-                    <label class="required">Votre adresse de messagerie</label>
-                    <input id="email" class="sandbox-form__input" type="email" name="email" required/>
+                    <!--<label class="required">Votre adresse de messagerie</label>-->
+                    <input id="email" class="sandbox-form__input required" type="email" name="email" placeholder="Votre email" required/>
                 </p>
                 <p class="sandbox-form__element">
-                    <label>Votre nom</label>
-                    <input id="name" class="sandbox-form__input" type="text" name="name"/>
+                    <!--<label>Votre nom</label>-->
+                    <input id="name" class="sandbox-form__input" type="text" name="name" placeholder="Nom"/>
                 </p>
                 <p class="sandbox-form__element">
-                    <label>Votre prénom</label>
-                    <input id="firstName" class="sandbox-form__input" type="text" name="firstName"/>
+                    <!--<label>Votre prénom</label>-->
+                    <input id="firstName" class="sandbox-form__input" type="text" name="firstName" placeholder="Prénom"/>
                 </p>
                 <p class="sandbox-form__element">
-                    <label>Votre société</label>
-                    <input id="company" class="sandbox-form__input" type="text" name="company"/>
+                    <!--<label>Votre société</label>-->
+                    <input id="company" class="sandbox-form__input" type="text" name="company" placeholder="Société"/>
                 </p>
                 <p class="sandbox-form__element">
-                    <label>Votre téléphone</label>
-                    <input id="phone" class="sandbox-form__input" type="tel" name="phone"/>
+                    <!--<label>Votre téléphone</label>-->
+                    <input id="phone" class="sandbox-form__input" type="tel" name="phone" placeholder="Téléphone"/>
                 </p>
                 <p class="sandbox-form__element">
-                    <label>Votre profil</label>
+                    <label>Profil</label>
                     <select id="profile" name="profile">
                         <option value="NA" selected>--</option>
                         <option value="Profil technique (IT)">Profil technique (IT)</option>
@@ -39,9 +40,20 @@
             </form>
             <button class="validate-button" @click="sendDemand()">Essayer Gratuitement</button>
         </div>
-        <div v-show="isImageVisible" class="side-content">
-            <img class="sandbox-image" src="https://megastuces.com/wp-content/uploads/2017/02/sandbox.png" alt="sandbox image">
-            <h2> Vous allez très vite recevoir un email </h2>
+
+        <!--<div v-show="isImageVisible" class="side-content">-->
+        <div class="side-content">
+            <!--<img class="side-content__image" src="https://megastuces.com/wp-content/uploads/2017/02/sandbox.png" alt="sandbox image">-->
+            <div class="side-content__brand">
+                <h2 class="side-content__message">Simplicité</h2>
+                <p class="side-content__text">pour toutes vos applications</p>
+            </div>
+
+            <div class="side-content__mail">
+                <img class="mail-icon" src="../../public/mail.svg">
+                <p>Un mail vous a été envoyé</p>
+            </div>
+
         </div>
     </div>
 
@@ -74,6 +86,7 @@
                     req.addEventListener("load", () => {
                         if (req.status >= 200 && req.status < 400) {
                             this.isImageVisible = true;
+                            document.getElementsByClassName("side-content__mail")[0].style.transform="scale(1)";
                             console.log(req.responseText);
                         }
                         else {
@@ -86,17 +99,15 @@
                     if(!email.classList.contains("empty-input"))
                         email.classList.add("empty-input")
                 }
-
-
-
             },
+
         },
         mounted() {
             let mail = document.getElementById("email")
             mail.addEventListener("blur", () => {
-                if(mail.value === "" || mail.value === undefined){
+                if(mail.value === "" || mail.value === undefined || mail.value === null){
+                    mail.placeholder="Veuillez remplir ce champ";
                     mail.classList.add("empty-input")
-                    mail.placeholder="Veuillez remplir ce champ s'il vous plaît";
                 }
                 else
                     mail.classList.remove("empty-input")
@@ -114,49 +125,51 @@
     @import "../assets/sass/utils/mixins";
 
     .sandbox-demand {
-        width: 80%;
+        width: 70%;
         margin: 20px auto 20px auto;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
         border-radius: $regular-radius;
-        padding: 20px;
         background-color: white;
         @include box-shadow;
     }
 
-
-    .side-content {
-        width: 50%;
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-    }
-
     .sandbox-form {
-        width: 40%;
+        width: $width-sandbox-form;
+        padding: 20px;
         display: flex;
         flex-flow: column;
 
+        &__title {
+            font-weight: bold;
+            color: #2B2B2B;
+            font-size: 2.5rem;
+            margin-bottom: 45px;
+        }
 
         label {
-            //background-color: #00e5ff;
             margin: 0;
         }
 
         &__element {
             display: flex;
             flex-flow: column;
-            margin-bottom: 15px;
+            margin-bottom: 30px;
         }
 
         &__input {
-            width: 60%;
-            border-bottom: solid 1px black;
+            border-bottom: 1px solid #999;
+
+            &::placeholder {
+                color: #999
+            }
 
             &:focus {
-                border-bottom: solid 2px $color-primary;
+                border-bottom: solid 1px black;
+                &::placeholder {
+                    color: black;
+                }
             }
         }
     }
@@ -164,17 +177,20 @@
     .validate-button {
         box-sizing: border-box;
         padding: 20px;
-        border: solid $color-primary 1px;
+       // border: solid $color-primary 1px;
         border-radius: $regular-radius;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: $color-primary;
+        //color: $color-primary;
         font-weight: bold;
+        font-size: 1.3rem;
+        background-color: lighten($color-primary, 10%);
+        color: white;
 
-        &:hover {
+        /*&:hover {
             background-color: lighten($color-primary, 60%);
-        }
+        }*/
     }
 
     .required:after {
@@ -183,20 +199,70 @@
         display: inline-block;
     }
 
+    .side-content {
+        width: (100%-$width-sandbox-form);
+        border-radius: 0 4px 4px 0;
+        padding: 20px;
+        position: relative;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+        color: white;
+        //background: url("https://megastuces.com/wp-content/uploads/2017/02/sandbox.png");
+        /*background: linear-gradient(to right, rgba($color-secondary, 0.3),
+                rgba($color-secondary, 0.3)),*/
+        background: linear-gradient(to right, rgba(#2B2B2B, 1),
+                rgba(#2B2B2B, 1)),
+        url("https://megastuces.com/wp-content/uploads/2017/02/sandbox.png");
+
+
+        &__image {
+            max-width: 100%;
+            border-radius: $regular-radius;
+        }
+
+        &__brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &__message {
+            font-size: 3rem;
+
+        }
+        &__text {
+            font-size: 1rem;
+        }
+
+        &__mail {
+            width: 60%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(0);
+            transition: transform 330ms ease-in-out;
+
+            .mail-icon {
+                width: 70%;
+                margin-bottom: 20px;
+            }
+        }
+    }
+
     .newsletter-input {
         margin-right: 10px;
     }
 
     .empty-input {
-        border-bottom: solid red;
+        border-bottom: 1px solid red;
         &::placeholder {
             color: red;
         }
     }
 
-    .sandbox-image {
-        max-width: 100%;
-    }
 
 
 </style>

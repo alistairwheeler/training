@@ -265,19 +265,19 @@
             }
 
             & ::v-deep .info {
-                background-color: $information !important;
+                background-color: $color-information !important;
             }
 
             & ::v-deep .success {
-                background-color: $success !important;
+                background-color: $color-success !important;
             }
 
             & ::v-deep .warning {
-                background-color: $warning !important;
+                background-color: $color-warning !important;
             }
 
             & ::v-deep .error {
-                background-color: $error !important;
+                background-color: $color-error !important;
             }
 
             & ::v-deep blockquote > p::before {
