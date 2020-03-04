@@ -40,19 +40,25 @@
             </form>
             <button class="validate-button" @click="sendDemand()">Essayer Gratuitement</button>
         </div>
-
+        <div class="vertical-separator"></div>
         <!--<div v-show="isImageVisible" class="side-content">-->
         <div class="side-content">
             <!--<img class="side-content__image" src="https://megastuces.com/wp-content/uploads/2017/02/sandbox.png" alt="sandbox image">-->
             <div class="side-content__brand">
-                <h2 class="side-content__message">Simplicité</h2>
-                <p class="side-content__text">pour toutes vos applications</p>
+                <h2 class="side-content__message">Créez vos applications dès maintenant avec Simplicité</h2>
+                <ul>
+                    <li><img class="side-content__icon" src="../../public/hand-pen.png">Remplissez le formulaire</li>
+                    <li><img class="side-content__icon" src="../../public/email.png">Validez votre demande avec l'email</li>
+                    <li><img class="side-content__icon" src="../../public/rocket.png">C'est tout bon, à vous de jouer !</li>
+                </ul>
+                <img class="side-content__brand-image" src="../../public/developer.png" alt="computer image">
+                <!--<p class="side-content__text">pour toutes vos applications</p>-->
             </div>
 
-            <div class="side-content__mail">
+            <!--<div class="side-content__mail">
                 <img class="mail-icon" src="../../public/mail.svg">
                 <p>Un mail vous a été envoyé</p>
-            </div>
+            </div>-->
 
         </div>
     </div>
@@ -135,6 +141,12 @@
         @include box-shadow;
     }
 
+    .required:after {
+        content: '*';
+        color: red;
+        display: inline-block;
+    }
+
     .sandbox-form {
         width: $width-sandbox-form;
         padding: 20px;
@@ -172,31 +184,45 @@
                 }
             }
         }
+
+        .newsletter-input {
+            margin-right: 10px;
+        }
+
+        .empty-input {
+            border-bottom: 1px solid red;
+            &::placeholder {
+                color: red;
+            }
+        }
+
+        .validate-button {
+            box-sizing: border-box;
+            padding: 20px;
+            // border: solid $color-primary 1px;
+            border-radius: $regular-radius;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            //color: $color-primary;
+            font-weight: bold;
+            font-size: 1.3rem;
+            background-color: lighten($color-primary, 10%);
+            color: white;
+
+            /*&:hover {
+                background-color: lighten($color-primary, 60%);
+            }*/
+        }
+
     }
 
-    .validate-button {
-        box-sizing: border-box;
-        padding: 20px;
-       // border: solid $color-primary 1px;
-        border-radius: $regular-radius;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        //color: $color-primary;
-        font-weight: bold;
-        font-size: 1.3rem;
-        background-color: lighten($color-primary, 10%);
-        color: white;
-
-        /*&:hover {
-            background-color: lighten($color-primary, 60%);
-        }*/
-    }
-
-    .required:after {
-        content: '*';
-        color: red;
-        display: inline-block;
+    .vertical-separator {
+        width: 2px;
+        background-color: #A2A2A2;
+        height: 500px;
+        align-self: center;
+        margin: 0 20px 0 20px;
     }
 
     .side-content {
@@ -207,14 +233,13 @@
         display: flex;
         flex-flow: column nowrap;
         justify-content: space-around;
-        align-items: center;
-        color: white;
+        color: #2B2B2B;
         //background: url("https://megastuces.com/wp-content/uploads/2017/02/sandbox.png");
         /*background: linear-gradient(to right, rgba($color-secondary, 0.3),
                 rgba($color-secondary, 0.3)),*/
-        background: linear-gradient(to right, rgba(#2B2B2B, 1),
+        /*background: linear-gradient(to right, rgba(#2B2B2B, 1),
                 rgba(#2B2B2B, 1)),
-        url("https://megastuces.com/wp-content/uploads/2017/02/sandbox.png");
+        url("https://megastuces.com/wp-content/uploads/2017/02/sandbox.png");*/
 
 
         &__image {
@@ -225,12 +250,21 @@
         &__brand {
             display: flex;
             flex-direction: column;
-            align-items: center;
+
+            ul {
+                padding: 0;
+                margin-bottom: 30px;
+            }
+        }
+
+        &__brand-image {
+            max-width: 100%;
         }
 
         &__message {
-            font-size: 3rem;
-
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 30px;
         }
         &__text {
             font-size: 1rem;
@@ -250,19 +284,12 @@
                 margin-bottom: 20px;
             }
         }
-    }
 
-    .newsletter-input {
-        margin-right: 10px;
-    }
-
-    .empty-input {
-        border-bottom: 1px solid red;
-        &::placeholder {
-            color: red;
+        &__icon {
+            width: $width-sandbox-icon;
+            height: $width-sandbox-icon;
+            margin-right: 10px;
         }
     }
-
-
 
 </style>
