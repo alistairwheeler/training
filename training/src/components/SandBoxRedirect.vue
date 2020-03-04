@@ -8,12 +8,12 @@
             <li>
                 <p>Notre site de formation (gratuit) : <a href="https://docs2.dev.simplicite.io">https://docs2.dev.simplicite.io</a></p>
                 <p>Vous y trouverez toutes les ressources pour apprendre à vous servir de Simplicité. Pour votre
-                    première prise en main, nous vous conseillons de suiver la formation, pour vous apprendre les bases
-                    du développement simplicité</p>
+                    première prise en main, nous vous conseillons de suivre la formation, pour vous apprendre les bases
+                    du développement simplicité.</p>
             </li>
             <li>
                 <p>Notre forum communautaire : <a href="http://community.simplicite.io/">http://community.simplicite.io/</a></p>
-                <p>Nos utilisateurs posent leurs questions et s'entraident sur ce forum. Vous y trouverez également des tips and tricks utiles.</p>
+                <p>Nos utilisateurs posent leurs questions et s'entraident sur ce forum. Vous y trouverez également des tips & tricks utiles.</p>
             </li>
             <li>
                 <p>Notre documentation : <a href="https://docs.simplicite.io/">https://docs.simplicite.io/</a></p>
