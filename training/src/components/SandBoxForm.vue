@@ -4,23 +4,18 @@
             <h1 class="sandbox-form__title">Demandez une Sandbox</h1>
             <form >
                 <p class="sandbox-form__element">
-                    <!--<label class="required">Votre adresse de messagerie</label>-->
                     <input id="email" class="sandbox-form__input required" type="email" name="email" placeholder="Votre email" required/>
                 </p>
                 <p class="sandbox-form__element">
-                    <!--<label>Votre nom</label>-->
                     <input id="name" class="sandbox-form__input" type="text" name="name" placeholder="Nom"/>
                 </p>
                 <p class="sandbox-form__element">
-                    <!--<label>Votre prénom</label>-->
                     <input id="firstName" class="sandbox-form__input" type="text" name="firstName" placeholder="Prénom"/>
                 </p>
                 <p class="sandbox-form__element">
-                    <!--<label>Votre société</label>-->
                     <input id="company" class="sandbox-form__input" type="text" name="company" placeholder="Société"/>
                 </p>
                 <p class="sandbox-form__element">
-                    <!--<label>Votre téléphone</label>-->
                     <input id="phone" class="sandbox-form__input" type="tel" name="phone" placeholder="Téléphone"/>
                 </p>
                 <p class="sandbox-form__element">
@@ -38,10 +33,12 @@
                     <label  for="newsletter">Vous acceptez la newsletter</label>
                 </p>
             </form>
-            <button class="validate-button" @click="sendDemand()">Essayer Gratuitement</button>
+            <button v-show="!showSpinner" class="validate-button" @click="sendDemand()">Essayer Gratuitement</button>
+            <div v-if="showSpinner" class="spinner-wrapper"><Spinner ></Spinner></div>
+            <div v-show="serverDown" class="server-error">Il semble qu'il y ait eu une erreur. Veuillez réessayer</div>
+
         </div>
         <div class="vertical-separator"></div>
-        <!--<div v-show="isImageVisible" class="side-content">-->
         <div class="side-content">
             <!--<img class="side-content__image" src="https://megastuces.com/wp-content/uploads/2017/02/sandbox.png" alt="sandbox image">-->
             <div class="side-content__brand">
@@ -66,47 +63,79 @@
 </template>
 
 <script>
+    import Spinner from "./Spinner";
     export default {
         name: "SandBoxForm",
+        components: {Spinner},
         data: ()=>({
-            isImageVisible: false,
+            showSpinner: false,
+            serverDown: false,
+            clickCounter: 0,
         }),
         methods: {
             sendDemand: function ()  {
-                let email = document.getElementById("email");
+                console.log("COUNTER ===" + this.clickCounter);
+                if(this.clickCounter === 0){
 
-                if(email.value !== "" && email.value !== undefined && email.value !== null){
-                    let name = document.getElementById("name").value;
-                    let firstName = document.getElementById("firstName").value;
-                    let company = document.getElementById("company").value;
-                    let phone = document.getElementById("phone").value;
-                    let profile = document.getElementById("profile").value;
-                    let newsletter = document.getElementById("newsletter").value;
-                    let req = new XMLHttpRequest();
+                    let email = document.getElementById("email");
 
-                    let json = JSON.stringify({
-                        "email":email.value,"name":name, "firstName": firstName, "company": company, "phone": phone,
-                        "profile": profile, "newsletter": newsletter});
-                    req.open("POST", "https://portalpr.dev.simplicite.io/ext/PorIsdService", true);
-                    req.setRequestHeader("Content-type", "application/json")
-                    req.addEventListener("load", () => {
-                        if (req.status >= 200 && req.status < 400) {
-                            this.isImageVisible = true;
-                            document.getElementsByClassName("side-content__mail")[0].style.transform="scale(1)";
-                            console.log(req.responseText);
-                        }
-                        else {
-                            console.error(req.status + " " + req.statusText);
-                        }
-                    });
-                    req.addEventListener("error", () => console.error("Erreur réseau avec l'URL "));
-                    req.send(json);
-                } else {
-                    if(!email.classList.contains("empty-input"))
-                        email.classList.add("empty-input")
+                    if(email.value !== "" && email.value !== undefined && email.value !== null){
+                        this.clickCounter++;
+                        this.serverDown = false;
+                        document.getElementsByClassName("validate-button")[0].innerText = "Demande Envoyée";
+                        this.showSpinner = true;
+                        setTimeout( () => {
+                            let json = this.generateJSON();
+                            let req = this.generateRequest();
+                            req.send(json);}, 1500)
+
+                    } else if (!email.classList.contains("empty-input")) {
+                            email.classList.add("empty-input")
+                    }
                 }
             },
 
+            generateJSON: function (){
+                let email = document.getElementById("email");
+                let name = document.getElementById("name").value;
+                let firstName = document.getElementById("firstName").value;
+                let company = document.getElementById("company").value;
+                let phone = document.getElementById("phone").value;
+                let profile = document.getElementById("profile").value;
+                let newsletter = document.getElementById("newsletter").value;
+
+
+                return JSON.stringify({
+                    "email":email.value,"name":name, "firstName": firstName, "company": company, "phone": phone,
+                    "profile": profile, "newsletter": newsletter});
+            },
+
+            generateRequest: function () {
+                let req = new XMLHttpRequest();
+                req.open("POST", "https://portalpr.dev.simplicite.io/ext/PorIsdService", true);
+                req.setRequestHeader("Content-type", "application/json");
+
+                req.addEventListener("load", () => {
+                    if (req.status >= 200 && req.status < 400) {
+                        this.showSpinner = false;
+                        let btn = document.getElementsByClassName("validate-button")[0];
+                        btn.classList.add("server-ok");
+                        btn.innerText = "Un email vous a été envoyé !"
+                    }
+                    else {
+                        console.error(req.status + " " + req.statusText);
+                        this.clickCounter = 0;
+                        this.showSpinner = false;
+                        this.serverDown = true;
+                    }
+                });
+                req.addEventListener("error", () => {
+                    this.showSpinner = false;
+                    this.serverDown = true;
+                    console.error("Erreur réseau avec l'URL ")
+                });
+                return req;
+            },
         },
         mounted() {
             let mail = document.getElementById("email")
@@ -210,9 +239,15 @@
             background-color: lighten($color-primary, 10%);
             color: white;
 
-            /*&:hover {
-                background-color: lighten($color-primary, 60%);
-            }*/
+            &.server-ok {
+                background-color: white;
+                color: $color-accent;
+                border: solid 2px $color-accent;
+
+                &:hover {
+                    background-color: lighten($color-accent, 50%);
+                }
+            }
         }
 
     }
@@ -292,4 +327,14 @@
         }
     }
 
+    .spinner-wrapper {
+        padding: 100px;
+    }
+
+    .server-error {
+        border-radius: $regular-radius;
+        background-color: $color-error;
+        padding: map-get($paddings, medium);
+        margin-top: 20px;
+    }
 </style>
