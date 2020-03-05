@@ -31,6 +31,10 @@
                 </template>
             </v-treeview>
 
+            <!--<div class="tree">
+                <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"></TreeViewNode>
+            </div>-->
+
         </v-navigation-drawer>
 
         <v-app-bar app dark class="app-bar-bg" clipped-left flat>
@@ -86,7 +90,6 @@
 
     export default {
         name: 'App',
-        components: {},
         data: () => ({
             snackBar: false,
             snbTimeOut: 1500,
@@ -97,6 +100,7 @@
         }),
         computed: {
             ...mapGetters([
+                'tree',
                 'treeView',
                 'getLessonFromPath',
                 'currentLesson',

@@ -1,6 +1,6 @@
 <template>
     <div class="tree">
-        <ul id="myUL">
+        <!--<ul id="myUL">
             <li>
                 <span class="caret expand" data-path="hello" data-type="category">Utilisation de l'interface</span>
             </li>
@@ -8,9 +8,10 @@
             </li>
             <li>
                 <span class="caret expand ">Tutoriel</span>
-                <ul class="">
-                    <li class><span data-type="category" data-path="/configuration" class="caret expand">Configuration</span>
-                        <ul class="">
+                <ul>
+                    <li><span data-type="category" data-path="/configuration"
+                                    class="caret expand">Configuration</span>
+                        <ul>
                             <li><span data-type="lesson" data-path="hello" class="expand zbang">Créer Module</span></li>
                             <li><span data-type="lesson" data-path="hello" class="expand">Créer Objet Métier</span></li>
                             <li><span data-type="lesson" data-path="hello" class="expand ">Créer Attribut</span></li>
@@ -22,20 +23,28 @@
             </li>
             <li class="tree-element"><span data-type="category" class="caret expand ">Tests Plateforme training</span>
             </li>
-        </ul>
+        </ul>-->
+        <!--<ul id="secondTree">
+        </ul>-->
+        <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"></TreeViewNode>
+
     </div>
 
 </template>
 
 <script>
     import {mapGetters} from "vuex";
+    import TreeViewNode from "./TreeViewNode";
 
     export default {
         name: "CustomTree",
-
+        components: {
+            TreeViewNode
+        },
         computed: {
             ...mapGetters([
                 'currentLesson',
+                'tree',
             ])
         },
         data: () => ({
@@ -43,12 +52,50 @@
         }),
 
         mounted() {
-            var v = this;
-            console.log(v)
-            this.setFoldingListeners();
-            this.setOnClickListeners(v);
+            //let secondTree = document.getElementById("secondTree");
+            /*this.tree.forEach(cat => {
+                console.log(this.generateCategory(cat))
+            });*/
+
+            //var v = this;
+            //console.log(v)
+            //this.setFoldingListeners();
+            //this.setOnClickListeners(v);
         },
         methods: {
+            generateCategory(category) {
+                let li = document.createElement("li")
+                let span = document.createElement("span");
+                span.innerText = category.trnCatTitle;
+                span.setAttribute("data-path", category.trnCatPath);
+                span.setAttribute("data-type", "category");
+                if(category.categories.length > 0 || category.lessons.length > 0)
+                    span.classList.add("caret")
+
+                span.classList.add("expand")
+                li.appendChild(span);
+                let secondTree = document.getElementById("secondTree");
+                secondTree.append(li)
+                console.log(span);
+                console.log(li);
+                console.log(secondTree);
+                return li;
+            },
+
+            generateLesson(lesson) {
+                let li = document.createElement("li")
+                let span = document.createElement("span");
+                span.innerText = lesson.trnLsnTitle;
+                span.setAttribute("data-path", lesson.trnLsnPath);
+                span.setAttribute("data-type", "lesson");
+                span.classList.add("expand")
+
+                console.log(span);
+                li.appendChild(span);
+                return li;
+            },
+
+
             //To use after the tree is built
             setFoldingListeners: () => {
                 let carets = document.getElementsByClassName("caret");
@@ -65,28 +112,29 @@
             setOnClickListeners: (instance) => {
                 let treeElements = document.getElementsByClassName("expand");
                 for (let i = 0; i < treeElements.length; i++) {
-                     if (treeElements[i].dataset.type === "lesson") {
+                    if (treeElements[i].dataset.type === "lesson") {
                         treeElements[i].addEventListener("click", () => {
+                            treeElements[i].classList.toggle("active")
                             //1. Rediriger vers la leçon correspondante
                             //instance.navigateToLesson(treeElements[i].dataset['path']);
                             instance.toString()
                             //2. Activer cet élément, désactiver les autres l'élément actif du treeview
                             //Ce process doit être fait par l'instance vue de l'App, pcq dans cette fonction
                             // on ne peut pas accéder au store et donc pas à la valeur de currentLesson.trnLsnPath
-                            let elements = document.getElementsByClassName("expand");
+                            /*let elements = document.getElementsByClassName("expand");
                             for (let j = 0; j < elements.length; j++) {
                                 if(elements[j].dataset['path'] === instance.currentLesson.trnLsnPath)
                                     elements[j].classList.add("active")
                                 else
                                     elements[j].classList.remove("active")
-                            }
+                            }*/
                         })
                     }
                 }
             },
 
-            navigateToLesson(path){
-                this.$router.push('/lessonItem'+path).catch(() => console.log("Navigation Duplicated"))
+            navigateToLesson(path) {
+                this.$router.push('/lessonItem' + path).catch(() => console.log("Navigation Duplicated"))
             }
         }
     }
@@ -148,6 +196,16 @@
             &:hover {
                 background-color: $color-active;
             }
+        }
+    }
+
+
+
+    #secondTree {
+        background-color: red;
+
+        .expand {
+            background-color: #00bcd4;
         }
     }
 </style>
