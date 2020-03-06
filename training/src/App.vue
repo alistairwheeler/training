@@ -1,8 +1,8 @@
 <template>
-    <v-app class="app">
-        <v-navigation-drawer app clipped dark class="navbg" v-model="this.drawerOpen">
+    <div class="app">
+        <!--<v-navigation-drawer app clipped dark class="navbg" v-model="this.drawerOpen">
 
-            <!--<v-treeview
+            &lt;!&ndash;<v-treeview
                     v-if="this.treeAsVuetifyTree"
                     :items="this.treeAsVuetifyTree"
                     return-object
@@ -29,89 +29,141 @@
                 <template v-slot:label="{ item }" >
                         <span v-if="item.name" class="tree-element__label"> {{item.name}} </span>
                 </template>
-            </v-treeview>-->
+            </v-treeview>&ndash;&gt;
 
             <div class="tree">
                 <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"></TreeViewNode>
             </div>
 
         </v-navigation-drawer>
-
         <v-app-bar app dark class="app-bar-bg" clipped-left flat>
-                <v-app-bar-nav-icon @click="openOrCloseDrawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click="openOrCloseDrawer"></v-app-bar-nav-icon>
 
-                <v-toolbar-title id="toolbar-title" class="simplicite-logo" @click="navigateHome()"></v-toolbar-title>
+            <v-toolbar-title id="toolbar-title" class="simplicite-logo" @click="navigateHome()"></v-toolbar-title>
 
-                <div class="flex-grow-1"></div>
+            <div class="flex-grow-1"></div>
 
-                <v-btn id="previous-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToPreviousLesson()">
-                    <v-icon>mdi-skip-previous</v-icon>
-                </v-btn>
-                <v-btn id="next-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToNextLesson()">
-                    <v-icon>mdi-skip-next</v-icon>
-                </v-btn>
+            <v-btn id="previous-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToPreviousLesson()">
+                <v-icon>mdi-skip-previous</v-icon>
+            </v-btn>
+            <v-btn id="next-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToNextLesson()">
+                <v-icon>mdi-skip-next</v-icon>
+            </v-btn>
 
-                <v-btn fab icon class="btn-link" href="http://community.simplicite.io" target="_blank">
-                    <v-icon>mdi-forum</v-icon>
-                </v-btn>
+            <v-btn fab icon class="btn-link" href="http://community.simplicite.io" target="_blank">
+                <v-icon>mdi-forum</v-icon>
+            </v-btn>
 
-                <v-btn fab icon class="btn-link" href="https://github.com/simplicitesoftware" target="_blank">
-                    <v-icon>mdi-git</v-icon>
-                </v-btn>
+            <v-btn fab icon class="btn-link" href="https://github.com/simplicitesoftware" target="_blank">
+                <v-icon>mdi-git</v-icon>
+            </v-btn>
 
-                <!-- <v-btn fab icon class="btn-link" href="https://hub.docker.com/u/simplicite/">
-                    <v-icon>mdi-docker</v-icon>
-                </v-btn> -->
+            &lt;!&ndash; <v-btn fab icon class="btn-link" href="https://hub.docker.com/u/simplicite/">
+                <v-icon>mdi-docker</v-icon>
+            </v-btn> &ndash;&gt;
 
-<!--            <v-toolbar-items>
-                <v-btn text to="/courses">Cours</v-btn>
-            </v-toolbar-items>-->
+            &lt;!&ndash;            <v-toolbar-items>
+                            <v-btn text to="/courses">Cours</v-btn>
+                        </v-toolbar-items>&ndash;&gt;
 
-        </v-app-bar>
+        </v-app-bar>-->
 
-        <!-- Sizes your content based upon application components -->
-        <v-content class="content">
-            <router-view :key="$route.fullPath" v-if="$store.state.treeLoaded"></router-view>
-            <!-- This makes the page reload when the url changes(check api doc for more info) -->
-            <v-snackbar id="snackbar" v-model="snackBar" :timeout="snbTimeOut">
+        <div id="top-menu">
+
+            <div class="unicode-symbol" @click="switchMenu">&#9776;</div>
+
+            <div class="unicode-symbol reverse" @click="navigateToPreviousLesson()">
+                <span>&#9658;</span>
+                <span class="unicode-symbol">&#10074; </span>
+            </div>
+
+            <div class="unicode-symbol" @click="navigateToNextLesson()">
+                <span>&#9658;</span>
+                <span>&#10074;</span>
+            </div>
+
+
+            <v-btn id="previous-button" v-show="checkIfRouteIsLesson()" fab icon
+                   @click="navigateToPreviousLesson()">
+                <v-icon>mdi-skip-previous</v-icon>
+            </v-btn>
+
+            <v-btn id="next-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToNextLesson()">
+                <v-icon>mdi-skip-next</v-icon>
+            </v-btn>
+
+            <v-btn fab icon class="btn-link" href="http://community.simplicite.io" target="_blank">
+                <v-icon>mdi-forum</v-icon>
+            </v-btn>
+
+            <v-btn fab icon class="btn-link" href="https://github.com/simplicitesoftware" target="_blank">
+                <v-icon>mdi-git</v-icon>
+            </v-btn>
+
+        </div>
+        <div id="main-content">
+            <div id="side-menu">
+                <TreeViewNode v-for="motherCat in this.tree"
+                              :key="motherCat.trnCatPath"
+                              :node="motherCat"
+                              :depth="0"/>
+            </div>
+            <router-view id="content" :key="$route.fullPath" v-if="$store.state.treeLoaded"/>
+        </div>
+
+        <!--<header class="top-menu">
+            <div class="burger-button" @click="openSideMenu">&#9776;</div>
+            <div class="controls">
+            </div>
+        </header>-->
+        <!--<div class="content-wrapper">
+            <div id="side-menu" class="side-menu visible">
+                <div class="tree">
+                    <TreeViewNode v-for="motherCat in this.tree"
+                                  :key="motherCat.trnCatPath"
+                                  :node="motherCat"
+                                  :depth="0"/>
+                </div>
+            </div>
+            <router-view id="content" class="content" :key="$route.fullPath" v-if="$store.state.treeLoaded"/>
+
+            &lt;!&ndash; This makes the page reload when the url changes(check api doc for more info) &ndash;&gt;
+            &lt;!&ndash;<v-snackbar id="snackbar" v-model="snackBar" :timeout="snbTimeOut">
                 <span id="snb-text"> {{snbText}} </span>
                 <v-btn color="#F08A7B" text @click="snackBar = false">FERMER</v-btn>
-            </v-snackbar>
-        </v-content>
+            </v-snackbar>&ndash;&gt;
+        </div>-->
+        <!-- Sizes your content based upon application components -->
 
-    </v-app>
+    </div>
 </template>
 
 <script>
     /* eslint-disable no-console */
 
-    import {mapGetters} from "vuex";
+    import {mapGetters, mapState} from "vuex";
     import {CATEGORY, LESSON} from "./Helper";
-    import TreeViewNode from "../src/components/TreeViewNode"
-
+    import TreeViewNode from "./components/TreeViewNode";
 
     export default {
         name: 'App',
-        components: {TreeViewNode},
+        components: {
+            TreeViewNode
+        },
         data: () => ({
             snackBar: false,
             snbTimeOut: 1500,
             snbText: '',
             active: [],
-            open: ["/tutoriel"],
-            selection: ["/tutoriel/configuration/creermodule"]
         }),
         computed: {
-            ...mapGetters([
-                'tree',
-                'treeView',
-                'getLessonFromPath',
-                'currentLesson',
-                'drawerOpen',
-                'treeAsVuetifyTree',
-            ]),
+            ...mapGetters(['getLessonFromPath']),
+            ...mapState(['tree', 'treeAsVuetifyTree', 'currentLesson', 'drawerOpen'])
         },
         methods: {
+            switchMenu() {
+                document.getElementById("side-menu").classList.toggle("open");
+            },
             openUpdated(openItems) {
                 console.log("openUpdated")
                 console.log(openItems)
@@ -119,14 +171,13 @@
             checkIfRouteIsLesson() {
                 return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
             },
-
             navigateToLesson(activeItems) {
                 let item = activeItems[0];
                 console.log(item);
                 if (item.type === CATEGORY) {
                     console.log(item.children.length);
                     console.log("ITEM IS A CATEGORY, can't navigate there if you want the tree to be foldable")
-                    if (item.children.length <=0) {
+                    if (item.children.length <= 0) {
                         this.$router.push('/404');
                         //this.showMessage("Cette catégorie est en construction, Revenez bientôt !")
                     }
@@ -137,7 +188,6 @@
                     console.error("Error with the item type - not matching category or contentItem")
                 }
             },
-
             navigateToNextLesson() {
                 let nextPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnNext;
                 console.log(`nextPath : ${nextPath}`);
@@ -149,7 +199,6 @@
                     this.showMessage("Vous êtes à la dernière leçon de cette catégorie")
                 }
             },
-
             navigateToPreviousLesson() {
                 let previousPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnPrevious;
                 console.log(`previousPath : ${previousPath}`);
@@ -161,30 +210,28 @@
                     this.showMessage('Vous êtes à la première leçon de cette catégorie')
                 }
             },
-
             navigateHome() {
                 this.$router.push('/home')
                     .catch(() => console.log('Navigation Duplicated'));
             },
-
             openOrCloseDrawer() {
                 let choice = !this.drawerOpen;
                 this.$store.commit('UPDATE_DRAWER_OPEN', choice);
             },
-
             shakeElement(elementId) {
                 document.getElementById(elementId).classList.add("shaked");
                 setTimeout(() => document.getElementById(elementId).classList.remove('shaked'), 150);
 
             },
-
             showMessage(message) {
                 this.snbText = message;
                 this.snackBar = true;
             },
         },
-        async beforeCreate(){
-            this.$smp.login(()=>{console.log("LOGGED IN")});
+        async beforeCreate() {
+            this.$smp.login(() => {
+                console.log("LOGGED IN")
+            });
         },
         async created() {
             this.$store.dispatch('fetchTree', {smp: this.$smp});
@@ -204,57 +251,100 @@
         font-family: 'Source Sans Pro', sans-serif;
     }
 
-    .navbg{
-        background: linear-gradient($color-primary,$color-secondary);
+    .app {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        #top-menu {
+            width: 100%;
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+            //justify-content: flex-end;
+            padding: 8px;
+            background: linear-gradient(to right, $color-primary 40%, $color-secondary);
+            color: white;
+
+            .unicode-symbol {
+                font-size: $burger-size;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        #main-content {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            flex-grow: 1; //So the main content extends to the bottom of the page
+            position: relative;
+
+            #side-menu {
+                //background: linear-gradient($color-primary 40%, $color-secondary);
+                background: #2b2b2b;
+                width: 0px;
+                position: absolute;
+                z-index: 1000;
+                top: 0;
+                bottom: 0;
+                overflow: hidden;
+                transition: 0.25s;
+
+                &.open {
+                    width: 250px;
+                }
+            }
+
+            #content {
+                width: 100%;
+                transition: 0.25s;
+                position: relative;
+                top: 0;
+                bottom: 0;
+            }
+        }
     }
 
 
-    .app-bar-bg{
-        background: linear-gradient(to right, $color-primary 40%,$color-secondary);
+    .content-wrapper {
+        .side-menu {
+            overflow: hidden;
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background: linear-gradient($color-primary, $color-secondary);
+            transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+        }
+
+
     }
 
-    .content {
-        width: 100%;
-        background-color: #f6f7eb;
-    }
-
-    .fill-page{
-        /* Added so the router-vue for lessons can inherit the 100% height */
-        height:100%;
-    }
-
-    .simplicite-logo{
+    .simplicite-logo {
         background-image: url("../public/Logo_Simplicite_Noir.png");
         background-size: contain;
+        z-index: 200;
         width: 20%;
         height: 70%;
         margin: 5px;
         filter: invert(100%);
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
-    .simplicite-logo:hover {
-        cursor: pointer;
+    .app-bar-bg {
+        background: linear-gradient(to right, $color-primary 40%, $color-secondary);
     }
 
-    .btn-link:hover{
+    .btn-link:hover {
         text-decoration: none;
-    }
-
-    .treeview-section {
-        font-size: nth($title-size, 4);
-        cursor: pointer;
-        border: solid $color-accent;
-    }
-
-    .treeview-lesson, .treeview-lesson--active {
-        cursor: pointer;
-        font-size: nth($title-size, 5);
-        border: solid $color-secondary;
-    }
-
-    .treeview-active {
-        filter: brightness(150%);
-        color: white!important;
     }
 
     #snb-text {
@@ -283,7 +373,7 @@
         outline: none;
     }
 
-    .treeView-item {
-        padding-top: map-get($paddings, medium)+1px;
+    .reverse {
+        transform: rotate(180deg);
     }
 </style>

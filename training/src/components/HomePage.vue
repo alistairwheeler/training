@@ -73,9 +73,7 @@
 
     #outer-div {
         @include flex-column-nowrap;
-        margin: 5vh;
         align-items: center;
-
     }
 
     .row-1 {

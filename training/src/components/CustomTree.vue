@@ -149,13 +149,6 @@
         color: white;
         background: linear-gradient($color-primary, $color-secondary);
 
-        /*.tree-element {
-            width: 100%;
-            font-size: 1.1rem;
-            border-bottom-right-radius: $radius-tree-element;
-            border-top-right-radius: $radius-tree-element;
-        }*/
-
         .expand {
             font-size: 1.1rem;
             display: block;
