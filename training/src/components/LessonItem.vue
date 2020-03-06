@@ -108,7 +108,7 @@
                 });
         },
         async beforeDestroy() {
-            this.$store.commit('UNLOAD_LESSON');
+            //this.$store.commit('UNLOAD_LESSON');
         }
     };
 </script>

@@ -2,7 +2,7 @@
     <v-app class="app">
         <v-navigation-drawer app clipped dark class="navbg" v-model="this.drawerOpen">
 
-            <v-treeview
+            <!--<v-treeview
                     v-if="this.treeAsVuetifyTree"
                     :items="this.treeAsVuetifyTree"
                     return-object
@@ -29,11 +29,11 @@
                 <template v-slot:label="{ item }" >
                         <span v-if="item.name" class="tree-element__label"> {{item.name}} </span>
                 </template>
-            </v-treeview>
+            </v-treeview>-->
 
-            <!--<div class="tree">
+            <div class="tree">
                 <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"></TreeViewNode>
-            </div>-->
+            </div>
 
         </v-navigation-drawer>
 
@@ -87,9 +87,12 @@
 
     import {mapGetters} from "vuex";
     import {CATEGORY, LESSON} from "./Helper";
+    import TreeViewNode from "../src/components/TreeViewNode"
+
 
     export default {
         name: 'App',
+        components: {TreeViewNode},
         data: () => ({
             snackBar: false,
             snbTimeOut: 1500,

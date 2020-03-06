@@ -1,54 +1,41 @@
 <template>
-    <div class="node" v-bind:class="{ active: isActive}">
-        <h3 class="node__text" :style="indent" @click="toggleChildren(node)" v-if="node.trnCatTitle">
-            {{node.trnCatTitle}}</h3>
-        <h3 class="node__text" :style="indent" @click="toggleChildren(node)" v-else>{{node.trnLsnTitle}}</h3>
+    <div>
+        <div :style="indent" class="label-wrapper">
+            <span v-if="node.trnCatTitle" class="node__label" @click="handleClick(node)">{{node.trnCatTitle}}</span>
+            <span v-else
+                v-bind:class="[this.currentLesson.trnLsnPath === node.trnLsnPath ? 'active' : '', 'node__label']"
+                @click="handleClick(node)">{{node.trnLsnTitle}}
+            </span>
+        </div>
+
         <div v-if="showChildren">
             <TreeViewNode v-for="subCat in node.categories" v-bind:key="subCat.trnCatPath" :node="subCat"
                           :depth="depth+1"/>
-            <TreeViewNode v-for="subCat in node.lessons" v-bind:key="subCat.trnLsnPath" :node="subCat"
+            <TreeViewNode v-for="lesson in node.lessons" v-bind:key="lesson.trnLsnPath" :node="lesson"
                           :depth="depth+1"/>
-            <!--<TreeViewLesson v-if="showChildren" :lessons="node.lessons" :depth="depth+1"/>-->
         </div>
     </div>
-
 
 </template>
 
 <script>
 
-    import {mapGetters} from "vuex";
+    import {mapState} from 'vuex';
 
     export default {
         props: ['node', 'depth'],
         name: "TreeViewNode",
-
         data: () => ({
             showChildren: true,
-            isActive: false,
         }),
-        created() {
-            if (this.currentLesson.trnLsnPath)
-                this.isActive = this.node.trnLsnPath !== undefined && this.node.trnLsnPath === this.currentLesson.trnLsnPath;
-            else
-                this.isActive = false
-
-            if (this.currentLesson.trnLsnPath)
-                this.showChildren = this.currentLesson.trnLsnPath.includes(this.node.trnLsnPath) || this.currentLesson.trnLsnPath.includes(this.node.trnCatPath);
-            else
-                this.showChildren = false
-        },
         computed: {
             indent() {
-                return {transform: `translate(${this.depth * 50}px)`}
+                return {transform: `translate(${this.depth * 20}px)`}
             },
-            ...mapGetters([
-                'currentLesson',
-                'tree',
-            ])
+            ...mapState(['currentLesson']),
         },
         methods: {
-            toggleChildren(node) {
+            handleClick(node) {
                 if (node.trnCatPath)
                     this.showChildren = !this.showChildren;
                 else
@@ -60,23 +47,32 @@
 
 <style lang="scss" scoped>
     @import "../assets/sass/utils/variables";
+    @import "../assets/sass/utils/mixins";
 
-    .node {
-        border-bottom-right-radius: $radius-tree-element;
-        border-top-right-radius: $radius-tree-element;
-    }
 
-    .node__text {
+    .label-wrapper {
+        color: white;
 
-        &:hover {
-            border-bottom-right-radius: $radius-tree-element;
-            border-top-right-radius: $radius-tree-element;
-            background-color: rgba(255, 255, 255, 0.1);
-            cursor: pointer;
+        .node__label {
+            font-size: 1.3rem;
+            display: block;
+            @include rounded-right-corners;
+            padding: 8px;
+            margin: 0;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                cursor: pointer;
+            }
+
+            &.active:hover {
+                background-color: $color-active;
+            }
         }
+
     }
 
     .active {
-        background-color: red;
+        background-color: $color-active;
     }
 </style>
