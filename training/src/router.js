@@ -1,8 +1,6 @@
 import VueRouter from 'vue-router'
 import LessonItem from "./components/LessonItem"
 import HomePage from "./components/HomePage"
-import Courses from "./components/Courses"
-import Lessons from "./components/Lessons"
 import PageNotFound from "./components/PageNotFound"
 import SandBoxRedirect from "./components/SandBoxRedirect"
 import SandBoxForm from "./components/SandBoxForm"
@@ -12,10 +10,6 @@ import CustomTree from "./components/CustomTree";
 const routes = [
     { path: '/', component: HomePage },
     { path: '/home', component: HomePage },
-    { path: '/courses', component: Courses },
-    { path: '/courses/:categoryPath', component: Courses },
-    { path: '/courses/*', component: Courses },
-    { path: '/lessons', component: Lessons },
     { path: '/lessonItem/*', component: LessonItem },
     { path: '/sandbox/:demandId', component: SandBoxRedirect },
     { path: '/sandbox-demand', component: SandBoxForm },

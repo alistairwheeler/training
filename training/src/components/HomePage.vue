@@ -19,50 +19,21 @@
                 </div>
             </div>
             <nav>
-                <ul class="__links">
-                    <li>
-                        <v-btn x-large class="text-white" link color="primary"
-                               @click="redirectTo('https://simplicite.fr/')">Discover our offers
-                        </v-btn>
-                    </li>
-                    <li>
-                        <v-btn x-large class="text-white" link color="primary"
-                               @click="redirectTo('https://docs.simplicite.io/')"> Read the Documentation
-                        </v-btn>
-                    </li>
-                    <li>
-                        <v-btn x-large class="text-white" link color="primary"
-                               @click="redirectTo('https://simplicite.fr/cas-clients/')">Watch Examples
-                        </v-btn>
-                    </li>
+                <ul class="nav-links">
+                    <li><a href="https://simplicite.fr/" target="_blank">Discover our offers</a></li>
+                    <li><a href="https://docs.simplicite.io/" target="_blank">Read the Documentation</a></li>
+                    <li><a href="https://simplicite.fr/cas-clients/" target="_blank">Watch Examples</a></li>
                 </ul>
             </nav>
         </div>
-
-
-
-
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
 
     export default {
         name: 'HomePage',
-        data: () => ({
-            open: ['public'],
-        }),
-        methods: {
-            redirectTo(url) {
-                window.location.href = url;
-            }
-        },
-        computed: {
-            ...mapGetters([
-                'treeAsVuetifyTree',
-            ])
-        },
     }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -112,10 +83,27 @@
         width: 80%;
         align-self: center;
 
-        .__links {
+        .nav-links {
             display: flex;
             flex-flow: row;
             justify-content: space-around;
+            box-sizing: border-box;
+
+            li {
+                a {
+                    padding: 10px;
+                    color: $color-primary;
+                    font-size: 15px;
+                    display: block;
+                    border-radius: $regular-radius;
+                    border: solid 1px $color-primary;
+
+                    &:hover {
+                        text-decoration: none;
+                        background-color: lighten($color-primary, 60%);
+                    }
+                }
+            }
         }
     }
 
