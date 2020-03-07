@@ -25,10 +25,7 @@
 
         <div id="main-content">
             <div id="side-menu" class="open">
-                <TreeViewNode v-for="motherCat in this.tree"
-                              :key="motherCat.trnCatPath"
-                              :node="motherCat"
-                              :depth="0"/>
+                <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"/>
             </div>
             <router-view id="content" :key="$route.fullPath" v-if="this.treeLoaded"/>
         </div>
@@ -248,6 +245,7 @@
 
     .simplicite-logo {
         background-image: url("../public/Logo_Simplicite_Noir.png");
+        background-repeat: no-repeat;
         background-size: contain;
         z-index: 200;
         width: 20%;
