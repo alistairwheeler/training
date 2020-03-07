@@ -2,17 +2,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router' //Documentation + Guide : https://router.vuejs.org/guide/
-import vuetify from './plugins/vuetify' //Documentation + Guide : https://vuetifyjs.com/en/getting-started/quick-start
 import Vuex from 'vuex' //Documentation + Guide : https://vuex.vuejs.org/guide/
 import VueHighlightJS from 'vue-highlightjs'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
 //3. Importing the router from router.js :
 import router from './router'
 //4. Importing the Store instance from store.js :
 import store from './store'
 
-Vue.use(VueAxios, axios);
 Vue.use(VueHighlightJS);
 
 Vue.config.productionTip = false;
@@ -39,7 +35,6 @@ else
     el: '#app',
     store, //injects the store into all child components so they can use it
     render: h => h(App),
-    vuetify,
     router: router,
   }).$mount('#app');
 
