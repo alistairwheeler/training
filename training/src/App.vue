@@ -70,45 +70,42 @@
 
         <div id="top-menu">
 
-            <div class="unicode-symbol" @click="switchMenu">&#9776;</div>
+            <div class="hamburger unicode-symbol" @click="switchMenu">&#9776;</div>
 
-            <div class="unicode-symbol reverse" @click="navigateToPreviousLesson()">
-                <span>&#9658;</span>
-                <span class="unicode-symbol">&#10074; </span>
+            <div class="controls">
+
+                <div class="unicode-symbol reverse" @click="navigateToPreviousLesson()" v-show="checkIfRouteIsLesson()">
+                    <span>&#9658;</span>
+                    <span class="unicode-symbol">&#10074; </span>
+                </div>
+
+                <div class="unicode-symbol" @click="navigateToNextLesson()" v-show="checkIfRouteIsLesson()">
+                    <span>&#9658;</span>
+                    <span>&#10074;</span>
+                </div>
+
+                <a class="btn-link" href="http://community.simplicite.io" target="_blank">community</a>
+
+                <a class="btn-link" href="https://github.com/simplicitesoftware" target="_blank">Github </a>
+
+               <!-- <v-btn fab icon class="btn-link" href="http://community.simplicite.io" target="_blank">
+                    <v-icon>mdi-forum</v-icon>
+                </v-btn>
+
+                <v-btn fab icon class="btn-link" href="https://github.com/simplicitesoftware" target="_blank">
+                    <v-icon>mdi-git</v-icon>
+                </v-btn>-->
             </div>
-
-            <div class="unicode-symbol" @click="navigateToNextLesson()">
-                <span>&#9658;</span>
-                <span>&#10074;</span>
-            </div>
-
-
-            <v-btn id="previous-button" v-show="checkIfRouteIsLesson()" fab icon
-                   @click="navigateToPreviousLesson()">
-                <v-icon>mdi-skip-previous</v-icon>
-            </v-btn>
-
-            <v-btn id="next-button" v-show="checkIfRouteIsLesson()" fab icon @click="navigateToNextLesson()">
-                <v-icon>mdi-skip-next</v-icon>
-            </v-btn>
-
-            <v-btn fab icon class="btn-link" href="http://community.simplicite.io" target="_blank">
-                <v-icon>mdi-forum</v-icon>
-            </v-btn>
-
-            <v-btn fab icon class="btn-link" href="https://github.com/simplicitesoftware" target="_blank">
-                <v-icon>mdi-git</v-icon>
-            </v-btn>
-
         </div>
         <div id="main-content">
-            <div id="side-menu">
+            <div id="side-menu" class="open">
                 <TreeViewNode v-for="motherCat in this.tree"
                               :key="motherCat.trnCatPath"
                               :node="motherCat"
                               :depth="0"/>
             </div>
-            <router-view id="content" :key="$route.fullPath" v-if="$store.state.treeLoaded"/>
+            <!--<router-view id="content" :key="$route.fullPath" v-if="$store.state.treeLoaded"/>-->
+            <router-view id="content" :key="$route.fullPath" v-if="this.treeLoaded"/>
         </div>
 
         <!--<header class="top-menu">
@@ -158,7 +155,7 @@
         }),
         computed: {
             ...mapGetters(['getLessonFromPath']),
-            ...mapState(['tree', 'treeAsVuetifyTree', 'currentLesson', 'drawerOpen'])
+            ...mapState(['tree', 'treeLoaded','treeAsVuetifyTree', 'currentLesson', 'drawerOpen'])
         },
         methods: {
             switchMenu() {
@@ -260,11 +257,20 @@
             width: 100%;
             display: flex;
             flex-flow: row;
+            justify-content: space-between;
             align-items: center;
-            //justify-content: flex-end;
             padding: 8px;
-            background: linear-gradient(to right, $color-primary 40%, $color-secondary);
+            background: #2b2b2b;
+            //background: linear-gradient(to right, $color-primary 40%, $color-secondary);
             color: white;
+
+            .hamburger {
+            }
+
+            .controls {
+                display: flex;
+                flex-direction: row;
+            }
 
             .unicode-symbol {
                 font-size: $burger-size;
@@ -296,6 +302,7 @@
                 &.open {
                     width: 250px;
                 }
+
             }
 
             #content {
@@ -306,23 +313,6 @@
                 bottom: 0;
             }
         }
-    }
-
-
-    .content-wrapper {
-        .side-menu {
-            overflow: hidden;
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background: linear-gradient($color-primary, $color-secondary);
-            transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
-        }
-
-
     }
 
     .simplicite-logo {
@@ -369,11 +359,8 @@
         }
     }
 
-    #previous-button, #next-button {
-        outline: none;
-    }
-
     .reverse {
         transform: rotate(180deg);
     }
+
 </style>

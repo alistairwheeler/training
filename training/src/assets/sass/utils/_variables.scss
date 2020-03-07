@@ -19,11 +19,11 @@ $color-code-comment: purple;
 $color-code-tag: darkgreen;
 $color-code-attribute: darkblue;
 
-$color-active: green;
+$color-active: $color-primary;
 
 //BORDER-RADIUS
 $media-containers: 4px;
-$radius-tree-element: 30px;
+$radius-tree-element: 8px;
 
 $burger-size: 30px;
 $header-height: 70px;
