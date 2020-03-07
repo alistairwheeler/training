@@ -51,7 +51,7 @@
 
 
     .label-wrapper {
-        color: white;
+        overflow: hidden;
 
         .node__label {
             font-size: 1.3rem;

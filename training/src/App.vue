@@ -157,7 +157,7 @@
                     border-radius: 9px;
                     left: 0;
                     //transform: rotate(0deg);
-                    transition: .25s ease-in-out;
+                    transition: $duration-drawer-collapse ease-in-out;
 
                     &:nth-child(1) {
                         top: 0px;
@@ -217,17 +217,19 @@
 
             #side-menu {
                 background: linear-gradient($color-primary 40%, $color-secondary);
-                //background: #2b2b2b;
                 width: 0px;
                 position: absolute;
                 z-index: 1000;
                 top: 0;
                 bottom: 0;
                 overflow: hidden;
-                transition: 0.25s;
+                transition: $duration-drawer-collapse ease-in-out;
+                color: rgba(0,0,0,0);
+                white-space: nowrap;
 
                 &.open {
-                    width: 250px;
+                   width: 250px;
+                   color: rgba(white, 1);
                 }
 
             }
