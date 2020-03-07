@@ -6,17 +6,17 @@
         <p>Pour démarrer au mieux avec votre sandbox, voici les liens vers quelques ressources utiles :</p>
         <ul class="sandbox-redirect__list">
             <li>
-                <p>Notre site de formation (gratuit) : <a href="https://docs2.dev.simplicite.io">https://docs2.dev.simplicite.io</a></p>
+                <p>Notre site de formation (gratuit) : <a target="_blank" href="https://docs2.dev.simplicite.io">https://docs2.dev.simplicite.io</a></p>
                 <p>Vous y trouverez toutes les ressources pour apprendre à vous servir de Simplicité. Pour votre
                     première prise en main, nous vous conseillons de suivre la formation, pour vous apprendre les bases
                     du développement simplicité.</p>
             </li>
             <li>
-                <p>Notre forum communautaire : <a href="http://community.simplicite.io/">http://community.simplicite.io/</a></p>
+                <p>Notre forum communautaire : <a target="_blank" href="http://community.simplicite.io/">http://community.simplicite.io/</a></p>
                 <p>Nos utilisateurs posent leurs questions et s'entraident sur ce forum. Vous y trouverez également des tips & tricks utiles.</p>
             </li>
             <li>
-                <p>Notre documentation : <a href="https://docs.simplicite.io/">https://docs.simplicite.io/</a></p>
+                <p>Notre documentation : <a target="_blank" href="https://docs.simplicite.io/">https://docs.simplicite.io/</a></p>
                 <p>Ici, vous trouverez la documentation de Simplicité.</p>
             </li>
 
@@ -48,13 +48,7 @@
     @import "../assets/sass/utils/variables";
 
     .sandbox-redirect {
-        /*display: flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: center;*/
-
-        width: 70%;
-        margin: 20px auto 20px auto;
+        margin: 40px;
         padding: 20px;
         display: flex;
         flex-flow: column nowrap;

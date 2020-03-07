@@ -66,14 +66,16 @@
             }
 
             &.active:hover {
-                background-color: $color-active;
+                //background-color: $color-active;
+                background: #2b2b2b;
             }
         }
 
     }
 
     .active {
-        background-color: $color-active;
+        //background-color: $color-active;
+        background: #2b2b2b;
     }
 
 </style>

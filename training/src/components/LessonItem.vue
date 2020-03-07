@@ -170,32 +170,8 @@
     .breadcrumb {
         border-bottom: $regular-thickness solid $light-grey;
         background-color: white;
-        padding: 0.3em;
-
-        &__item {
-            text-transform: uppercase;
-
-            &:hover {
-                cursor: pointer;
-            }
-        }
-    }
-
-    .occupy100percent {
-        height: 100%;
-        width: 100%;
-    }
-
-    video {
-        height: 100%;
-        width: 100%;
-    }
-
-    .breadcrumb {
-        border-bottom: $regular-thickness solid $light-grey;
-        background-color: white;
         // margin: $breadcrumb-margin 0 $breadcrumb-margin 0;
-        padding: 0.3em;
+        padding-bottom: 1em;
 
         &__item {
             text-transform: uppercase;

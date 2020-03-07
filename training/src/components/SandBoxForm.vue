@@ -161,7 +161,7 @@
 
     .sandbox-demand {
         width: 70%;
-        margin: 20px auto 20px auto;
+        margin: 40px;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
