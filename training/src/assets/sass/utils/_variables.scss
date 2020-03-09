@@ -3,7 +3,6 @@
 $color-primary: #20477a;
 $color-secondary: #387ED1;
 $color-accent: #399953;
-$color-active: black;
 $light-grey: #eee;
 $color-information: #e6f4fa;
 $color-success: #e6fae7;
@@ -17,11 +16,16 @@ $color-code-string: darkred;
 $color-code-comment: purple;
 $color-code-tag: darkgreen;
 $color-code-attribute: darkblue;
-
-//BORDER-RADIUS
-$regular-radius: 4px;
-$media-containers: $regular-radius;
-$radius-tree-element: 8px;
+  //TREE
+$color-tree-hover: rgba(255, 255, 255, 0.1);
+$color-tree-active: black;
+  //SANDBOX FORM
+$color-invalid-email: red;
+$color-form-title: #2B2B2B;
+$color-form-background: white;
+$color-border-form-element: #999;
+$color-focus-form-element: black;
+$color-separator: #A2A2A2;
 
 //DURATIONS
 $duration-caret-rotation: 175ms;
@@ -30,14 +34,11 @@ $duration-drawer-collapse: 0.3s;
 //WIDTHS
 $homepage-dividing-width: 50%;
 $drawer-width: 300px;
-
 $burger-width: 40px;
 $burger-height: 30px;
-$burger-size: 30px;
-$header-height: 50px;
+$logo-height: 50px;
 
 //PADDING & MARGIN
-$main-content-padding: 10px;
 $content-padding: 40px;
 $regular-thickness: 1px;
 $breadcrumb-margin: 20px;
@@ -45,7 +46,8 @@ $img-counter-margin: 10px;
 
 $paddings: (x-large: 30px, large: 20px, medium: 10px, small: 5px, x-small: 3px);
 $margins: (large: 40px, medium: 30px, small: 20px, x-small: 5px);
-$title-size: 3rem 2.4rem 2.2rem 1.8rem 1.2rem 1.1rem;
+$title-sizes: (x-large: 3rem, large: 2.4rem, medium: 2.2rem, small: 1.8rem, x-small: 1.2rem);
+$radius: (x-large: 30px, medium: 8px, regular: 4px);
 
 //SANDBOX FORM
 $color-invalid-email: red;
@@ -58,12 +60,4 @@ $color-button-text: white;
 $width-sandbox-form: 70%;
 $width-sandbox-icon: 18px;
 $height-separator: 500px;
-$padding-sandbox-form: 20px;
-$padding-sandbox-validate-button: 20px;
-$size-form-title: 2.5rem;
-$size-sandbox-button-text: 1.3rem;
-$margin-bottom-form-title: 40px;
-$margin-bottom-form-element: 30px;
-$margin-horizontal-separation: 20px;
-
 $redirect-image-width: 50%;

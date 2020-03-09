@@ -62,18 +62,18 @@
 
     .sandbox-redirect {
         width: 70%;
-        padding: $padding-sandbox-form;
+        padding: map-get($paddings, large);
         display: flex;
         flex-flow: column nowrap;
-        border-radius: $regular-radius;
+        border-radius: map-get($radius, regular);;
         background-color: $color-form-background;
         @include box-shadow;
 
         &__title {
             font-weight: bold;
             color: $color-form-title;
-            font-size: $size-form-title;
-            margin-bottom: $margin-bottom-form-element;
+            font-size: map-get($title-sizes, large);
+            margin-bottom: map-get($margins, medium);
         }
 
         .end-text {
@@ -99,8 +99,8 @@
      .sandbox-image{
          max-width: $redirect-image-width;
          align-self: center;
-         margin-bottom: $margin-bottom-form-element;
-         border-radius: $regular-radius;
+         margin-bottom: map-get($margins, medium);
+         border-radius: map-get($radius, regular);;
     }
 
 </style>

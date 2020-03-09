@@ -31,10 +31,6 @@
                 <router-view id="router" :key="$route.fullPath" v-if="this.treeLoaded"/>
             </main>
         </div>
-        <!--<div id="popup">
-            <div class="overlay" @click="disableOverlay">overlay</div>
-            <div class="popup">hello</div>
-        </div>-->
 
     </div>
 </template>
@@ -110,7 +106,6 @@
     @import "assets/sass/utils/mixins";
 
     * {
-        @include no-padding-margin;
         list-style-type: none;
         outline: 0;
         font-family: 'Source Sans Pro', sans-serif;
@@ -189,9 +184,10 @@
                 align-items: center;
 
                 .control {
-                    margin-left: 20px;
-                    padding: 10px;
-                    border-radius: 30px;
+                    margin-left: map-get($margins, small);
+                    padding: map-get($paddings, medium);
+                    border-radius: map-get($radius, x-large);
+                    color: white;
 
                     &:hover {
                         background-color: rgba(255, 255, 255, 0.1);
@@ -206,7 +202,7 @@
                 background-size: contain;
                 z-index: 200;
                 width: 20%;
-                height: $header-height;
+                height: $logo-height;
                 margin: 5px 5px 5px 16px;
                 filter: invert(100%);
 
@@ -258,8 +254,7 @@
             main {
                 display: block;
                 width: 100%;
-                //margin: $main-content-padding;
-                padding: $main-content-padding;
+                padding: map-get($paddings, medium);
 
                 #router {
                     width: 100%;
@@ -270,10 +265,10 @@
     }
 
     a {
-        color: white;
+        color: black;
 
         &:visited {
-            color: white;
+            color: black;
             text-decoration: none;
         }
     }

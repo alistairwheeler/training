@@ -1,6 +1,11 @@
 <template>
         <div id="outer-div">
-            <div class="row-1">
+            <div class="card">
+                <h2>Developer your Apps Quicker</h2>
+            </div>
+            <div></div>
+            <div></div>
+            <!--<div class="row-1">
                 <div id="video-wrapper">
                     <iframe src="https://player.vimeo.com/video/359243007"
                             width="712" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
@@ -24,7 +29,7 @@
                     <li><a href="https://docs.simplicite.io/" target="_blank">Read the Documentation</a></li>
                     <li><a href="https://simplicite.fr/cas-clients/" target="_blank">Watch Examples</a></li>
                 </ul>
-            </nav>
+            </nav>-->
         </div>
 </template>
 
@@ -69,7 +74,7 @@
         color: $color-secondary;
 
         &__title {
-            font-size: nth($title-size, 1)+1rem;
+            font-size: map-get($title-sizes, x-large)+1rem;
         }
 
         &__promotion {
@@ -94,7 +99,7 @@
                     color: $color-primary;
                     font-size: 15px;
                     display: block;
-                    border-radius: $regular-radius;
+                    border-radius: map-get($radius, regular);;
                     border: solid 1px $color-primary;
 
                     &:hover {

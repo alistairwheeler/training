@@ -137,7 +137,7 @@
         margin: 1em;
         //padding: 0.5em;
         background: white;
-        border-radius: $media-containers;
+        border-radius: map-get($radius, regular);;
         @include box-shadow;
         overflow: auto;
     }
@@ -171,7 +171,6 @@
     .breadcrumb {
         border-bottom: $regular-thickness solid $light-grey;
         background-color: white;
-        // margin: $breadcrumb-margin 0 $breadcrumb-margin 0;
         padding-bottom: 1em;
 
         &__item {
@@ -191,7 +190,7 @@
     /* ----- LESSON LESSON ----- */
     .lesson-title {
         color: $color-primary;
-        font-size: nth($title-size, 1) + 1rem;
+        font-size: map-get($title-sizes, x-large) + 1rem;
         font-weight: bold;
         margin-top: map-get($margins, medium);
     }
@@ -201,34 +200,34 @@
         overflow: hidden;
 
         & ::v-deep h1 {
-            font-size: nth($title-size, 1);
+            font-size: map-get($title-sizes, x-large);
         }
 
         & ::v-deep h2 {
             /* ::v-deep is used instead of >>> because we are using sass (with scss syntax). it is a deep selector to apply styles ot the v-html content*/
-            font-size: nth($title-size, 2);
+            font-size: map-get($title-sizes, large);
             font-weight: bold;
             color: $color-secondary;
         }
 
         & ::v-deep h3 {
-            font-size: nth($title-size, 3);
+            font-size: map-get($title-sizes, medium);
             font-weight: bold;
             color: $color-secondary;
         }
 
         & ::v-deep h4 {
-            font-size: nth($title-size, 4);
+            font-size: map-get($title-sizes, small);
             color: $color-secondary;
         }
 
         & ::v-deep h5 {
-            font-size: nth($title-size, 5);
+            font-size: map-get($title-sizes, x-small);
             color: $color-secondary;
         }
 
         & ::v-deep h6 {
-            font-size: nth($title-size, 6);
+            font-size: map-get($title-sizes, x-small) - 0.1rem;
             color: $color-secondary;
         }
 
@@ -240,7 +239,7 @@
         & ::v-deep .success,
         & ::v-deep .warning,
         & ::v-deep .error {
-            border-radius: $regular-radius;
+            border-radius: map-get($radius, regular);;
             padding: map-get($paddings, x-small);
             margin: map-get($margins, x-small);
         }
@@ -287,24 +286,6 @@
 
         & ::v-deep img {
             margin-left: $content-padding;
-        }
-    }
-
-    .empty-content {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-self: center;
-        align-items: center;
-
-        button {
-            padding: 20px;
-            font-size: 1.5rem;
-            border: solid $color-primary 2px;
-            border-radius: $regular-radius;
-
-            &:hover {
-                background-color: #4fc3f7;
-            }
         }
     }
 

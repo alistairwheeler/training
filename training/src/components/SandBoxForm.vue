@@ -171,21 +171,21 @@
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
-        border-radius: $regular-radius;
+        border-radius: map-get($radius, regular);;
         @include box-shadow;
     }
 
     .sandbox-form {
         width: $width-sandbox-form;
-        padding: $padding-sandbox-form;
+        padding: map-get($paddings, large);
         display: flex;
         flex-flow: column;
 
         &__title {
             font-weight: bold;
             color: $color-form-title;
-            font-size: $size-form-title;
-            margin-bottom: $margin-bottom-form-title;
+            font-size: map-get($title-sizes, large);
+            margin-bottom: map-get($margins, large);
         }
 
         label {
@@ -195,7 +195,7 @@
         &__element {
             display: flex;
             flex-flow: column;
-            margin-bottom: $margin-bottom-form-element;
+            margin-bottom: map-get($margins, medium);
         }
 
 
@@ -228,14 +228,14 @@
 
         .validate-button {
             box-sizing: border-box;
-            padding: $padding-sandbox-validate-button;
+            padding: map-get($paddings, large);
             border: none;
-            border-radius: $regular-radius;
+            border-radius: map-get($radius, regular);;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: $size-sandbox-button-text;
+            font-size: map-get($title-sizes, x-small);
             background-color: lighten($color-primary, 10%);
             color: $color-button-text;
 
@@ -256,12 +256,12 @@
         background-color: $color-separator;
         height: $height-separator;
         align-self: center;
-        margin: 0 $margin-horizontal-separation;
+        margin: 0 map-get($margins, small);
     }
 
     .side-content {
         width: (100%-$width-sandbox-form);
-        border-radius: 0 $regular-radius $regular-radius 0;
+        border-radius: 0 map-get($radius, regular) map-get($radius, regular) 0;
         padding: 20px;
         position: relative;
         display: flex;
@@ -274,7 +274,7 @@
             flex-direction: column;
 
             ul {
-                margin: 30px 0;
+                margin: map-get($margins, medium) 0;
             }
         }
 
@@ -300,7 +300,7 @@
     }
 
     .server-error {
-        border-radius: $regular-radius;
+        border-radius: map-get($radius, regular);;
         background-color: $color-error;
         padding: map-get($paddings, medium);
         margin-top: 20px;
