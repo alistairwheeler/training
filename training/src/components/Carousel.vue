@@ -105,17 +105,18 @@
 
     /* Transition */
     .v-enter, .v-leave-to{
-      transform: scale(0);
+      //transform: scale(0);
+      opacity: 0;
     }
     .v-enter-to, .v-leave{
-      transform: scale(1);
+      //transform: scale(1);
+      opacity: 1;
     }
-    .v-leave-active{
-      transition-duration: 0.5s;
+    .v-leave-active, .v-enter-active{
+      transition-duration: 0.2s;
     }
     .v-enter-active{
-      transition-delay: 0.5s;
-      transition-duration: 0.5s;
+      transition-delay: 0.2s;
     }
 
 
