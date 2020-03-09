@@ -1,10 +1,35 @@
 <template>
-        <div id="outer-div">
-            <div class="card">
-                <h2>Developer your Apps Quicker</h2>
-            </div>
-            <div></div>
-            <div></div>
+        <div class="home-page-wrapper">
+            <section class="branding">Bienvenue chez simplicité</section>
+            <ul class="advantages">
+                <li class="card orange"><h2 class="card__title">Bienvenue au Training Center</h2>
+                    <p class="card__body">C'est ici que vous trouverez les ressources pour apprendre à vous servir de
+                        Simplicité, et des applications que vous créerez avec. </p>
+                    <div class="card__button">
+                        <p>Learn more</p>
+                        <i class="material-icons">arrow_forward</i>
+                    </div>
+                </li>
+                <li class="card blue"><h2 class="card__title">Découvrez les profils utilisateurs de vos applications </h2>
+                    <p class="card__body">
+                        Découvrez les possibilités offertes par Simplicité à tous les utilisateurs
+                        d'une application: Développeur, Exploitant, utilisateur
+                    </p>
+                    <div class="card__button">
+                        <p>Learn more</p>
+                        <i class="material-icons">arrow_forward</i>
+                    </div>
+                </li>
+                <li class="card green"><h2 class="card__title">Certifications</h2>
+                    <p class="card__body">
+                        Click here to attempt one of our Simplicité certifications, to garanty your
+                        expertise in building projects with the Simplicité platform</p>
+                    <div class="card__button">
+                        <p>Learn more</p>
+                        <i class="material-icons">arrow_forward</i>
+                    </div>
+                </li>
+            </ul>
             <!--<div class="row-1">
                 <div id="video-wrapper">
                     <iframe src="https://player.vimeo.com/video/359243007"
@@ -47,10 +72,78 @@
     @import "../assets/sass/utils/variables";
     @import "../assets/sass/utils/mixins";
 
-    #outer-div {
-        @include flex-column-nowrap;
-        align-items: center;
+    .home-page-wrapper {
+        /*@include flex-column-nowrap;
+        align-items: center;*/
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
+
+    .branding {
+        width: $branding-width;
+        background-color: #399953;
+    }
+
+    .advantages {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 98%-$branding-width;
+        margin: 0;
+    }
+
+    .card {
+        padding: map-get($paddings, large);
+        border-radius: map-get($radius, regular);
+
+        @include fillParent(100%, 30%);
+        color: white;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &__title {
+            margin: 0;
+        }
+
+        &__button {
+            align-self: flex-end;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: map-get($paddings, small);
+            border-radius: map_get($radius, regular);
+
+            &:hover {
+                background-color: $color-tree-hover;
+            }
+
+            p {
+                padding-right: map-get($paddings, medium);
+                margin: 0;
+            }
+        }
+
+        &.orange {
+            background-color: rgb(255,62,0);
+        }
+        &.blue {
+            background-color: cornflowerblue;
+        }
+        &.green {
+            background-color: forestgreen;
+        }
+    }
+
+
+
+
 
     .row-1 {
         display: flex;
