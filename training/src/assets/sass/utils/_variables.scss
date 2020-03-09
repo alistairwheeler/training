@@ -1,16 +1,15 @@
 //COLORS
+  //MAIN
 $color-primary: #20477a;
 $color-secondary: #387ED1;
 $color-accent: #399953;
+$color-active: black;
 $light-grey: #eee;
-$light-black: #2B2B2B;
-$black: #222222;
-$treeView-active: #e6eced;
 $color-information: #e6f4fa;
 $color-success: #e6fae7;
 $color-warning: #f5e5d5;
 $color-error: #ffc9c9;
-
+  //CODE
 $color-code-background: #F7F7F7;
 $color-code-regular-text: #4D515C;
 $color-code-keyword: blue;
@@ -19,44 +18,52 @@ $color-code-comment: purple;
 $color-code-tag: darkgreen;
 $color-code-attribute: darkblue;
 
-$color-active: $color-primary;
-
 //BORDER-RADIUS
-$media-containers: 4px;
+$regular-radius: 4px;
+$media-containers: $regular-radius;
 $radius-tree-element: 8px;
+
+//DURATIONS
+$duration-caret-rotation: 175ms;
+$duration-drawer-collapse: 0.3s;
+
+//WIDTHS
+$homepage-dividing-width: 50%;
+$drawer-width: 300px;
 
 $burger-width: 40px;
 $burger-height: 30px;
 $burger-size: 30px;
 $header-height: 50px;
 
-//DURATIONS
-$duration-caret-rotation: 175ms;
-$duration-drawer-collapse: 0.3s;
-
 //PADDING & MARGIN
-$homepage-dividing-width: 50%;
-$aside-width: 50%;
-$large-width: 55%;
-$thin-width: 45%;
+$main-content-padding: 10px;
 $content-padding: 40px;
 $regular-thickness: 1px;
-$regular-radius: 4px;
-$media-width: 80%;
-$media-height: 45%;
 $breadcrumb-margin: 20px;
-$short-hover-duration: 200ms;
-$long-hover-duration: 400ms;
-$preview-pic-container-width: 30%;
-$preview-pic-width: 70%;
-$preview-pic-height: 80%;
-
 $img-counter-margin: 10px;
 
 $paddings: (x-large: 30px, large: 20px, medium: 10px, small: 5px, x-small: 3px);
 $margins: (large: 40px, medium: 30px, small: 20px, x-small: 5px);
 $title-size: 3rem 2.4rem 2.2rem 1.8rem 1.2rem 1.1rem;
 
-//SANDBOX DEMAND
-$width-sandbox-form: 60%;
+//SANDBOX FORM
+$color-invalid-email: red;
+$color-form-title: #2B2B2B;
+$color-form-background: white;
+$color-border-form-element: #999;
+$color-focus-form-element: black;
+$color-separator: #A2A2A2;
+$color-button-text: white;
+$width-sandbox-form: 70%;
 $width-sandbox-icon: 18px;
+$height-separator: 500px;
+$padding-sandbox-form: 20px;
+$padding-sandbox-validate-button: 20px;
+$size-form-title: 2.5rem;
+$size-sandbox-button-text: 1.3rem;
+$margin-bottom-form-title: 40px;
+$margin-bottom-form-element: 30px;
+$margin-horizontal-separation: 20px;
+
+$redirect-image-width: 50%;

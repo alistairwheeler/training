@@ -121,6 +121,7 @@
 
     .lesson-item-wrapper {
         position: relative;
+
     }
 
     .grid-lesson {

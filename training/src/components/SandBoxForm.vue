@@ -1,64 +1,63 @@
 <template>
-    <div class="sandbox-demand">
-        <div class="sandbox-form">
-            <h1 class="sandbox-form__title">Demandez une Sandbox</h1>
-            <form >
-                <p class="sandbox-form__element">
-                    <input id="email" class="sandbox-form__input required" type="email" name="email" placeholder="Votre email" required/>
-                </p>
-                <p class="sandbox-form__element">
-                    <input id="name" class="sandbox-form__input" type="text" name="name" placeholder="Nom"/>
-                </p>
-                <p class="sandbox-form__element">
-                    <input id="firstName" class="sandbox-form__input" type="text" name="firstName" placeholder="Prénom"/>
-                </p>
-                <p class="sandbox-form__element">
-                    <input id="company" class="sandbox-form__input" type="text" name="company" placeholder="Société"/>
-                </p>
-                <p class="sandbox-form__element">
-                    <input id="phone" class="sandbox-form__input" type="tel" name="phone" placeholder="Téléphone"/>
-                </p>
-                <p class="sandbox-form__element">
-                    <label>Profil</label>
-                    <select id="profile" name="profile">
-                        <option value="NA" selected>--</option>
-                        <option value="Profil technique (IT)">Profil technique (IT)</option>
-                        <option value="Profil métier">Profil métier</option>
-                        <option value="Étudiant">Etudiant</option>
-                        <option value="Autre">Autres</option>
-                    </select>
-                </p>
-                <p>
-                    <input id="newsletter" class="newsletter-input" type="checkbox" name="newsletter" />
-                    <label  for="newsletter">Vous acceptez la newsletter</label>
-                </p>
-            </form>
-            <button v-show="!showSpinner" class="validate-button" @click="sendDemand()">Essayer Gratuitement</button>
-            <div v-if="showSpinner" class="spinner-wrapper"><Spinner ></Spinner></div>
-            <div v-show="serverDown" class="server-error">Il semble qu'il y ait eu une erreur. Veuillez réessayer</div>
 
-        </div>
-        <div class="vertical-separator"></div>
-        <div class="side-content">
-            <!--<img class="side-content__image" src="https://megastuces.com/wp-content/uploads/2017/02/sandbox.png" alt="sandbox image">-->
-            <div class="side-content__brand">
-                <h2 class="side-content__message">Créez vos applications dès maintenant avec Simplicité</h2>
-                <ul>
-                    <li><img class="side-content__icon" src="../../public/hand-pen.png">Remplissez le formulaire</li>
-                    <li><img class="side-content__icon" src="../../public/email.png">Validez votre demande avec l'email</li>
-                    <li><img class="side-content__icon" src="../../public/rocket.png">C'est tout bon, à vous de jouer !</li>
-                </ul>
-                <img class="side-content__brand-image" src="../../public/developer.png" alt="computer image">
-                <!--<p class="side-content__text">pour toutes vos applications</p>-->
+    <div class="wrapper">
+        <div class="sandbox-demand">
+            <div class="sandbox-form">
+                <h1 class="sandbox-form__title">Demandez une Sandbox</h1>
+                <form >
+                    <p class="sandbox-form__element">
+                        <input id="email" class="sandbox-form__input required" type="email" name="email" placeholder="Votre email" required/>
+                    </p>
+                    <p class="sandbox-form__element">
+                        <input id="name" class="sandbox-form__input" type="text" name="name" placeholder="Nom"/>
+                    </p>
+                    <p class="sandbox-form__element">
+                        <input id="firstName" class="sandbox-form__input" type="text" name="firstName" placeholder="Prénom"/>
+                    </p>
+                    <p class="sandbox-form__element">
+                        <input id="company" class="sandbox-form__input" type="text" name="company" placeholder="Société"/>
+                    </p>
+                    <p class="sandbox-form__element">
+                        <input id="phone" class="sandbox-form__input" type="tel" name="phone" placeholder="Téléphone"/>
+                    </p>
+                    <div class="sandbox-form__element">
+                        <label for="profile">Profil</label>
+                        <select id="profile" name="profile">
+                            <option value="NA" selected>--</option>
+                            <option value="Profil technique (IT)">Profil technique (IT)</option>
+                            <option value="Profil métier">Profil métier</option>
+                            <option value="Étudiant">Etudiant</option>
+                            <option value="Autre">Autres</option>
+                        </select>
+                    </div>
+                    <p>
+                        <input id="newsletter" class="newsletter-input" type="checkbox" name="newsletter" />
+                        <label  for="newsletter">Vous acceptez la newsletter</label>
+                    </p>
+                </form>
+                <button v-show="!showSpinner" class="validate-button" @click="sendDemand()">Essayer Gratuitement</button>
+                <div v-if="showSpinner" class="spinner-wrapper">
+                    <Spinner/>
+                </div>
+                <div v-show="serverDown" class="server-error">Il semble qu'il y ait eu une erreur. Veuillez réessayer</div>
+
             </div>
+            <div class="vertical-separator"></div>
+            <div class="side-content">
+                <div class="side-content__brand">
+                    <h2 class="side-content__message">Créez vos applications dès maintenant avec Simplicité</h2>
+                    <ul>
+                        <li><img class="side-content__icon" src="../../public/hand-pen.png">Remplissez le formulaire</li>
+                        <li><img class="side-content__icon" src="../../public/email.png">Validez votre demande avec l'email</li>
+                        <li><img class="side-content__icon" src="../../public/rocket.png">C'est tout bon, à vous de jouer !</li>
+                    </ul>
+                    <img class="side-content__brand-image" src="../../public/developer.png" alt="computer image">
+                </div>
 
-            <!--<div class="side-content__mail">
-                <img class="mail-icon" src="../../public/mail.svg">
-                <p>Un mail vous a été envoyé</p>
-            </div>-->
-
+            </div>
         </div>
     </div>
+
 
 </template>
 
@@ -141,7 +140,7 @@
             let mail = document.getElementById("email")
             mail.addEventListener("blur", () => {
                 if(mail.value === "" || mail.value === undefined || mail.value === null){
-                    mail.placeholder="Veuillez remplir ce champ";
+                    mail.placeholder="Veuillez renseigner votre email";
                     mail.classList.add("empty-input")
                 }
                 else
@@ -159,34 +158,34 @@
     @import "../assets/sass/utils/variables";
     @import "../assets/sass/utils/mixins";
 
+    .wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $color-form-background;
+    }
+
     .sandbox-demand {
-        width: 70%;
-        margin: 40px;
+        width: $width-sandbox-form;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
         border-radius: $regular-radius;
-        background-color: white;
         @include box-shadow;
-    }
-
-    .required:after {
-        content: '*';
-        color: red;
-        display: inline-block;
     }
 
     .sandbox-form {
         width: $width-sandbox-form;
-        padding: 20px;
+        padding: $padding-sandbox-form;
         display: flex;
         flex-flow: column;
 
         &__title {
             font-weight: bold;
-            color: #2B2B2B;
-            font-size: 2.5rem;
-            margin-bottom: 45px;
+            color: $color-form-title;
+            font-size: $size-form-title;
+            margin-bottom: $margin-bottom-form-title;
         }
 
         label {
@@ -196,20 +195,22 @@
         &__element {
             display: flex;
             flex-flow: column;
-            margin-bottom: 30px;
+            margin-bottom: $margin-bottom-form-element;
         }
 
+
         &__input {
-            border-bottom: 1px solid #999;
+            border: none;
+            border-bottom: 1px solid $color-border-form-element;
 
             &::placeholder {
-                color: #999
+                color: $color-border-form-element;
             }
 
             &:focus {
-                border-bottom: solid 1px black;
+                border-bottom: solid 1px $color-focus-form-element;
                 &::placeholder {
-                    color: black;
+                    color: $color-focus-form-element;
                 }
             }
         }
@@ -219,28 +220,27 @@
         }
 
         .empty-input {
-            border-bottom: 1px solid red;
+            border-bottom: 1px solid $color-invalid-email;
             &::placeholder {
-                color: red;
+                color: $color-invalid-email;
             }
         }
 
         .validate-button {
             box-sizing: border-box;
-            padding: 20px;
-            // border: solid $color-primary 1px;
+            padding: $padding-sandbox-validate-button;
+            border: none;
             border-radius: $regular-radius;
             display: flex;
             align-items: center;
             justify-content: center;
-            //color: $color-primary;
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: $size-sandbox-button-text;
             background-color: lighten($color-primary, 10%);
-            color: white;
+            color: $color-button-text;
 
             &.server-ok {
-                background-color: white;
+                background-color: $color-form-background;
                 color: $color-accent;
                 border: solid 2px $color-accent;
 
@@ -249,46 +249,32 @@
                 }
             }
         }
-
     }
 
     .vertical-separator {
         width: 2px;
-        background-color: #A2A2A2;
-        height: 500px;
+        background-color: $color-separator;
+        height: $height-separator;
         align-self: center;
-        margin: 0 20px 0 20px;
+        margin: 0 $margin-horizontal-separation;
     }
 
     .side-content {
         width: (100%-$width-sandbox-form);
-        border-radius: 0 4px 4px 0;
+        border-radius: 0 $regular-radius $regular-radius 0;
         padding: 20px;
         position: relative;
         display: flex;
         flex-flow: column nowrap;
         justify-content: space-around;
-        color: #2B2B2B;
-        //background: url("https://megastuces.com/wp-content/uploads/2017/02/sandbox.png");
-        /*background: linear-gradient(to right, rgba($color-secondary, 0.3),
-                rgba($color-secondary, 0.3)),*/
-        /*background: linear-gradient(to right, rgba(#2B2B2B, 1),
-                rgba(#2B2B2B, 1)),
-        url("https://megastuces.com/wp-content/uploads/2017/02/sandbox.png");*/
-
-
-        &__image {
-            max-width: 100%;
-            border-radius: $regular-radius;
-        }
+        color: $color-form-title;
 
         &__brand {
             display: flex;
             flex-direction: column;
 
             ul {
-                padding: 0;
-                margin-bottom: 30px;
+                margin: 30px 0;
             }
         }
 
@@ -300,24 +286,6 @@
             font-size: 2rem;
             font-weight: bold;
             margin-bottom: 30px;
-        }
-        &__text {
-            font-size: 1rem;
-        }
-
-        &__mail {
-            width: 60%;
-            height: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform: scale(0);
-            transition: transform 330ms ease-in-out;
-
-            .mail-icon {
-                width: 70%;
-                margin-bottom: 20px;
-            }
         }
 
         &__icon {

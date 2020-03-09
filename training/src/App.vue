@@ -22,21 +22,20 @@
             </div>
         </div>
 
-        <div id="main-content">
-            <aside id="aside" class="side-menu">
+        <div id="main-section">
+            <aside id="aside" class="side-menu open">
                 <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"/>
             </aside>
 
             <main id="main">
-                <router-view id="content" :key="$route.fullPath" v-if="this.treeLoaded"/>
+                <router-view id="router" :key="$route.fullPath" v-if="this.treeLoaded"/>
             </main>
-<!--            <div id="side-menu" class="open">
-                <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"/>
-            </div>
-            <router-view id="content" :key="$route.fullPath" v-if="this.treeLoaded"/>-->
         </div>
-        <div class="overlay" @click="disableOverlay">overlay</div>
-        <div class="popup">hello</div>
+        <!--<div id="popup">
+            <div class="overlay" @click="disableOverlay">overlay</div>
+            <div class="popup">hello</div>
+        </div>-->
+
     </div>
 </template>
 
@@ -56,17 +55,9 @@
             ...mapState(['tree', 'treeLoaded', 'treeAsVuetifyTree', 'currentLesson', 'drawerOpen'])
         },
         methods: {
-            disableOverlay() {
-                document.getElementsByClassName("overlay")[0].style.zIndex = '-1000';
-            },
             toggleMenu() {
-                /*document.getElementById("side-menu").classList.toggle("open");
-
-                */
-
                 document.getElementById("aside").classList.toggle("open");
                 document.getElementsByClassName("hamburger")[0].classList.toggle("open");
-
             },
             checkIfRouteIsLesson() {
                 return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
@@ -94,17 +85,12 @@
                 }
             },
             navigateHome() {
-                this.$router.push('/home')
+                this.$router.push('/')
                     .catch(() => console.log('Navigation Duplicated'));
             },
             shakeElement(elementId) {
                 document.getElementById(elementId).classList.add("shaked");
                 setTimeout(() => document.getElementById(elementId).classList.remove('shaked'), 150);
-
-            },
-            showMessage(message) {
-                this.snbText = message;
-                this.snackBar = true;
             },
         },
         async beforeCreate() {
@@ -213,115 +199,83 @@
                     }
                 }
             }
+
+            .simplicite-logo {
+                background-image: url("../public/Logo_Simplicite_Noir.png");
+                background-repeat: no-repeat;
+                background-size: contain;
+                z-index: 200;
+                width: 20%;
+                height: $header-height;
+                margin: 5px 5px 5px 16px;
+                filter: invert(100%);
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .shaked {
+                animation: headshake 100ms cubic-bezier(.4, .1, .6, .9);
+                animation-iteration-count: 2;
+            }
+
+            @keyframes headshake {
+                0% {
+                    background-color: $color-accent;
+                    border: solid $color-accent;
+                }
+                25% {
+                    transform: translateX(10%);
+                }
+                75% {
+                    transform: translateX(-10%);
+                }
+            }
+
         }
 
-        #main-content {
-            flex: 1 1;
-            background-color: #00bcd4;
+        #main-section {
+            flex: 1 1; //So the main content extends to the bottom of the page
             display: flex;
             flex-direction: row;
             width: 100%;
-            flex-grow: 1; //So the main content extends to the bottom of the page
             position: relative;
 
             aside {
                 display: block;
                 width: 0px;
                 height: 100%;
-                background-color: #399953;
+                color: white;
+                background: linear-gradient($color-primary 40%, $color-secondary);
                 transition: $duration-drawer-collapse ease-in-out;
 
                 &.open {
-                    background-color: grey;
-                    width: 300px;
+                    width: $drawer-width;
                 }
             }
 
             main {
                 display: block;
                 width: 100%;
-                margin: 10px;
-                background-color: #EF6565;
-            }
+                //margin: $main-content-padding;
+                padding: $main-content-padding;
 
-            #side-menu {
-                background: linear-gradient($color-primary 40%, $color-secondary);
-                width: 0px;
-                position: absolute;
-                z-index: 1000;
-                top: 0;
-                bottom: 0;
-                overflow: hidden;
-                transition: $duration-drawer-collapse ease-in-out;
-                color: rgba(0,0,0,0);
-                white-space: nowrap;
-
-                &.open {
-                   width: 250px;
-                   color: rgba(white, 1);
+                #router {
+                    width: 100%;
+                    height: 100%;
                 }
-
             }
         }
     }
 
     a {
         color: white;
+
         &:visited {
             color: white;
             text-decoration: none;
         }
     }
 
-    .simplicite-logo {
-        background-image: url("../public/Logo_Simplicite_Noir.png");
-        background-repeat: no-repeat;
-        background-size: contain;
-        z-index: 200;
-        width: 20%;
-        height: $header-height;
-        margin: 5px 5px 5px 16px;
-        filter: invert(100%);
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    .shaked {
-        animation: headshake 100ms cubic-bezier(.4, .1, .6, .9);
-        animation-iteration-count: 2;
-    }
-
-    @keyframes headshake {
-        0% {
-            background-color: $color-accent;
-            border: solid $color-accent;
-        }
-        25% {
-            transform: translateX(10%);
-        }
-        75% {
-            transform: translateX(-10%);
-        }
-    }
-
-    .popup {
-        position: absolute;
-        width: 40%;
-        height: 20%;
-        border-radius: $regular-radius;
-        background-color: #4fc3f7;
-        left: 50%-20%;
-        top: 50%-10%;
-        z-index: 1000;
-    }
-
-    .overlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0, 0.2);
-        z-index: 500;
-    }
 </style>

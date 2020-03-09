@@ -9,7 +9,6 @@ import CustomTree from "./components/CustomTree";
 //1. Routes definition
 const routes = [
     { path: '/', component: HomePage },
-    { path: '/home', component: HomePage },
     { path: '/lessonItem/*', component: LessonItem },
     { path: '/sandbox/:demandId', component: SandBoxRedirect },
     { path: '/sandbox-demand', component: SandBoxForm },

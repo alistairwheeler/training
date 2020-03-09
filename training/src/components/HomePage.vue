@@ -74,7 +74,7 @@
 
         &__promotion {
             font-size: 1.5rem;
-            color: $light-black;
+            color: black;
         }
     }
 
