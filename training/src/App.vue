@@ -9,7 +9,6 @@
             </div>
             <div class="simplicite-logo" @click="navigateHome"></div>
             <div class="controls">
-
                 <i id="previous-button" class="material-icons control" @click="navigateToPreviousLesson()"
                    v-show="checkIfRouteIsLesson()">skip_previous</i>
                 <i id="next-button" class="material-icons control" @click="navigateToNextLesson()"
@@ -24,11 +23,20 @@
         </div>
 
         <div id="main-content">
-            <div id="side-menu" class="open">
+            <aside id="aside" class="side-menu">
+                <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"/>
+            </aside>
+
+            <main id="main">
+                <router-view id="content" :key="$route.fullPath" v-if="this.treeLoaded"/>
+            </main>
+<!--            <div id="side-menu" class="open">
                 <TreeViewNode v-for="motherCat in this.tree" :key="motherCat.trnCatPath" :node="motherCat" :depth="0"/>
             </div>
-            <router-view id="content" :key="$route.fullPath" v-if="this.treeLoaded"/>
+            <router-view id="content" :key="$route.fullPath" v-if="this.treeLoaded"/>-->
         </div>
+        <div class="overlay" @click="disableOverlay">overlay</div>
+        <div class="popup">hello</div>
     </div>
 </template>
 
@@ -43,19 +51,22 @@
         components: {
             TreeViewNode
         },
-        data: () => ({
-            snackBar: false,
-            snbTimeOut: 1500,
-            snbText: '',
-        }),
         computed: {
             ...mapGetters(['getLessonFromPath']),
             ...mapState(['tree', 'treeLoaded', 'treeAsVuetifyTree', 'currentLesson', 'drawerOpen'])
         },
         methods: {
+            disableOverlay() {
+                document.getElementsByClassName("overlay")[0].style.zIndex = '-1000';
+            },
             toggleMenu() {
-                document.getElementById("side-menu").classList.toggle("open");
+                /*document.getElementById("side-menu").classList.toggle("open");
+
+                */
+
+                document.getElementById("aside").classList.toggle("open");
                 document.getElementsByClassName("hamburger")[0].classList.toggle("open");
+
             },
             checkIfRouteIsLesson() {
                 return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
@@ -117,14 +128,9 @@
         list-style-type: none;
         outline: 0;
         font-family: 'Source Sans Pro', sans-serif;
-    }
-
-    a {
-        color: white;
-        &:visited {
-            color: white;
-            text-decoration: none;
-        }
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
 
     .app {
@@ -136,6 +142,7 @@
             width: 100%;
             display: flex;
             flex-flow: row;
+            flex: 0 1 0;
             align-items: center;
             padding: 8px;
             background: linear-gradient(to right, $color-primary 40%, $color-secondary);
@@ -209,11 +216,33 @@
         }
 
         #main-content {
+            flex: 1 1;
+            background-color: #00bcd4;
             display: flex;
             flex-direction: row;
             width: 100%;
             flex-grow: 1; //So the main content extends to the bottom of the page
             position: relative;
+
+            aside {
+                display: block;
+                width: 0px;
+                height: 100%;
+                background-color: #399953;
+                transition: $duration-drawer-collapse ease-in-out;
+
+                &.open {
+                    background-color: grey;
+                    width: 300px;
+                }
+            }
+
+            main {
+                display: block;
+                width: 100%;
+                margin: 10px;
+                background-color: #EF6565;
+            }
 
             #side-menu {
                 background: linear-gradient($color-primary 40%, $color-secondary);
@@ -233,15 +262,14 @@
                 }
 
             }
+        }
+    }
 
-            #content {
-                padding: 10px;
-                width: 100%;
-                transition: 0.25s;
-                position: relative;
-                top: 0;
-                bottom: 0;
-            }
+    a {
+        color: white;
+        &:visited {
+            color: white;
+            text-decoration: none;
         }
     }
 
@@ -258,10 +286,6 @@
         &:hover {
             cursor: pointer;
         }
-    }
-
-    #snb-text {
-        text-transform: uppercase;
     }
 
     .shaked {
@@ -282,4 +306,22 @@
         }
     }
 
+    .popup {
+        position: absolute;
+        width: 40%;
+        height: 20%;
+        border-radius: $regular-radius;
+        background-color: #4fc3f7;
+        left: 50%-20%;
+        top: 50%-10%;
+        z-index: 1000;
+    }
+
+    .overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0, 0.2);
+        z-index: 500;
+    }
 </style>

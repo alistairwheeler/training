@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="node-wrapper">
         <div :style="indent" class="label-wrapper">
             <span v-if="node.trnCatTitle" class="node__label" @click="handleClick(node)">{{node.trnCatTitle}}</span>
             <span v-else
-                v-bind:class="[this.currentLesson.trnLsnPath === node.trnLsnPath ? 'active' : '', 'node__label']"
-                @click="handleClick(node)">{{node.trnLsnTitle}}
+                  v-bind:class="[this.currentLesson.trnLsnPath === node.trnLsnPath ? 'active' : '', 'node__label']"
+                  @click="handleClick(node)">{{node.trnLsnTitle}}
             </span>
         </div>
 
@@ -50,6 +50,13 @@
     @import "../assets/sass/utils/mixins";
 
 
+    .node-wrapper {
+        //Really important for global rendering. Otherwise, when the side menu is collapsed, the height of the menu
+        //gets bigger than the page because the words in the treeview wrap
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
     .label-wrapper {
         overflow: hidden;
 
@@ -77,5 +84,4 @@
         //background-color: $color-active;
         background: #2b2b2b;
     }
-
 </style>

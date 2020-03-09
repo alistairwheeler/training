@@ -79,7 +79,6 @@
     }
 
     nav {
-        margin-top: $content-padding;
         width: 80%;
         align-self: center;
 
