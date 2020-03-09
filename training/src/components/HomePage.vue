@@ -1,6 +1,7 @@
 <template>
         <div class="home-page-wrapper">
-            <section class="branding">Bienvenue chez simplicité</section>
+            <section class="branding">
+            <img class="branding__logo" alt="Simplicité Software Logo" src="../../public/Logo_Simplicite_Noir.png"></section>
             <ul class="advantages">
                 <li class="card orange"><h2 class="card__title">Bienvenue au Training Center</h2>
                     <p class="card__body">C'est ici que vous trouverez les ressources pour apprendre à vous servir de
@@ -82,7 +83,9 @@
 
     .branding {
         width: $branding-width;
-        background-color: #399953;
+        &__logo {
+            max-width: 100%;
+        }
     }
 
     .advantages {
