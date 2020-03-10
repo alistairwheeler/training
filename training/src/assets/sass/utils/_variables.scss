@@ -17,7 +17,7 @@ $color-code-comment: purple;
 $color-code-tag: darkgreen;
 $color-code-attribute: darkblue;
   //TREE
-$color-tree-hover: rgba(255, 255, 255, 0.2);
+$color-tree-hover: rgba(255, 255, 255, 0.3);
 $color-tree-active: black;
   //SANDBOX FORM
 $color-invalid-email: red;
@@ -47,7 +47,7 @@ $img-counter-margin: 10px;
 
 $paddings: (x-large: 30px, large: 20px, medium: 10px, small: 5px, x-small: 3px);
 $margins: (large: 40px, medium: 30px, small: 20px, x-small: 5px);
-$title-sizes: (x-large: 3rem, large: 2.4rem, medium: 2.2rem, small: 1.8rem, x-small: 1.2rem);
+$title-sizes: (x-large: 3rem, large: 2.4rem, medium: 2.2rem, small: 1.8rem, x-small: 1.2rem, xx-small: 1rem);
 $radius: (x-large: 30px, medium: 8px, regular: 4px);
 
 //SANDBOX FORM

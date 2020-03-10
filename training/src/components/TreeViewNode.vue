@@ -61,26 +61,32 @@
         overflow: hidden;
 
         .node__label {
-            font-size: map-get($title-sizes, x-small);
+            font-size: map-get($title-sizes, xx-small);
             display: block;
             @include rounded-left-corners;
             padding: 8px;
             margin: 0;
+
+            &::before {
+                content: '';
+            }
 
             &:hover {
                 background-color: $color-tree-hover;
                 cursor: pointer;
             }
 
+            &.active {
+                background-color: $color-tree-hover;
+                color: white;
+            }
+
             &.active:hover {
-                background-color: $color-tree-active;
+                background-color: $color-tree-hover;
             }
         }
 
     }
 
-    .active {
-        background-color: $color-tree-active;
-        color: white;
-    }
+
 </style>
