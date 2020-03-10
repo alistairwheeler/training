@@ -204,7 +204,7 @@
         }
 
         & ::v-deep h2 {
-            /* ::v-deep is used instead of >>> because we are using sass (with scss syntax). it is a deep selector to apply styles ot the v-html content*/
+            /* ::v-deep is used instead of >>> because we are using sass (with scss syntax). it is a deep selector to apply styles to the v-html content*/
             font-size: map-get($title-sizes, large);
             font-weight: bold;
             color: $color-secondary;
@@ -276,12 +276,15 @@
             text-decoration: underline;
         }
 
-        & ::v-deep ol li {
-            list-style: decimal;
+        & ::v-deep ol {
+            list-style-type: decimal;
+            padding-left: 25px; //ol and ul require a certain amount of padding to display the style-type
+                                //The use of the reset style in app is still to keep though, because it doesn't provoke other issues
         }
 
-        & ::v-deep ul li {
+        & ::v-deep ul {
             list-style-type: disc;
+            padding-left: 25px;
         }
 
         & ::v-deep img {

@@ -106,7 +106,6 @@
     @import "assets/sass/utils/mixins";
 
     * {
-        list-style-type: none;
         outline: 0;
         font-family: 'Source Sans Pro', sans-serif;
         box-sizing: border-box;
