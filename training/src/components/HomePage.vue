@@ -260,7 +260,6 @@
         }
     }
 
-
     .row-1 {
         display: flex;
         flex-flow: row;
@@ -720,9 +719,6 @@
         .footer-link {
             text-align: center;
         }
-
     }
-
-
 </style>
 
