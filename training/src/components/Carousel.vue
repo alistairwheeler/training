@@ -119,5 +119,9 @@
       transition-delay: 0.2s;
     }
 
+  button {
+    border: none;
+  }
+
 
 </style>
