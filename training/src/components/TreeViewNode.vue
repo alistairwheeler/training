@@ -1,10 +1,15 @@
 <template>
     <div class="node-wrapper">
         <div :style="indent" class="label-wrapper">
-            <span v-if="node.trnCatTitle" class="node__label" @click="handleClick(node)">{{node.trnCatTitle}}</span>
+            <span v-if="node.trnCatTitle" class="node__label category" @click="handleClick(node)">
+                <i class="material-icons">folder</i>
+                {{node.trnCatTitle}}
+            </span>
             <span v-else
                   v-bind:class="[this.currentLesson.trnLsnPath === node.trnLsnPath ? 'active' : '', 'node__label']"
-                  @click="handleClick(node)">{{node.trnLsnTitle}}
+                  @click="handleClick(node)">
+                <i class="material-icons">menu_book</i>
+                {{node.trnLsnTitle}}
             </span>
         </div>
 
@@ -62,13 +67,15 @@
 
         .node__label {
             font-size: map-get($title-sizes, xx-small);
-            display: block;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
             @include rounded-left-corners;
             padding: 8px;
             margin: 0;
 
-            &::before {
-                content: '';
+            i {
+                margin-right: map-get($margins, x-small);
             }
 
             &:hover {
@@ -79,14 +86,17 @@
             &.active {
                 background-color: $color-tree-hover;
                 color: white;
+
+                i {
+                    color: #4D515C;
+                }
+
             }
 
             &.active:hover {
                 background-color: $color-tree-hover;
             }
         }
-
     }
-
 
 </style>

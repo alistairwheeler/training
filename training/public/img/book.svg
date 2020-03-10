@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="415.409" height="512" viewBox="0 0 415.409 512">
+  <g id="book" transform="translate(-48.295)">
+    <g id="Groupe_2" data-name="Groupe 2">
+      <g id="Groupe_1" data-name="Groupe 1">
+        <path id="Tracé_1" data-name="Tracé 1" d="M443.441,0h-322.2A73.034,73.034,0,0,0,48.3,72.95v366.1A73.034,73.034,0,0,0,121.245,512h297.2a20.263,20.263,0,0,0,20.264-20.264V405.952h4.728A20.263,20.263,0,0,0,463.7,385.688V20.264A20.262,20.262,0,0,0,443.441,0ZM398.185,471.472H121.245a32.762,32.762,0,1,1,.676-65.52H398.185Zm24.992-106.047H121.921a73.18,73.18,0,0,0-33.1,7.869V72.95a32.46,32.46,0,0,1,32.422-32.422H423.176v324.9Z" fill="#fff"/>
+      </g>
+    </g>
+    <g id="Groupe_4" data-name="Groupe 4">
+      <g id="Groupe_3" data-name="Groupe 3">
+        <rect id="Rectangle_2" data-name="Rectangle 2" width="40.528" height="365.425" transform="translate(141.509 20.264)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>
