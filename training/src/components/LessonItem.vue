@@ -16,7 +16,7 @@
                          v-html="this.currentLesson.trnLsnHtmlContent"></div>
                     <EmptyContent v-else/>
                 </div>
-                <Spinner v-else></Spinner>
+                <Spinner v-else/>
             </div>
 
             <div class="grid-item grid-item-media">
@@ -56,7 +56,7 @@
             lesson: false
         }),
         computed: {
-            ...mapGetters(["breadCrumb", "breadCrumbItems", "getLessonFromPath", "currentLesson", "currentLessonImages", "currentLessonImagesLoaded"]),
+            ...mapGetters(["tree", "breadCrumb", "breadCrumbItems", "getLessonFromPath", "currentLesson", "currentLessonImages", "currentLessonImagesLoaded"]),
             openDrawer: function () {
                 return this.$store.getters.drawerOpen;
             },
@@ -76,7 +76,7 @@
             },
             hasCurrentLesson: function () {
                 return this.currentLesson;
-            }
+            },
         },
         methods: {
             breadCrumbItemClicked(categoryPath, index, length) {
@@ -86,13 +86,15 @@
                         .catch(err => console.error(err));
                 }
             },
+
             lessonClick: function (event) {
-                if (event && event.target && event.target.tagName == "A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_") != -1) {
+                if (event && event.target && event.target.tagName === "A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_") !== -1) {
                     event.preventDefault();
                     let imagename = event.target.getAttribute("href").split("#IMG_CLICK_")[1];
                     this.$refs.carousel.displayFile(imagename);
                 }
-            }
+            },
+
         },
         async created() {
             let splitted = this.$router.currentRoute.path.split("lessonItem");

@@ -2,17 +2,17 @@
     <div class="app">
 
         <div id="top-menu">
-            <div class="hamburger open" @click="toggleMenu">
+            <div id="hamburger" class="hamburger open" @click="toggleMenu">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-            <div class="simplicite-logo" @click="navigateHome"></div>
+            <div class="simplicite-logo" @click="goToHome"></div>
             <div class="controls">
-                <i id="previous-button" class="material-icons control" @click="navigateToPreviousLesson()"
-                   v-show="checkIfRouteIsLesson()">skip_previous</i>
-                <i id="next-button" class="material-icons control" @click="navigateToNextLesson()"
-                   v-show="checkIfRouteIsLesson()">skip_next</i>
+                <i id="previous-button" class="material-icons control" @click="goToPreviousLesson()"
+                   v-show="checkIfLessonDisplayed()">skip_previous</i>
+                <i id="next-button" class="material-icons control" @click="goToNextLesson()"
+                   v-show="checkIfLessonDisplayed()">skip_next</i>
                 <a href="http://community.simplicite.io" target="_blank">
                     <i id="forum" class="material-icons control">forum</i>
                 </a>
@@ -48,52 +48,52 @@
         },
         computed: {
             ...mapGetters(['getLessonFromPath']),
-            ...mapState(['tree', 'treeLoaded', 'treeAsVuetifyTree', 'currentLesson', 'drawerOpen'])
+            ...mapState(['tree', 'treeLoaded', 'currentLesson', 'drawerOpen'])
         },
         methods: {
-            toggleMenu() {
-                document.getElementById("aside").classList.toggle("open");
-                document.getElementsByClassName("hamburger")[0].classList.toggle("open");
+            goToNextLesson() {
+                const nextPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnNext;
+                console.log(nextPath)
+                if (nextPath !== null && nextPath !== undefined && nextPath !== "" && nextPath !== "null")
+                    this.$router.push('/lessonItem/' + nextPath.toString().substring(1)).catch(err => console.error(err));
+                 else
+                    this.shakeElement("next-button");
+
             },
-            checkIfRouteIsLesson() {
+            goToPreviousLesson() {
+                const previousPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnPrevious;
+                console.log(previousPath)
+                if (previousPath !== "" && previousPath !== undefined && previousPath !== "null" && previousPath !== null)
+                    this.$router.push('/lessonItem/' + previousPath.toString().substring(1));
+                else
+                    this.shakeElement("previous-button");
+            },
+
+            goToHome() {
+                this.$router.push('/').catch(() => console.log('Navigation Duplicated'));
+            },
+
+            checkIfLessonDisplayed() {
                 return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
             },
-            navigateToNextLesson() {
-                let nextPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnNext;
-                console.log(`nextPath : ${nextPath}`);
-                if (nextPath !== undefined && nextPath !== "null") {
-                    let path = nextPath.toString().substring(1);
-                    this.$router.push('/lessonItem/' + path).catch(err => console.error(err))
-                } else {
-                    this.shakeElement("next-button");
-                    this.showMessage("Vous êtes à la dernière leçon de cette catégorie")
-                }
+
+            toggleMenu() {
+                document.getElementById("aside").classList.toggle("open");
+                document.getElementById("hamburger").classList.toggle("open");
             },
-            navigateToPreviousLesson() {
-                let previousPath = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnPrevious;
-                console.log(`previousPath : ${previousPath}`);
-                if (previousPath !== undefined && previousPath !== "null") {
-                    let path = previousPath.toString().substring(1);
-                    this.$router.push('/lessonItem/' + path)
-                } else {
-                    this.shakeElement("previous-button");
-                    this.showMessage('Vous êtes à la première leçon de cette catégorie')
-                }
-            },
-            navigateHome() {
-                this.$router.push('/')
-                    .catch(() => console.log('Navigation Duplicated'));
-            },
+
             shakeElement(elementId) {
                 document.getElementById(elementId).classList.add("shaked");
                 setTimeout(() => document.getElementById(elementId).classList.remove('shaked'), 150);
             },
         },
+
         async beforeCreate() {
             this.$smp.login(() => {
                 console.log("LOGGED IN")
             });
         },
+
         async created() {
             this.$store.dispatch('fetchTree', {smp: this.$smp});
         },
@@ -273,3 +273,4 @@
     }
 
 </style>
+

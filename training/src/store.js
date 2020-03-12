@@ -82,6 +82,28 @@ export default new Vuex.Store({
                 });
                 return foundLsn;
             },
+        getNextLessonPath:
+            state => lessonPath => {
+                let parents = lessonPath.split('/');
+                parents.splice(0, 1);
+                let cursor = state.tree;
+                let path = "";
+                let foundLsn = undefined;
+
+                parents.forEach(function (val, idx, array) {
+                    path += "/" + val;
+                    let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath === path);
+                    if (foundCat !== undefined) {
+                        if (idx === parents.length - 2) //Means we are in the parent category of the we're looking lesson
+                            cursor = foundCat.lessons;
+                        else
+                            cursor = foundCat.categories;
+                    } else if (idx === parents.length - 1) {
+                        foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath === path);
+                    }
+                });
+                return foundLsn;
+            },
         currentLesson:
             state => state.currentLesson,
         currentLessonImages:
