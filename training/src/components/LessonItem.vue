@@ -1,7 +1,7 @@
 <template>
     <div class="lesson-item-wrapper">
         <div class="grid-lesson">
-            <div class="grid-item grid-item-content">
+            <div id="lesson-content" class="grid-item grid-item-content">
                 <div v-if="this.hasCurrentLesson" class="occupy100percent">
                     <ul class="breadcrumb">
                         <li class="breadcrumb__item" v-for="(item, index) in this.breadCrumbItems" :key="index"
@@ -10,6 +10,7 @@
                             <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
                         </li>
                     </ul>
+                    <button id="toggle-scroll" class="toggle-scroll" @click="toggleScroll">Desactiver le scroll des images</button>
 
                     <div class="lesson_content" v-highlightjs v-on:click="lessonClick"
                          v-if="this.currentLesson.trnLsnHtmlContent"
@@ -53,7 +54,8 @@
         components: {Carousel, Spinner, EmptyContent},
         data: () => ({
             urlList: [],
-            lesson: false
+            lesson: false,
+            scrollEnabled: true,
         }),
         computed: {
             ...mapGetters(["tree", "breadCrumb", "breadCrumbItems", "getLessonFromPath", "currentLesson", "currentLessonImages", "currentLessonImagesLoaded"]),
@@ -82,11 +84,49 @@
             lessonClick: function (event) {
                 if (event && event.target && event.target.tagName === "A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_") !== -1) {
                     event.preventDefault();
-                    let imagename = event.target.getAttribute("href").split("#IMG_CLICK_")[1];
-                    this.$refs.carousel.displayFile(imagename);
+                    let imageName = event.target.getAttribute("href").split("#IMG_CLICK_")[1];
+                    this.$refs.carousel.displayFile(imageName);
                 }
             },
+            toggleScroll: function()  {
+                this.scrollEnabled = !this.scrollEnabled;
+                document.getElementById("toggle-scroll").classList.toggle("off");
+                if(this.scrollEnabled){
+                    console.log("Scroll is enabled")
+                    document.getElementById("toggle-scroll").innerText = "Désactiver le scroll des images"
+                }
+                else {
+                    document.getElementById("toggle-scroll").innerText = "Réactiver le scroll des images"
+                    console.log("scroll is NOT enabled")
+                }
 
+
+
+            },
+            addScrollListeners: function (){
+                let potentialImages = [];
+                document.getElementById("lesson-content").addEventListener('scroll', (e) => {
+                    let containerHeight = e.target.getBoundingClientRect().bottom - e.target.getBoundingClientRect().top;
+                    let imageName;
+                    let links = e.target.querySelectorAll("a");
+                    for (let i = 0; i< links.length; i++){ //On parcourt tous les liens qui ont un attribut href avec #IMC_CLICK dedans
+                        if(links[i].hasAttribute("href") && links[i].getAttribute("href").indexOf("#IMG_CLICK_") !== -1){
+                            let linkDistance = links[i].getBoundingClientRect().top - e.target.getBoundingClientRect().top;
+                            if(linkDistance < containerHeight * 0.85){ //Si ce lien est dans une certaine tranche de la page
+                                imageName = links[i].getAttribute("href").split("#IMG_CLICK_")[1];
+                                if(imageName !== undefined)
+                                    potentialImages.push(imageName); //On ajoute son image a la liste
+                            }
+                        }
+                    }
+                    if(potentialImages.length > 0 && this.scrollEnabled)
+                        this.$refs.carousel.displayFile(potentialImages[potentialImages.length-1]);//On affiche la dernière image dans le carousel
+                });
+            }
+
+        },
+        mounted() {
+            this.addScrollListeners();
         },
         async created() {
             let splitted = this.$router.currentRoute.path.split("lessonItem");
@@ -101,6 +141,7 @@
                     lessonId: lesson.row_id
                 });
         },
+
         async beforeDestroy() {
             this.$store.commit('UNLOAD_LESSON');
         }
@@ -115,7 +156,6 @@
 
     .lesson-item-wrapper {
         position: relative;
-
     }
 
     .grid-lesson {
@@ -192,6 +232,7 @@
     .lesson_content {
         @include flex-column-nowrap;
         overflow: hidden;
+
 
         & ::v-deep h1 {
             font-size: map-get($title-sizes, x-large);
@@ -286,4 +327,20 @@
         }
     }
 
+    .toggle-scroll {
+        border-radius: map-get($radius, x-large);
+        padding: map-get($paddings, medium);
+        background-color: white;
+        font-weight: bold;
+        color: green;
+        border: solid 2px $color-accent;
+        outline: none;
+
+        &.off {
+            border-color: red;
+            color: red;
+        }
+
+
+    }
 </style>

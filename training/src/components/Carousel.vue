@@ -62,8 +62,8 @@
             buttons.addEventListener('mouseleave', () => {
               buttons.style.visibility = "hidden";
             })
+            console.log(this.images)
           }
-
         }
     };
 </script>
