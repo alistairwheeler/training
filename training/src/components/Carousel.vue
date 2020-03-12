@@ -36,7 +36,7 @@
             displayFile(filename){
               console.log("Switching carousel to "+filename+" if possible");
               for(let i=0; i<this.images.length; i++){
-                if(this.images[i].filename==filename){
+                if(this.images[i].filename===filename){
                   this.counter = i;
                   break;
                 }

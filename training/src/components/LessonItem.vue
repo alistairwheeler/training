@@ -79,14 +79,6 @@
             },
         },
         methods: {
-            breadCrumbItemClicked(categoryPath, index, length) {
-                if (index !== length - 1) {
-                    this.$router
-                        .push("/courses/" + categoryPath)
-                        .catch(err => console.error(err));
-                }
-            },
-
             lessonClick: function (event) {
                 if (event && event.target && event.target.tagName === "A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_") !== -1) {
                     event.preventDefault();
