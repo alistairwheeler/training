@@ -10,7 +10,7 @@
                             <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
                         </li>
                     </ul>
-                    <button id="toggle-scroll" class="toggle-scroll" @click="toggleScroll">Desactiver le scroll des images</button>
+                   <!-- <button id="toggle-scroll" class="toggle-scroll" @click="toggleScroll">Desactiver le scroll des images</button>-->
 
                     <div class="lesson_content" v-highlightjs v-on:click="lessonClick"
                          v-if="this.currentLesson.trnLsnHtmlContent"
