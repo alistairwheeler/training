@@ -106,14 +106,12 @@
             addScrollListeners: function (){
                 let potentialImages = [];
                 document.getElementById("lesson-content").addEventListener('scroll', (e) => {
-                    let containerHeight = e.target.getBoundingClientRect().bottom - e.target.getBoundingClientRect().top;
                     let imageName;
                     let links = e.target.querySelectorAll("a");
                     for (let i = 0; i< links.length; i++){ //On parcourt tous les liens qui ont un attribut href avec #IMC_CLICK dedans
-                        if(links[i].hasAttribute("href") && links[i].getAttribute("href").indexOf("#IMG_CLICK_") !== -1){
-                            let linkDistance = links[i].getBoundingClientRect().top - e.target.getBoundingClientRect().top;
-                            if(linkDistance < containerHeight * 0.85){ //Si ce lien est dans une certaine tranche de la page
-                                imageName = links[i].getAttribute("href").split("#IMG_CLICK_")[1];
+                        if(links[i].hasAttribute("href") && links[i].getAttribute("href").indexOf("#IMG_SCROLL_") !== -1){
+                            if(links[i].getBoundingClientRect().bottom < e.target.getBoundingClientRect().bottom ){
+                                imageName = links[i].getAttribute("href").split("#IMG_SCROLL_")[1];
                                 if(imageName !== undefined)
                                     potentialImages.push(imageName); //On ajoute son image a la liste
                             }
