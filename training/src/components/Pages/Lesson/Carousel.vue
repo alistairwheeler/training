@@ -4,7 +4,7 @@
   <div class="carousel-wrapper">
     <div class="img-holder">
       <transition>
-        <img :src="currentImg.filesrc" :download="currentImg.filename" v-bind:key="currentImg.filename">
+        <img :src="currentImg.filesrc" :download="currentImg.filename" v-bind:key="currentImg.filename" @click="displayFullScreenImage(currentImg.filesrc)">
       </transition>
     </div>
     <div class="buttons">
@@ -17,9 +17,11 @@
 </template>
 
 <script>
+    //import ExpandableImage from "../../Commons/ExpandableImage";
     export default {
-        name: "Carousel",
-        props: ["images"],
+      name: "Carousel",
+      //components: {ExpandableImage},
+      props: ["images"],
         data: () => ({
             counter: 0
         }),
@@ -41,7 +43,12 @@
                   break;
                 }
               }
-            }
+            },
+          displayFullScreenImage(image){
+              console.log("displayFullScreenImage " + image)
+              this.$store.commit('UPDATE_POP_UP_IMAGE', image);
+              this.$store.commit('UPDATE_POP_UP_STATE', true);
+          }
         },
         mounted() {
           if(this.images.length <= 1 ){
@@ -69,11 +76,16 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../assets/sass/utils/_variables.scss";
+  @import "../../../assets/sass/utils/variables";
     img {
         max-width: 100%;
         max-height: 100%;
     }
+
+  .image {
+    max-width: 100%;
+    max-height: 100%;
+  }
 
     .carousel-wrapper {
       width: 100%;
@@ -124,4 +136,9 @@
   }
 
 
+  .img-holder {
+    &:hover {
+      cursor: pointer; 
+    }
+  }
 </style>

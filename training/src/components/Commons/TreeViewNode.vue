@@ -51,8 +51,8 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../assets/sass/utils/variables";
-    @import "../assets/sass/utils/mixins";
+    @import "../../assets/sass/utils/variables";
+    @import "../../assets/sass/utils/mixins";
 
 
     .node-wrapper {

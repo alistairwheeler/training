@@ -30,7 +30,7 @@
             <div class="grid-item grid-item-video">
                 <div v-if="this.hasCurrentLesson" class="occupy100percent">
                     <!-- Do NOT prelead anything to keep app snappy -->
-                    <video controls muted :src="videoUrl" preload="none" poster="../../public/media.svg"
+                    <video controls muted :src="videoUrl" preload="none" poster="../../../../public/media.svg"
                            class="occupy100percent" style="object-fit: contain" v-if="videoUrl">
                         Sorry, your browser doesn't support embedded videos.
                     </video>
@@ -45,8 +45,8 @@
 <script>
     /* eslint-disable no-console,no-unused-vars,no-undef */
     import Carousel from "./Carousel";
-    import Spinner from "./Spinner";
-    import EmptyContent from "./EmptyContent";
+    import Spinner from "../../Commons/Spinner";
+    import EmptyContent from "../../Commons/EmptyContent";
     import {mapGetters} from "vuex";
 
     export default {
@@ -148,8 +148,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-    @import "../assets/sass/utils/variables";
-    @import "../assets/sass/utils/mixins";
+    @import "../../../assets/sass/utils/variables";
+    @import "../../../assets/sass/utils/mixins";
 
 
     .lesson-item-wrapper {

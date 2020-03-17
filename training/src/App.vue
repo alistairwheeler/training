@@ -31,7 +31,16 @@
                 <router-view id="router" :key="$route.fullPath" v-if="this.treeLoaded"/>
             </main>
         </div>
-
+<!--        <expandable-image
+                class="image"
+                src="https://images.unsplash.com/photo-1550948537-130a1ce83314?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2552&q=80"
+                alt="dog"
+                title="dog"
+        />-->
+        <div class="popup" :class="{ active: this.popup }">
+            <div class="overlay" @click="togglePopUp"></div>
+            <img class="popup__image" :src="currentPopUpImage"/>
+        </div>
     </div>
 </template>
 
@@ -39,16 +48,16 @@
     /* eslint-disable no-console */
 
     import {mapGetters, mapState} from "vuex";
-    import TreeViewNode from "./components/TreeViewNode";
+    import TreeViewNode from "./components/Commons/TreeViewNode";
 
     export default {
         name: 'App',
         components: {
-            TreeViewNode
+            TreeViewNode,
         },
         computed: {
             ...mapGetters(['getLessonFromPath']),
-            ...mapState(['tree', 'treeLoaded', 'currentLesson', 'drawerOpen'])
+            ...mapState(['tree', 'treeLoaded', 'currentLesson', 'drawerOpen', 'currentPopUpImage', 'popup'])
         },
         methods: {
             goToNextLesson() {
@@ -68,23 +77,24 @@
                 else
                     this.shakeElement("previous-button");
             },
-
             goToHome() {
                 this.$router.push('/').catch(() => console.log('Navigation Duplicated'));
             },
-
             checkIfLessonDisplayed() {
                 return this.$router.currentRoute.path.split("/lessonItem/").length > 1;
             },
-
             toggleMenu() {
                 document.getElementById("aside").classList.toggle("open");
                 document.getElementById("hamburger").classList.toggle("open");
             },
-
             shakeElement(elementId) {
                 document.getElementById(elementId).classList.add("shaked");
                 setTimeout(() => document.getElementById(elementId).classList.remove('shaked'), 150);
+            },
+
+            togglePopUp() {
+                document.getElementsByClassName("popup")[0].classList.toggle("active");
+                this.$store.commit('UPDATE_POP_UP_STATE', false);
             },
         },
 
@@ -104,6 +114,11 @@
 
     @import "assets/sass/utils/variables";
     @import "assets/sass/utils/mixins";
+
+    .image {
+        width: 400px;
+        max-width: 100%;
+    }
 
     * {
         outline: 0;
@@ -272,5 +287,36 @@
         }
     }
 
+    .popup {
+        position: absolute;
+        z-index: -10000;
+        visibility: hidden;
+        width: 100%;
+        height: 100%;
+
+        &.active {
+            z-index: 1000;
+            visibility: visible;
+        }
+
+        .overlay {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &__image {
+            border-radius: map-get($radius, regular);
+            max-width: 80%;
+            max-height: 80%;
+            position: absolute;
+            top: 10%;
+            left: 15%;
+        }
+    }
 </style>
 

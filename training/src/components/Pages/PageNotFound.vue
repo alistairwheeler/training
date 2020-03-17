@@ -17,7 +17,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 
-    @import "../assets/sass/utils/variables";
+    @import "../../assets/sass/utils/variables";
 
     h1 {
         color: black;

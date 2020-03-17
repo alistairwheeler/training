@@ -17,6 +17,8 @@ export default new Vuex.Store({
         treeLoaded: false,
         currentLesson: false,
         currentLessonImages: false,
+        currentPopUpImage: '',
+        popup: false,
     },
     getters: {
         //NEW MODEL
@@ -117,6 +119,14 @@ export default new Vuex.Store({
     },
 
     mutations: {
+        UPDATE_POP_UP_IMAGE(state, image) {
+            state.currentPopUpImage = image;
+        },
+
+        UPDATE_POP_UP_STATE(state, choice) {
+            state.popup = choice;
+        },
+
         UPDATE_DRAWER_OPEN(state, choice) {
             state.drawerOpen = choice;
         },

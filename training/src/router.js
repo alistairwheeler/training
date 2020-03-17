@@ -1,9 +1,9 @@
 import VueRouter from 'vue-router'
-import LessonItem from "./components/LessonItem"
-import HomePage from "./components/HomePage"
-import PageNotFound from "./components/PageNotFound"
-import SandBoxRedirect from "./components/SandBoxRedirect"
-import SandBoxForm from "./components/SandBoxForm"
+import LessonItem from "./components/Pages/Lesson/LessonItem"
+import HomePage from "./components/Pages/HomePage"
+import PageNotFound from "./components/Pages/PageNotFound"
+import SandBoxRedirect from "./components/Pages/SandBoxRedirect"
+import SandBoxForm from "./components/Pages/SandBoxForm"
 
 //1. Routes definition
 const routes = [

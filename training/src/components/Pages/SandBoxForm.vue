@@ -47,11 +47,11 @@
                 <div class="side-content__brand">
                     <h2 class="side-content__message">Créez vos applications dès maintenant avec Simplicité</h2>
                     <ul>
-                        <li><img class="side-content__icon" src="../../public/hand-pen.png">Remplissez le formulaire</li>
-                        <li><img class="side-content__icon" src="../../public/email.png">Validez votre demande avec l'email</li>
-                        <li><img class="side-content__icon" src="../../public/rocket.png">C'est tout bon, à vous de jouer !</li>
+                        <li><img class="side-content__icon" src="../../../public/hand-pen.png">Remplissez le formulaire</li>
+                        <li><img class="side-content__icon" src="../../../public/email.png">Validez votre demande avec l'email</li>
+                        <li><img class="side-content__icon" src="../../../public/rocket.png">C'est tout bon, à vous de jouer !</li>
                     </ul>
-                    <img class="side-content__brand-image" src="../../public/developer.png" alt="computer image">
+                    <img class="side-content__brand-image" src="../../../public/developer.png" alt="computer image">
                 </div>
 
             </div>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-    import Spinner from "./Spinner";
+    import Spinner from "../Commons/Spinner";
     export default {
         name: "SandBoxForm",
         components: {Spinner},
@@ -155,8 +155,8 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../assets/sass/utils/variables";
-    @import "../assets/sass/utils/mixins";
+    @import "../../assets/sass/utils/variables";
+    @import "../../assets/sass/utils/mixins";
 
     .wrapper {
         width: 100%;

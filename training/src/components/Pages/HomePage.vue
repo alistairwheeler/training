@@ -7,7 +7,7 @@
                 <div class="container bloc-lg">
                     <div class="row">
                         <div class="col-md-6">
-                            <img src="../../public/img/illustration_training_Simplicite.png"
+                            <img src="../../../public/img/illustration_training_Simplicite.png"
                                  class="img-fluid mx-auto d-block"/>
                         </div>
                         <div class="col-md-6 align-self-center">
@@ -57,7 +57,7 @@
                         <div class="col-sm-8 col">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <img src="../../public/img/Schema_Simplicite.png"
+                                    <img src="../../../public/img/Schema_Simplicite.png"
                                          class="img-fluid mx-auto d-block"/>
                                     <p class="p-style">
                                         <br>
@@ -101,7 +101,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <img src="../../public/img/Pair_Prog.png" class="img-fluid mx-auto d-block"/>
+                            <img src="../../../public/img/Pair_Prog.png" class="img-fluid mx-auto d-block"/>
                         </div>
                     </div>
                 </div>
@@ -124,8 +124,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 
-    @import "../assets/sass/utils/variables";
-    @import "../assets/sass/utils/mixins";
+    @import "../../assets/sass/utils/variables";
+    @import "../../assets/sass/utils/mixins";
 
     .home-page-wrapper {
         /*@include flex-column-nowrap;
@@ -581,7 +581,7 @@
     /* Bloc image backgrounds */
 
     .bg-Home-training-center {
-        background-image: url("../../public/img/Home-training-center.jpg");
+        background-image: url("../../../public/img/Home-training-center.jpg");
     }
 
 

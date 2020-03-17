@@ -1,7 +1,7 @@
 <template>
     <div class="center-content">
         <div class="empty-content">
-            <img class="empty-image" src="../../public/empty.png" alt="Empty Content">
+            <img class="empty-image" src="../../../public/empty.png" alt="Empty Content">
             <p>There is no content for this element</p>
         </div>
     </div>
@@ -15,7 +15,7 @@
 
 <style lang="scss" scoped>
 
-    @import "../assets/sass/utils/variables";
+    @import "../../assets/sass/utils/variables";
 
     .center-content {
         display: flex;
