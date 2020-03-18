@@ -110,22 +110,27 @@
             },
 
             generateRequest: function () {
+                let btn = document.getElementsByClassName("validate-button")[0];
                 let req = new XMLHttpRequest();
                 req.open("POST", "https://portalpr.dev.simplicite.io/ext/PorIsdService", true);
                 req.setRequestHeader("Content-type", "application/json");
 
-                req.addEventListener("load", () => {
+                req.addEventListener("load", (result) => {
+                    console.log(result)
                     if (req.status >= 200 && req.status < 400) {
+                        console.log(req)
                         this.showSpinner = false;
-                        let btn = document.getElementsByClassName("validate-button")[0];
                         btn.classList.add("server-ok");
                         btn.innerText = "Un email vous a été envoyé !"
-                    }
-                    else {
+                    } else {
                         console.error(req.status + " " + req.statusText);
                         this.clickCounter = 0;
                         this.showSpinner = false;
                         this.serverDown = true;
+                        if (req.status === 401) {
+                            document.getElementsByClassName("server-error")[0].innerText = "Cette adresse mail est invalide";
+                        }
+                        btn.innerText = 'Renvoyer une demande'
                     }
                 });
                 req.addEventListener("error", () => {
