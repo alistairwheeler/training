@@ -29,7 +29,7 @@
 
 <script>
     export default {
-        name: 'SandBoxRedirect',
+        name: 'Deployment',
 
         mounted() {
             let demandId = this.$router.currentRoute.path.split("/sandbox/")[1];

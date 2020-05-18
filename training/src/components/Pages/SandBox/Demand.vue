@@ -64,7 +64,7 @@
 <script>
     import Spinner from "../../UI/Spinner";
     export default {
-        name: "SandBoxForm",
+        name: "Demand",
         components: {Spinner},
         data: ()=>({
             showSpinner: false,
