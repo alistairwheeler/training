@@ -44,9 +44,9 @@
 
 <script>
     /* eslint-disable no-console,no-unused-vars,no-undef */
-    import Carousel from "./Carousel";
-    import Spinner from "../../Commons/Spinner";
-    import EmptyContent from "../../Commons/EmptyContent";
+    import Carousel from "../../UI/Carousel";
+    import Spinner from "../../UI/Spinner";
+    import EmptyContent from "../../UI/EmptyContent";
     import {mapGetters} from "vuex";
 
     export default {

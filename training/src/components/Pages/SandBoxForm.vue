@@ -62,7 +62,7 @@
 </template>
 
 <script>
-    import Spinner from "../Commons/Spinner";
+    import Spinner from "../UI/Spinner";
     export default {
         name: "SandBoxForm",
         components: {Spinner},

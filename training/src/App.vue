@@ -42,7 +42,7 @@
     /* eslint-disable no-console */
 
     import {mapGetters, mapState} from "vuex";
-    import TreeViewNode from "./components/Commons/TreeViewNode";
+    import TreeViewNode from "./components/UI/TreeViewNode";
 
     export default {
         name: 'App',

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    //import ExpandableImage from "../../Commons/ExpandableImage";
+    //import ExpandableImage from "../../UI/ExpandableImage";
     export default {
       name: "Carousel",
       //components: {ExpandableImage},
@@ -76,7 +76,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../assets/sass/utils/variables";
+  @import "../../assets/sass/utils/variables";
     img {
         max-width: 100%;
         max-height: 100%;
@@ -138,7 +138,7 @@
 
   .img-holder {
     &:hover {
-      cursor: pointer; 
+      cursor: pointer;
     }
   }
 </style>
