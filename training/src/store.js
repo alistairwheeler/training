@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Vue from 'vue'
 import Vuex from 'vuex'
-//import {convertTreeToArray, convertTreeToVuetify, findLessonBreadCrumb, findParentsOfLesson} from "./Helper";
 
 Vue.use(Vuex);
 
@@ -13,8 +12,6 @@ export default new Vuex.Store({
     state: {
         drawerOpen: true,
         tree: [],
-        vTree: [],
-        treeLoaded: false,
         currentLesson: false,
         currentLessonImages: false,
         currentPopUpImage: '',
@@ -24,10 +21,6 @@ export default new Vuex.Store({
         //NEW MODEL
         drawerOpen:
             state => state.drawerOpen,
-        drawerActive:
-            state => state.currentLesson ? [state.currentLesson.trnLsnPath] : [],
-        treeLoaded:
-            state => state.treeLoaded,
         breadCrumbItems:
             state => {
                 let parents = state.currentLesson.trnLsnPath.split('/');
@@ -114,8 +107,6 @@ export default new Vuex.Store({
             state => state.currentLessonImages !== false,
         tree:
             state => state.tree,
-        treeAsVuetifyTree:
-            state => state.vTree
     },
 
     mutations: {
@@ -133,34 +124,6 @@ export default new Vuex.Store({
 
         UPDATE_TREE(state, tree) {
             state.tree = tree;
-            state.treeLoaded = true;
-
-            //recursive v-tree builder
-            let convertItemToVTree = function (item) {
-                if (Object.prototype.hasOwnProperty.call(item, "trnLsnPath")) {
-                    return {
-                        id: item.row_id,
-                        name: item.trnLsnTitle,
-                        path: item.trnLsnPath,
-                        description: item.trnLsnDescription,
-                        type: "lesson",
-                        open: true
-                    }
-                } else {
-                    var childLessons = item.lessons.map(convertItemToVTree);
-                    var childCategories = item.categories.map(convertItemToVTree);
-                    return {
-                        id: item.row_id,
-                        name: item.trnCatTitle,
-                        path: item.trnCatPath,
-                        description: item.trnCatDescription,
-                        type: "category",
-                        children: [...childCategories, ...childLessons],
-                        open: true
-                    };
-                }
-            };
-            state.vTree = state.tree.map(convertItemToVTree);
         },
 
         UPDATE_CURRENT_LESSON(state, lesson){

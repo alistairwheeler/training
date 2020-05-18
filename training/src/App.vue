@@ -28,15 +28,9 @@
             </aside>
 
             <main id="main">
-                <router-view id="router" :key="$route.fullPath" v-if="this.treeLoaded"/>
+                <router-view id="router" :key="$route.fullPath" v-if="this.tree.length > 1"/>
             </main>
         </div>
-<!--        <expandable-image
-                class="image"
-                src="https://images.unsplash.com/photo-1550948537-130a1ce83314?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2552&q=80"
-                alt="dog"
-                title="dog"
-        />-->
         <div class="popup" :class="{ active: this.popup }">
             <div class="overlay" @click="togglePopUp"></div>
             <img class="popup__image" :src="currentPopUpImage"/>
@@ -57,7 +51,7 @@
         },
         computed: {
             ...mapGetters(['getLessonFromPath']),
-            ...mapState(['tree', 'treeLoaded', 'currentLesson', 'drawerOpen', 'currentPopUpImage', 'popup'])
+            ...mapState(['tree', 'currentLesson', 'drawerOpen', 'currentPopUpImage', 'popup'])
         },
         methods: {
             goToNextLesson() {
@@ -105,7 +99,7 @@
         },
 
         async created() {
-            this.$store.dispatch('fetchTree', {smp: this.$smp});
+            await this.$store.dispatch('fetchTree', {smp: this.$smp});
         },
     };
 </script>
