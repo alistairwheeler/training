@@ -2,11 +2,11 @@
   <div class="lesson-item-wrapper">
     <div class="grid-lesson">
       <div id="lesson-content" class="grid-item grid-item-content">
-        <div v-if="this.hasCurrentLesson" class="occupy100percent">
+        <div v-if="this.currentLesson.row_id" class="occupy100percent">
           <ul class="breadcrumb">
-            <li class="breadcrumb__item" v-for="(item, index) in this.breadCrumbItems" :key="index"
-                @click="breadCrumbItemClicked(item.path, index, breadCrumbItems.length)">
-              <span>{{item.title}}</span>
+            <li class="breadcrumb__item" v-for="(breadCrumbItem, index) in this.breadCrumbItems" :key="index"
+                @click="breadCrumbItemClicked(breadCrumbItem.path, index, breadCrumbItems.length)">
+              <span>{{breadCrumbItem.title}}</span>
               <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
             </li>
           </ul>
@@ -21,14 +21,14 @@
       </div>
 
       <div class="grid-item grid-item-media">
-        <div v-if="this.currentLessonImagesLoaded" class="occupy100percent">
-          <Carousel v-bind:images="this.currentLessonImages" v-if="hasImages" ref="carousel"/>
+        <div v-if="this.currentLessonImages" class="occupy100percent">
+          <Carousel v-bind:images="this.currentLessonImages" v-if="this.currentLessonImages.length" ref="carousel"/>
           <EmptyContent v-else/>
         </div>
-        <Spinner v-else></Spinner>
+        <Spinner v-else/>
       </div>
       <div class="grid-item grid-item-video">
-        <div v-if="this.hasCurrentLesson" class="occupy100percent">
+        <div v-if="this.currentLesson" class="occupy100percent">
           <!-- Do NOT prelead anything to keep app snappy -->
           <video controls muted :src="videoUrl" preload="none" poster="../../../public/media.svg"
                  class="occupy100percent" style="object-fit: contain" v-if="videoUrl">
@@ -36,7 +36,7 @@
           </video>
           <EmptyContent v-else/>
         </div>
-        <Spinner v-else></Spinner>
+        <Spinner v-else/>
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
   import Carousel from "../UI/Carousel";
   import Spinner from "../UI/Spinner";
   import EmptyContent from "../UI/EmptyContent";
-  import {mapGetters} from "vuex";
+  import {mapGetters, mapState} from "vuex";
 
   export default {
     name: "LessonItem",
@@ -58,26 +58,13 @@
       scrollEnabled: true,
     }),
     computed: {
-      ...mapGetters(["tree", "breadCrumb", "breadCrumbItems", "getLessonFromPath", "currentLesson", "currentLessonImages", "currentLessonImagesLoaded"]),
-      openDrawer: function () {
-        return this.$store.getters.drawerOpen;
-      },
-      breadCrumbItems2: function () {
-        return this.breadCrumb(
-          this.$router.currentRoute.path.split("lessonItem")[1]
-        );
-      },
+      ...mapState(['tree', 'currentLesson', 'currentLessonImages']),
+      ...mapGetters(["breadCrumbItems", "getLessonFromPath"]),
       videoUrl: function () {
         if (this.currentLesson && this.currentLesson.trnLsnVideo)
           return this.$smp.documentURL("TrnLesson", "trnLsnVideo", this.currentLesson.row_id, this.currentLesson.trnLsnVideo);
         else
           return false;
-      },
-      hasImages: function () {
-        return this.currentLessonImages.length > 0;
-      },
-      hasCurrentLesson: function () {
-        return this.currentLesson;
       },
     },
     methods: {
@@ -98,8 +85,6 @@
           document.getElementById("toggle-scroll").innerText = "Réactiver le scroll des images"
           console.log("scroll is NOT enabled")
         }
-
-
       },
       addScrollListeners: function () {
         let potentialImages = [];
@@ -119,10 +104,6 @@
             this.$refs.carousel.displayFile(potentialImages[potentialImages.length - 1]);//On affiche la dernière image dans le carousel
         });
       }
-
-    },
-    mounted() {
-      this.addScrollListeners();
     },
     async created() {
       let splitted = this.$router.currentRoute.path.split("lessonItem");
@@ -137,7 +118,9 @@
           lessonId: lesson.row_id
         });
     },
-
+    mounted() {
+      this.addScrollListeners();
+    },
     async beforeDestroy() {
       this.$store.commit('UNLOAD_LESSON');
     }

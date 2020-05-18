@@ -4,21 +4,24 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
-//Store pattern made with vuex
-
-//It serves as the unique source of truth for the application, to make easier the communication of information between components
-
+/* This Store is used to centralize the data of the app that is shared between the different components.
+- The whole app is organized around a TreeView that is displayed in the navigation drawer of the app. This TreeView is
+here for the user to navigate in the app.
+- The state of the drawer is also controlled from this store because it can be changed from several components.
+- The image popup state and image src are also controlled from this store.
+*/
 export default new Vuex.Store({
     state: {
-        drawerOpen: true,
         tree: [],
+        drawerOpen: true,
         currentLesson: false,
         currentLessonImages: false,
         currentPopUpImage: '',
         popup: false,
     },
     getters: {
-        //NEW MODEL
+        tree:
+          state => state.tree,
         drawerOpen:
             state => state.drawerOpen,
         breadCrumbItems:
@@ -103,42 +106,31 @@ export default new Vuex.Store({
             state => state.currentLesson,
         currentLessonImages:
             state => state.currentLessonImages,
-        currentLessonImagesLoaded:
-            state => state.currentLessonImages !== false,
-        tree:
-            state => state.tree,
     },
 
     mutations: {
-        UPDATE_POP_UP_IMAGE(state, image) {
-            state.currentPopUpImage = image;
-        },
-
-        UPDATE_POP_UP_STATE(state, choice) {
-            state.popup = choice;
-        },
-
-        UPDATE_DRAWER_OPEN(state, choice) {
-            state.drawerOpen = choice;
-        },
-
         UPDATE_TREE(state, tree) {
             state.tree = tree;
         },
-
+        UPDATE_DRAWER_OPEN(state, choice) {
+            state.drawerOpen = choice;
+        },
         UPDATE_CURRENT_LESSON(state, lesson){
             state.currentLesson = lesson;
         },
-
         UPDATE_LESSON_IMAGES(state, images){
-            state.currentLessonImages = [];
-            images.forEach(img => state.currentLessonImages.push(img));
+            state.currentLessonImages = images;
         },
-
         UNLOAD_LESSON(state) {
             state.currentLesson = false;
             state.currentLessonImages = false;
-        }
+        },
+        UPDATE_POP_UP_IMAGE(state, image) {
+            state.currentPopUpImage = image;
+        },
+        UPDATE_POP_UP_STATE(state, choice) {
+            state.popup = choice;
+        },
     },
 
     actions: {
