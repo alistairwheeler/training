@@ -106,14 +106,14 @@
       }
     },
     async created() {
-      let splitted = this.$router.currentRoute.path.split("lessonItem");
+      let splitted = this.$router.currentRoute.path.split("lesson");
       let lessonPath = splitted[1] ? splitted[1] : "";
       let lesson = this.getLessonFromPath(lessonPath);
 
       if (!lesson)
-        this.$router.push('/404');
+        await this.$router.push('/404');
       else
-        this.$store.dispatch("loadLesson", {
+        await this.$store.dispatch("loadLesson", {
           smp: this.$smp,
           lessonId: lesson.row_id
         });

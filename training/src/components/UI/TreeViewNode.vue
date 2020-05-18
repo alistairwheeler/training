@@ -43,7 +43,7 @@
         if (node.trnCatPath)
           this.showChildren = !this.showChildren;
         else
-          this.$router.push('/lessonItem' + node.trnLsnPath).catch(err => console.error(err))
+          this.$router.push('/lesson' + node.trnLsnPath).catch(err => console.error(err))
       },
     }
   }
