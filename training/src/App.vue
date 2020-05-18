@@ -93,9 +93,8 @@
         },
 
         async beforeCreate() {
-            this.$smp.login(() => {
-                console.log("LOGGED IN")
-            });
+            await this.$smp.login();
+            console.log('LOGGED IN');
         },
 
         async created() {
