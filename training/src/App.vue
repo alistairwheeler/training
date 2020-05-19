@@ -1,77 +1,35 @@
 <template>
   <div class="app">
+    <Header/>
 
-    <header id="top-menu">
-      <div id="hamburger" class="hamburger" :class="[drawerOpen ? 'open' : '']" @click="toggleMenu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="simplicite-logo" @click="goToHome"></div>
-      <div class="controls">
-        <i id="previous-button" class="material-icons control" @click="arrowNavigationClicked(-1)"
-           v-show="isUserOnLessonPage()">skip_previous</i>
-        <i id="next-button" class="material-icons control" @click="arrowNavigationClicked(1)"
-           v-show="isUserOnLessonPage()">skip_next</i>
-        <a href="http://community.simplicite.io" target="_blank">
-          <i id="forum" class="material-icons control">forum</i>
-        </a>
-        <a href="https://github.com/simplicitesoftware" target="_blank">
-          <i id="github" class="material-icons control">code</i>
-        </a>
-      </div>
-    </header>
-
-    <div id="main-section">
-      <aside id="aside" class="side-menu" :class="[drawerOpen ? 'open' : '']">
+    <main>
+      <nav class="navigation-drawer" :class="[drawerOpen ? 'open' : '']">
         <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory" :depth="0"/>
-      </aside>
+      </nav>
+      <div class="page-content">
+        <router-view class="page-content__router-view" :key="$route.fullPath" v-if="tree.length > 1"/>
+      </div>
+    </main>
 
-      <main id="main">
-        <router-view id="router" :key="$route.fullPath" v-if="tree.length > 1"/>
-      </main>
-    </div>
-    <div class="popup" :class="[popupVisible ? 'active' : '']">
+    <div class="popup" :class="[popupVisible ? 'visible' : '']">
       <div class="popup__overlay" @click="disablePopUpImage"></div>
-      <img class="popup__image" :src="currentPopUpImage" alt="popup image"/>
+      <img class="popup__image" :src="currentPopUpImageSrc" alt="popup image"/>
     </div>
   </div>
 </template>
 
 <script>
-  import {mapGetters, mapState} from "vuex";
+  import {mapState} from "vuex";
   import TreeViewNode from "./components/UI/TreeViewNode";
+  import Header from "./components/UI/Header";
 
   export default {
     name: 'App',
-    components: {TreeViewNode},
+    components: {Header, TreeViewNode},
     computed: {
-      ...mapState(['tree', 'drawerOpen', 'currentLesson', 'currentPopUpImage', 'popupVisible']),
-      ...mapGetters(['getLessonFromPath']),
+      ...mapState(['tree', 'drawerOpen', 'currentPopUpImageSrc', 'popupVisible']),
     },
     methods: {
-      goToHome() {
-        this.$router.push('/').catch(() => console.log('Navigation Duplicated'))
-      },
-      arrowNavigationClicked(direction){
-        let path = '';
-        if (direction === -1) path = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnPrevious;
-        if (direction === 1) path = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnNext;
-        if (path)
-          this.$router.push('/lesson/' + path.toString().substring(1)).catch(err => console.error(err));
-        else if (direction === -1) this.shakeElement("previous-button");
-        else if (direction === 1) this.shakeElement("next-button");
-      },
-      isUserOnLessonPage() {
-        return this.$router.currentRoute.path.includes("/lesson/")
-      },
-      toggleMenu() {
-        this.$store.commit('UPDATE_DRAWER_OPEN', !this.drawerOpen);
-      },
-      shakeElement(elementId) {
-        document.getElementById(elementId).classList.add("shaked");
-        setTimeout(() => document.getElementById(elementId).classList.remove('shaked'), 150);
-      },
       disablePopUpImage() {
         this.$store.commit('UPDATE_POP_UP_STATE', false);
       },
@@ -87,21 +45,15 @@
 </script>
 
 <style lang="scss">
-
   @import "assets/sass/utils/variables";
   @import "assets/sass/utils/mixins";
 
-  .image {
-    width: 400px;
-    max-width: 100%;
-  }
-
   * {
-    outline: 0;
     font-family: 'Source Sans Pro', sans-serif;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    outline: 0;
   }
 
   .app {
@@ -109,128 +61,16 @@
     display: flex;
     flex-direction: column;
 
-    #top-menu {
-      width: 100%;
-      display: flex;
-      flex-flow: row;
-      flex: 0 1 0;
-      align-items: center;
-      padding: 8px;
-      background: linear-gradient(to right, $color-primary 40%, $color-secondary);
-      color: white;
-
-      .hamburger {
-        width: $burger-width;
-        height: $burger-height;
-        position: relative;
-        transition: .5s ease-in-out;
-        cursor: pointer;
-
-        span {
-          display: block;
-          position: absolute;
-          height: 6px;
-          width: 100%;
-          background: white;
-          border-radius: 9px;
-          left: 0;
-          //transform: rotate(0deg);
-          transition: $duration-drawer-collapse ease-in-out;
-
-          &:nth-child(1) {
-            top: 0px;
-          }
-
-          &:nth-child(2) {
-            top: 12px;
-          }
-
-          &:nth-child(3) {
-            top: 24px;
-          }
-        }
-
-        &.open {
-          span:nth-child(1) {
-            top: 12px;
-            transform: rotate(135deg);
-          }
-
-          span:nth-child(2) {
-            opacity: 0;
-            left: -60px;
-          }
-
-          span:nth-child(3) {
-            top: 12px;
-            transform: rotate(-135deg);
-          }
-        }
-      }
-
-      .controls {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-
-        .control {
-          margin-left: map-get($margins, small);
-          padding: map-get($paddings, medium);
-          border-radius: map-get($radius, x-large);
-          color: white;
-
-          &:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-          }
-        }
-      }
-
-      .simplicite-logo {
-        background-image: url("../public/Logo_Simplicite_Noir.png");
-        background-repeat: no-repeat;
-        background-size: contain;
-        z-index: 200;
-        width: 20%;
-        height: $logo-height;
-        margin: 5px 5px 5px 16px;
-        filter: invert(100%);
-
-        &:hover {
-          cursor: pointer;
-        }
-      }
-
-      .shaked {
-        animation: headshake 100ms cubic-bezier(.4, .1, .6, .9);
-        animation-iteration-count: 2;
-      }
-
-      @keyframes headshake {
-        0% {
-          background-color: $color-accent;
-          border: solid $color-accent;
-        }
-        25% {
-          transform: translateX(10%);
-        }
-        75% {
-          transform: translateX(-10%);
-        }
-      }
-
-    }
-
-    #main-section {
-      flex: 1 1; //So the main content extends to the bottom of the page
+    main {
+      flex: 1 1; // So the main content extends to the bottom of the page
       display: flex;
       flex-direction: row;
       width: 100%;
       position: relative;
 
-      aside {
+      .navigation-drawer {
         display: block;
-        width: 0px;
+        width: 0;
         height: 100%;
         color: white;
         background: linear-gradient($color-primary 40%, $color-secondary);
@@ -241,25 +81,15 @@
         }
       }
 
-      main {
-        display: block;
+      .page-content {
         width: 100%;
-        padding: map-get($paddings, medium);
 
-        #router {
+        &__router-view {
           width: 100%;
           height: 100%;
+          padding: map-get($paddings, medium);
         }
       }
-    }
-  }
-
-  a {
-    color: black;
-
-    &:visited {
-      color: black;
-      text-decoration: none;
     }
   }
 
@@ -270,7 +100,7 @@
     width: 100%;
     height: 100%;
 
-    &.active {
+    &.visible {
       z-index: 1000;
       visibility: visible;
     }

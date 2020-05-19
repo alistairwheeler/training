@@ -16,7 +16,7 @@ export default new Vuex.Store({
     drawerOpen: true,
     currentLesson: false,
     currentLessonImages: false,
-    currentPopUpImage: '',
+    currentPopUpImageSrc: '',
     popupVisible: false,
   },
   getters: {
@@ -117,8 +117,8 @@ export default new Vuex.Store({
       state.currentLesson = false;
       state.currentLessonImages = false;
     },
-    UPDATE_POP_UP_IMAGE(state, image) {
-      state.currentPopUpImage = image;
+    UPDATE_POP_UP_IMAGE(state, imageSrc) {
+      state.currentPopUpImageSrc = imageSrc;
     },
     UPDATE_POP_UP_STATE(state, choice) {
       state.popup = choice;
