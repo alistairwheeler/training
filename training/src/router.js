@@ -7,12 +7,12 @@ import SandBoxDemand from "./components/Pages/SandBox/Demand"
 
 //1. Routes definition
 const routes = [
-    { path: '/', component: Home },
-    { path: '/lesson/*', component: Lesson },
-    { path: '/sandbox/:demandId', component: SandBoxDeployment },
-    { path: '/sandbox-demand', component: SandBoxDemand },
+    { path: '/', component: Home, name: 'Home' },
+    { path: '/lesson/*', component: Lesson, name: 'Lesson' },
+    { path: '/sandbox/:demandId', component: SandBoxDeployment, name:'SandBoxDeployment' },
+    { path: '/sandbox-demand', component: SandBoxDemand, name: 'SandBoxDemand' },
     //This route is last in the list because it can override the other ones (because it matches all routes)
-    { path: '/*', component: PageNotFound }
+    { path: '/*', component: PageNotFound, name: 'PageNotFound' }
 ];
 
 //2. Exporting the router instance

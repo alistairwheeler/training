@@ -3,7 +3,7 @@
     <Header/>
 
     <main>
-      <nav class="navigation-drawer" :class="[drawerOpen ? 'open' : '']">
+      <nav class="navigation-drawer" :class="[isDrawerOpen ? 'open' : '']">
         <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory" :depth="0"/>
       </nav>
       <div class="page-content">
@@ -11,9 +11,9 @@
       </div>
     </main>
 
-    <div class="popup" :class="[popupVisible ? 'visible' : '']">
+    <div class="popup" :class="[isPopupVisible ? 'visible' : '']">
       <div class="popup__overlay" @click="disablePopUpImage"></div>
-      <img class="popup__image" :src="currentPopUpImageSrc" alt="popup image"/>
+      <img class="popup__image" :src="currentPopupImageSrc" alt="popup image"/>
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@
     name: 'App',
     components: {Header, TreeViewNode},
     computed: {
-      ...mapState(['tree', 'drawerOpen', 'currentPopUpImageSrc', 'popupVisible']),
+      ...mapState(['tree', 'isDrawerOpen', 'currentPopupImageSrc', 'isPopupVisible']),
     },
     methods: {
       disablePopUpImage() {

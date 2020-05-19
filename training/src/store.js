@@ -8,16 +8,16 @@ Vue.use(Vuex);
 - The whole app is organized around a TreeView that is displayed in the navigation drawer of the app. This TreeView is
 here for the user to navigate in the app.
 - The state of the drawer is also controlled from this store because it can be changed from several components.
-- The image popupVisible state and image src are also controlled from this store.
+- The image isPopupVisible state and image src are also controlled from this store.
 */
 export default new Vuex.Store({
   state: {
     tree: [],
-    drawerOpen: true,
+    isDrawerOpen: true,
     currentLesson: false,
     currentLessonImages: false,
-    currentPopUpImageSrc: '',
-    popupVisible: false,
+    isPopupVisible: false,
+    currentPopupImageSrc: '',
   },
   getters: {
     breadCrumbItems:
@@ -26,33 +26,33 @@ export default new Vuex.Store({
         parents.splice(0, 1);
         let cursor = state.tree;
         let path = "";
-        let rslt = [];
+        let result = [];
         let finish = false;
 
         parents.forEach(function (val, idx, array) {
           path += "/" + val;
-          let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath == path);
-          if (foundCat != undefined) {
-            rslt.push({
+          let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath === path);
+          if (foundCat !== undefined) {
+            result.push({
               title: foundCat.trnCatTitle,
               path: foundCat.trnCatPath
             });
-            if (idx == parents.length - 2)
+            if (idx === parents.length - 2)
               cursor = foundCat.lessons;
             else
               cursor = foundCat.categories;
-          } else if (idx == parents.length - 1) {
-            let foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath == path);
-            if (foundLsn != undefined) {
-              rslt.push({
+          } else if (idx === parents.length - 1) {
+            let foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath === path);
+            if (foundLsn !== undefined) {
+              result.push({
                 title: foundLsn.trnLsnTitle,
                 path: foundLsn.trnLsnPath
-              })
+              });
               finish = true;
             }
           }
         });
-        return finish == true ? rslt : false;
+        return finish === true ? result : false;
       },
     getLessonFromPath:
       state => lessonPath => {
@@ -64,31 +64,9 @@ export default new Vuex.Store({
 
         parents.forEach(function (val, idx, array) {
           path += "/" + val;
-          let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath == path);
-          if (foundCat != undefined) {
-            if (idx == parents.length - 2)
-              cursor = foundCat.lessons;
-            else
-              cursor = foundCat.categories;
-          } else if (idx == parents.length - 1) {
-            foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath == path);
-          }
-        });
-        return foundLsn;
-      },
-    getNextLessonPath:
-      state => lessonPath => {
-        let parents = lessonPath.split('/');
-        parents.splice(0, 1);
-        let cursor = state.tree;
-        let path = "";
-        let foundLsn = undefined;
-
-        parents.forEach(function (val, idx, array) {
-          path += "/" + val;
           let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath === path);
           if (foundCat !== undefined) {
-            if (idx === parents.length - 2) //Means we are in the parent category of the we're looking lesson
+            if (idx === parents.length - 2)
               cursor = foundCat.lessons;
             else
               cursor = foundCat.categories;
@@ -105,7 +83,7 @@ export default new Vuex.Store({
       state.tree = tree;
     },
     UPDATE_DRAWER_OPEN(state, choice) {
-      state.drawerOpen = choice;
+      state.isDrawerOpen = choice;
     },
     UPDATE_CURRENT_LESSON(state, lesson) {
       state.currentLesson = lesson;
@@ -118,10 +96,10 @@ export default new Vuex.Store({
       state.currentLessonImages = false;
     },
     UPDATE_POP_UP_IMAGE(state, imageSrc) {
-      state.currentPopUpImageSrc = imageSrc;
+      state.currentPopupImageSrc = imageSrc;
     },
     UPDATE_POP_UP_STATE(state, choice) {
-      state.popup = choice;
+      state.isPopupVisible = choice;
     },
   },
 

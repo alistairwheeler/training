@@ -26,7 +26,7 @@
       navigationArrowVisible: false,
     }),
     computed: {
-      ...mapState(['drawerOpen', 'currentLesson']),
+      ...mapState(['isDrawerOpen', 'currentLesson']),
       ...mapGetters(['getLessonFromPath']),
     },
     methods: {
@@ -43,16 +43,19 @@
         else if (direction === 1) this.shakeElement("next-button");
       },
       toggleMenu() {
-        this.$store.commit('UPDATE_DRAWER_OPEN', !this.drawerOpen);
+        this.$store.commit('UPDATE_DRAWER_OPEN', !this.isDrawerOpen);
       },
       shakeElement(elementId) {
         document.getElementById(elementId).classList.add("shaked");
         setTimeout(() => document.getElementById(elementId).classList.remove('shaked'), 150);
       },
     },
+    created() {
+      if (this.$router.currentRoute.name === 'Lesson') this.navigationArrowVisible = true
+    },
     watch:{
       $route (to){
-        this.navigationArrowVisible = to.path.includes('lesson');
+        this.navigationArrowVisible = to.name === 'Lesson';
       }
     },
   }
