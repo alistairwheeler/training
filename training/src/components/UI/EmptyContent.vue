@@ -13,28 +13,25 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="sass" scoped>
+@import "../../assets/sass/utils/variables"
 
-  @import "../../assets/sass/utils/variables";
+.center-content
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 100%
+  height: 100%
 
-  .center-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
+.empty-content
+  width: 50%
+  height: 50%
+  margin: auto
+  text-align: center
 
-  .empty-content {
-    width: 50%;
-    height: 50%;
-    margin: auto;
-    text-align: center;
-  }
+.empty-image
+  max-width: 100%
+  max-height: 100%
+  margin-bottom: 1em
 
-  .empty-image {
-    max-width: 100%;
-    max-height: 100%;
-    margin-bottom: 1em;
-  }
 </style>
