@@ -61,78 +61,61 @@
   }
 </script>
 
-<style scoped lang="scss">
-  @import "../../assets/sass/utils/variables";
-  @import "../../assets/sass/utils/mixins";
+<style scoped lang="sass">
+@import "../../assets/sass/utils/variables"
+@import "../../assets/sass/utils/mixins"
 
-  header {
-    width: 100%;
-    display: flex;
-    flex-flow: row;
-    flex: 0 1 0;
-    align-items: center;
-    padding: 8px;
-    background: linear-gradient(to right, $color-primary 40%, $color-secondary);
-    color: white;
+header
+  width: 100%
+  display: flex
+  flex-flow: row
+  flex: 0 1 0
+  align-items: center
+  padding: 8px
+  background: linear-gradient(to right, $color-primary 40%, $color-secondary)
+  color: white
+  .logo
+    background-image: url("../../../public/Logo_Simplicite_Noir.png")
+    background-repeat: no-repeat
+    background-size: contain
+    z-index: 200
+    width: 20%
+    height: $logo-height
+    margin: 5px 5px 5px 16px
+    filter: invert(100%)
+    &:hover
+      cursor: pointer
 
-    .menu-icon {
-      width: $menu-icon-width;
-      height: $menu-icon-height;
-      position: relative;
-      cursor: pointer;
-      object-fit: cover;
-    }
+  .menu-icon
+    width: $menu-icon-width
+    height: $menu-icon-height
+    position: relative
+    cursor: pointer
+    object-fit: cover
 
-    .header-buttons {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
+  .header-buttons
+    margin-left: auto
+    display: flex
+    align-items: center
+    &__button
+      margin-left: map-get($margins, small)
+      padding: map-get($paddings, medium)
+      border-radius: map-get($radius, x-large)
+      color: white
+      &:hover
+        background-color: rgba(255, 255, 255, 0.1)
+        cursor: pointer
 
-      &__button {
-        margin-left: map-get($margins, small);
-        padding: map-get($paddings, medium);
-        border-radius: map-get($radius, x-large);
-        color: white;
+  .shaked
+    animation: headshake 100ms cubic-bezier(.4, .1, .6, .9)
+    animation-iteration-count: 2
 
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-          cursor: pointer;
-        }
-      }
-    }
-
-    .logo {
-      background-image: url("../../../public/Logo_Simplicite_Noir.png");
-      background-repeat: no-repeat;
-      background-size: contain;
-      z-index: 200;
-      width: 20%;
-      height: $logo-height;
-      margin: 5px 5px 5px 16px;
-      filter: invert(100%);
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-
-    .shaked {
-      animation: headshake 100ms cubic-bezier(.4, .1, .6, .9);
-      animation-iteration-count: 2;
-    }
-
-    @keyframes headshake {
-      0% {
-        background-color: $color-accent;
-        border: solid $color-accent;
-      }
-      25% {
-        transform: translateX(10%);
-      }
-      75% {
-        transform: translateX(-10%);
-      }
-    }
-
-  }
+  @keyframes headshake
+    0%
+      background-color: $color-accent
+      border: solid $color-accent
+    25%
+      transform: translateX(10%)
+    75%
+      transform: translateX(-10%)
 </style>
