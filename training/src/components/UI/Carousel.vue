@@ -3,7 +3,7 @@
 <template>
   <div class="carousel">
     <div class="carousel__img-holder">
-      <transition>
+      <transition :duration="125">
         <img :src="currentImg.filesrc" alt="carousel image" :download="currentImg.filename"
              v-bind:key="currentImg.filename" @click="displayFullScreenImage(currentImg.filesrc)">
       </transition>
@@ -42,7 +42,6 @@
         this.counter = this.counter < 0 ? this.images.length - 1 : this.counter;
       },
       displayFile(filename) {
-        console.log("Switching carousel to " + filename + " if possible");
         for (let i = 0; i < this.images.length; i++) {
           if (this.images[i].filename === filename) {
             this.counter = i;
@@ -51,7 +50,6 @@
         }
       },
       displayFullScreenImage(image) {
-        console.log("displayFullScreenImage " + image)
         this.$store.commit('UPDATE_POP_UP_IMAGE', image);
         this.$store.commit('UPDATE_POP_UP_STATE', true);
       }
@@ -130,4 +128,5 @@
 
   .v-enter-active
     transition-delay: 0.2s
+
 </style>
