@@ -58,16 +58,16 @@
     },
     mounted() {
       if (!this.images.length) {
-        let buttons = document.querySelector(".buttons");
+        let buttons = document.querySelector(".carousel__buttons");
         buttons.style.visibility = "hidden";
       } else {
-        let box = document.querySelector(".carousel-wrapper");
-        let buttons = document.querySelector(".buttons");
+        let box = document.querySelector(".carousel");
+        let buttons = document.querySelector(".carousel__buttons");
         box.addEventListener('mouseover', () => {
           buttons.style.visibility = "visible";
         });
         box.addEventListener('mouseout', e => {
-          if (!e.relatedTarget.classList.contains('buttons')) {
+          if (!e.relatedTarget.classList.contains('carousel__buttons')) {
             buttons.style.visibility = "hidden";
           }
 
