@@ -1,20 +1,20 @@
 <template>
   <div class="app">
-
     <Header/>
     <main>
       <nav class="navigation-drawer" :class="[isDrawerOpen ? 'open' : '']">
         <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory" :depth="0"/>
       </nav>
       <div class="page-content">
-        <router-view class="page-content__router-view" :key="$route.fullPath" v-if="tree.length > 1"/>
+        <router-view class="page-content__router-view" :key="$route.fullPath" v-if="tree.length"/>
       </div>
     </main>
-    <div class="popup" :class="[isPopupVisible ? 'visible' : '']">
-      <div class="popup__overlay" @click="disablePopUpImage"></div>
-      <img class="popup__image" :src="currentPopupImageSrc" alt="popup image"/>
+  <transition name="light-box">
+    <div class="light-box" v-show="isLightBoxVisible" :class="[isLightBoxVisible ? 'visible' : '']">
+      <div class="light-box__overlay" @click="$store.dispatch('hideLightBox')"></div>
+      <img class="light-box__image" :src="lightBoxImageSrc" alt="light-box image"/>
     </div>
-
+  </transition>
   </div>
 </template>
 
@@ -27,12 +27,7 @@
     name: 'App',
     components: {Header, TreeViewNode},
     computed: {
-      ...mapState(['tree', 'isDrawerOpen', 'currentPopupImageSrc', 'isPopupVisible']),
-    },
-    methods: {
-      disablePopUpImage() {
-        this.$store.commit('UPDATE_POP_UP_STATE', false);
-      },
+      ...mapState(['tree', 'isDrawerOpen', 'lightBoxImageSrc', 'isLightBoxVisible']),
     },
     async beforeCreate() {
       await this.$smp.login();
@@ -45,15 +40,15 @@
 </script>
 
 <style lang="sass">
-@import "assets/sass/utils/variables"
-@import "assets/sass/utils/mixins"
+@import "assets/sass/variables"
+@import "assets/sass/mixins"
 
 *
   font-family: 'Source Sans Pro', sans-serif
   box-sizing: border-box
   margin: 0
   padding: 0
-  outline: 0
+  outline: none
 
 .app
   height: 100%
@@ -82,23 +77,17 @@
         height: 100%
         padding: map-get($paddings, medium)
 
-.popup
+.light-box
   position: absolute
-  z-index: -10000
-  visibility: hidden
   width: 100%
   height: 100%
-  &.visible
-    z-index: 1000
-    visibility: visible
-
+  z-index: 10000
   &__overlay
     width: 100%
     height: 100%
-    background-color: rgba(0, 0, 0, 0.4)
+    background-color: $light-box-overlay-background
     &:hover
       cursor: pointer
-
   &__image
     border-radius: map-get($radius, regular)
     max-width: 80%
@@ -106,5 +95,20 @@
     position: absolute
     top: 10%
     left: 15%
+
+.light-box-enter-active
+  animation: lightBoxIn $light-box-duration-apparition
+.light-box-enter-leave
+  animation: lightBoxOut $light-box-duration-apparition
+@keyframes lightBoxIn
+  from
+    opacity: 0
+  to
+    opacity: 1
+@keyframes lightBoxOut
+  from
+    opacity: 1
+  to
+    opacity: 0
 </style>
 

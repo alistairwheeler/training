@@ -10,7 +10,7 @@
               <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
             </li>
           </ul>
-          <!-- <button id="toggle-scroll" class="toggle-scroll" @click="toggleScroll">Desactiver le scroll des images</button>-->
+          <!-- <button id="toggle-scroll" class="toggle-scroll" @click="toggleScroll">Desactiver le scroll des slides</button>-->
 
           <div class="lesson_content" v-highlightjs v-on:click="lessonClick"
                v-if="this.currentLesson.trnLsnHtmlContent"
@@ -21,11 +21,8 @@
       </div>
 
       <div class="grid-item grid-item-media">
-        <div v-if="this.currentLessonImages" class="occupy100percent">
-          <Carousel v-bind:images="this.currentLessonImages" v-if="this.currentLessonImages.length" ref="carousel"/>
-          <EmptyContent v-else/>
-        </div>
-        <Spinner v-else/>
+        <Slider v-if="currentLessonImages.length" :slides="currentLessonImages"/>
+        <EmptyContent v-else/>
       </div>
       <div class="grid-item grid-item-video">
         <div v-if="this.currentLesson" class="occupy100percent">
@@ -44,14 +41,14 @@
 
 <script>
   /* eslint-disable no-console,no-unused-vars,no-undef */
-  import Carousel from "../UI/Carousel";
   import Spinner from "../UI/Spinner";
   import EmptyContent from "../UI/EmptyContent";
   import {mapGetters, mapState} from "vuex";
+  import Slider from "../UI/Slider";
 
   export default {
     name: "LessonItem",
-    components: {Carousel, Spinner, EmptyContent},
+    components: {Slider, Spinner, EmptyContent},
     data: () => ({
       urlList: [],
       lesson: false,
@@ -80,9 +77,9 @@
         document.getElementById("toggle-scroll").classList.toggle("off");
         if (this.scrollEnabled) {
           console.log("Scroll is enabled")
-          document.getElementById("toggle-scroll").innerText = "Désactiver le scroll des images"
+          document.getElementById("toggle-scroll").innerText = "Désactiver le scroll des slides"
         } else {
-          document.getElementById("toggle-scroll").innerText = "Réactiver le scroll des images"
+          document.getElementById("toggle-scroll").innerText = "Réactiver le scroll des slides"
           console.log("scroll is NOT enabled")
         }
       },
@@ -101,7 +98,8 @@
             }
           }
           if (potentialImages.length > 0 && this.scrollEnabled)
-            this.$refs.carousel.displayFile(potentialImages[potentialImages.length - 1]);//On affiche la dernière image dans le carousel
+            // TODO : instead use th goTo method in the slider
+            this.$refs.carousel.displayFile(potentialImages[potentialImages.length - 1]); // On affiche la dernière image dans le carousel
         });
       }
     },

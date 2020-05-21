@@ -8,7 +8,7 @@ Vue.use(Vuex);
 - The whole app is organized around a TreeView that is displayed in the navigation drawer of the app. This TreeView is
 here for the user to navigate in the app.
 - The state of the drawer is also controlled from this store because it can be changed from several components.
-- The image isPopupVisible state and image src are also controlled from this store.
+- The light-box isLightBoxVisible state and image src are also controlled from this store.
 */
 export default new Vuex.Store({
   state: {
@@ -16,8 +16,8 @@ export default new Vuex.Store({
     isDrawerOpen: true,
     currentLesson: false,
     currentLessonImages: false,
-    isPopupVisible: false,
-    currentPopupImageSrc: '',
+    isLightBoxVisible: false,
+    lightBoxImageSrc: '',
   },
   getters: {
     breadCrumbItems:
@@ -95,11 +95,11 @@ export default new Vuex.Store({
       state.currentLesson = false;
       state.currentLessonImages = false;
     },
-    UPDATE_POP_UP_IMAGE(state, imageSrc) {
-      state.currentPopupImageSrc = imageSrc;
+    SET_LIGHT_BOX_IMAGE(state, imageSrc) {
+      state.lightBoxImageSrc = imageSrc;
     },
-    UPDATE_POP_UP_STATE(state, choice) {
-      state.isPopupVisible = choice;
+    SET_LIGHT_BOX_VISIBILITY(state, choice) {
+      state.isLightBoxVisible = choice;
     },
   },
 
@@ -113,12 +113,10 @@ export default new Vuex.Store({
         });
       })
     },
-
     async loadLesson({commit}, payload) {
       await this.dispatch("loadLessonContent", payload);
       this.dispatch("loadLessonImages", payload);
     },
-
     async loadLessonImages({commit}, payload) {
       return new Promise((resolve, reject) => {
         let picture = payload.smp.getBusinessObject("TrnPicture");
@@ -135,7 +133,6 @@ export default new Vuex.Store({
         }, {'trnPicLsnId': payload.lessonId}, {inlineDocs: 'infos'})
       });
     },
-
     async loadLessonContent(context, payload) {
       return new Promise(async (resolve, reject) => {
         let lesson = payload.smp.getBusinessObject("TrnLesson");
@@ -145,7 +142,6 @@ export default new Vuex.Store({
         }, payload.lessonId);
       });
     },
-
     async fetchLessonsPictureURLs({commit}, payload) {
       return new Promise((resolve, reject) => {
         let picture = payload.smp.getBusinessObject("TrnPicture");
@@ -157,5 +153,12 @@ export default new Vuex.Store({
         }, {'trnPicLsnId': payload.lessonId})
       });
     },
+    displayLightBox({commit}, imageSrc) {
+      commit('SET_LIGHT_BOX_IMAGE', imageSrc);
+      commit('SET_LIGHT_BOX_VISIBILITY', true);
+    },
+     hideLightBox({commit}) {
+       commit('SET_LIGHT_BOX_VISIBILITY', false);
+     }
   },
 });

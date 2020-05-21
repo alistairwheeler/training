@@ -25,7 +25,7 @@
         type: Array,
         required: true,
         default: () => [],
-        note: 'The images in the carousel',
+        note: 'The slides in the carousel',
       },
     },
     data: () => ({
@@ -50,8 +50,8 @@
         }
       },
       displayFullScreenImage(image) {
-        this.$store.commit('UPDATE_POP_UP_IMAGE', image);
-        this.$store.commit('UPDATE_POP_UP_STATE', true);
+        this.$store.commit('SET_LIGHT_BOX_IMAGE', image);
+        this.$store.commit('SET_LIGHT_BOX_VISIBILITY', true);
       }
     },
     mounted() {

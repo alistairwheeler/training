@@ -1,14 +1,12 @@
 <template>
   <div class="slider" @mouseover="controlsVisible = true" @mouseout="controlsVisible = false">
-    <div class="slider__image-wrapper" v-for="(img, index) in images" :key="index">
-      <transition :name="transitionName">
-        <img v-show="index === currentImageIndex" :src="img" alt="slider image">
+      <transition :name="transitionName" class="slider__image-wrapper" v-for="(slide, index) in slides" :key="index">
+        <img v-show="index === currentImageIndex" :src="slide.filesrc" :alt="slide.filename" @click="$store.dispatch('displayLightBox', slide.filesrc)"/>
       </transition>
-    </div>
-    <button class="slider__control slider__previous" v-if="controls" :class="controlsVisible ? 'visible' : ''" @click.prevent="previous"><i class="material-icons">keyboard_arrow_left</i></button>
-    <button class="slider__control slider__next" v-if="controls" :class="controlsVisible ? 'visible' : ''" @click.prevent="next"><i class="material-icons">keyboard_arrow_right</i></button>
-    <div class="slider__pagination" v-if="pagination">
-      <button v-for="n in images.length" :key="n" @click="goTo(n-1)" :class="[n-1 === currentImageIndex ? 'active' : '']"/>
+    <button class="slider__control slider__previous" v-if="controls" :class="controlsVisible && slides.length > 1 ? 'visible' : ''" @click.prevent="previous"><i class="material-icons">keyboard_arrow_left</i></button>
+    <button class="slider__control slider__next" v-if="controls" :class="controlsVisible && slides.length > 1 ? 'visible' : ''" @click.prevent="next"><i class="material-icons">keyboard_arrow_right</i></button>
+    <div class="slider__pagination" v-if="pagination && slides.length > 1">
+      <button v-for="n in slides.length" :key="n" @click="goTo(n-1)" :class="[n-1 === currentImageIndex ? 'active' : '']"/>
     </div>
   </div>
 </template>
@@ -17,11 +15,11 @@
   export default {
     name: "Slider",
     props: {
-      images: {
+      slides: {
         type: Array,
-        required: true,
+        required: false,
         default: () => [],
-        note: 'The images in the carousel',
+        note: 'The slides in the carousel',
       },
       controls: {
         type: Boolean,
@@ -34,7 +32,7 @@
         required: false,
         default: true,
         note: 'Display the pagination at the bottom',
-      }
+      },
     },
     data: () => ({
       currentImageIndex: 0,
@@ -45,18 +43,23 @@
       next() {
         // Check grafikart vuejs slider video if there is a problem on loading, because maybe the there is a need to check this part of the code
         this.direction = 'right';
-        if (this.currentImageIndex === this.images.length - 1) this.currentImageIndex = 0;
+        if (this.currentImageIndex === this.slides.length - 1) this.currentImageIndex = 0;
         else this.currentImageIndex++;
       },
       previous() {
         this.direction = 'left';
-        if (this.currentImageIndex === 0) this.currentImageIndex = this.images.length - 1;
+        if (this.currentImageIndex === 0) this.currentImageIndex = this.slides.length - 1;
         else this.currentImageIndex--;
       },
-      goTo(index){
-        if (index > this.currentImageIndex) this.direction = 'right';
+      goTo(indexToGo){
+        if (indexToGo > this.currentImageIndex) this.direction = 'right';
         else this.direction = 'left';
-        this.currentImageIndex = index;
+        if (indexToGo > this.slides.length-1) this.currentImageIndex = 0;
+        else if (indexToGo < 0) this.currentImageIndex = this.slides.length-1;
+        else this.currentImageIndex = indexToGo;
+      },
+      displayFullScreenImage(imageSrc) {
+        this.$store.dispatch('displayLightBox', imageSrc);
       }
     },
     computed: {
@@ -65,12 +68,7 @@
       }
     },
     created() {
-      function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-      }
-      for (let i = 1; i < 5; i++){
-        this.images.push('https://picsum.photos/id/'+ getRandomInt(100) +'/1000/300')
-      }
+      console.log(this.slides);
     }
   }
 </script>
@@ -79,11 +77,17 @@
 @import "../../assets/sass/variables"
 .slider
   position: relative
-  &__image-wrapper
+  width: 100%
+  height: 100%
+  overflow-x: hidden
+  img
     width: 100%
-    img
-      width: 100%
-      object-fit: fill
+    height: 100%
+    max-width: 100%
+    max-height: 100%
+    object-fit: contain
+    &:hover
+      cursor: pointer
   .slider__control
     opacity: 0
     transition: $slider-duration-control-apparition all
@@ -118,15 +122,16 @@
     text-align: center
     button
       display: inline-block
+      border: transparent 2px solid
+      outline: none
       width: $slider-pagination-size
       height: $slider-pagination-size
       border-radius: $slider-pagination-size
-      border: none
-      outline: none
-      margin: $slider-margin
-      background-color: #000
+      margin: $slider-pagination-margin
+      background-color: $slider-pagination-inactive-color
       &.active
-        background-color: white
+        background-color: $slider-pagination-active-color
+        border: solid 2px black
 
 .slide-right-enter-active
   animation: slideRightIn $slider-duration-transition
