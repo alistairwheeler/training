@@ -86,7 +86,7 @@
       object-fit: fill
   .slider__control
     opacity: 0
-    transition: $duration-slider-control all
+    transition: $slider-duration-control-apparition all
     outline: none
     border: none
     border-radius: 100%
@@ -129,10 +129,10 @@
         background-color: white
 
 .slide-right-enter-active
-  animation: slideRightIn $duration-slider-transition
+  animation: slideRightIn $slider-duration-transition
 
 .slide-right-leave-active
-  animation: slideRightOut $duration-slider-transition
+  animation: slideRightOut $slider-duration-transition
   position: absolute
   top: 0
   left: 0
@@ -152,10 +152,10 @@
     transform: translateX(-100%)
 
 .slide-left-enter-active
-  animation: slideLeftIn $duration-slider-transition
+  animation: slideLeftIn $slider-duration-transition
 
 .slide-left-leave-active
-  animation: slideLeftOut $duration-slider-transition
+  animation: slideLeftOut $slider-duration-transition
   position: absolute
   top: 0
   left: 0
