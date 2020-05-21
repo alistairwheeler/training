@@ -122,8 +122,8 @@
       height: $slider-pagination-size
       border-radius: $slider-pagination-size
       border: none
-      margin: $slider-margin
       outline: none
+      margin: $slider-margin
       background-color: #000
       &.active
         background-color: white
