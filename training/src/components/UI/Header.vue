@@ -1,6 +1,8 @@
 <template>
   <header id="top-menu">
-    <img src="../../assets/icons/menu.svg" alt="menu icon" class="menu-icon" @click="toggleMenu"/>
+    <div class="menu-icon" @click="toggleMenu">
+      <i class="material-icons menu-icon__image">menu</i>
+    </div>
     <div class="logo" @click="goToHome"></div>
     <nav class="header-buttons">
       <i id="previous-button" class="material-icons header-buttons__button" @click="arrowNavigationClicked(-1)"
@@ -62,8 +64,8 @@
 </script>
 
 <style scoped lang="sass">
-@import "../../assets/sass/utils/variables"
-@import "../../assets/sass/utils/mixins"
+@import "../../assets/sass/variables"
+@import "../../assets/sass/mixins"
 
 header
   width: 100%
@@ -71,7 +73,7 @@ header
   flex-flow: row
   flex: 0 1 0
   align-items: center
-  padding: 8px
+  padding: $header-padding
   background: linear-gradient(to right, $color-primary 40%, $color-secondary)
   color: white
   .logo
@@ -79,19 +81,24 @@ header
     background-repeat: no-repeat
     background-size: contain
     z-index: 200
-    width: 20%
-    height: $logo-height
+    width: $header-logo-width
+    height: $header-logo-height
     margin: 5px 5px 5px 16px
     filter: invert(100%)
     &:hover
       cursor: pointer
 
   .menu-icon
-    width: $menu-icon-width
-    height: $menu-icon-height
-    position: relative
+    padding: $header-menu-icon-padding
+    border-radius: 50px
     cursor: pointer
-    object-fit: cover
+    display: flex
+    align-items: center
+    user-select: none
+    &:hover
+      background-color: transparentize(white, 0.9)
+    &__image
+      font-size: $header-menu-icon-size
 
   .header-buttons
     margin-left: auto

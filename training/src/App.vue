@@ -56,6 +56,7 @@
     width: 100%
     position: relative
     .navigation-drawer
+      overflow-y: auto
       display: block
       width: 0
       height: 100%
