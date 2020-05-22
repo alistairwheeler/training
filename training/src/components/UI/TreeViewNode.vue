@@ -9,7 +9,7 @@
       <span>{{node.trnCatTitle || node.trnLsnTitle}} </span>
     </p>
 
-    <div v-if="showChildren" class="tree__subtree">
+    <div v-show="showChildren" class="tree__subtree">
       <TreeViewNode v-for="(subCategory, index) in node.categories" v-bind:key="index" :node="subCategory"
                     :depth="depth+1"/>
       <TreeViewNode v-for="(lesson, index) in node.lessons" v-bind:key="index" :node="lesson" :depth="depth+1"/>
