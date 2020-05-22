@@ -67,9 +67,6 @@
         return 'slide-' + this.direction
       }
     },
-    created() {
-      console.log(this.slides);
-    }
   }
 </script>
 

@@ -2,9 +2,11 @@
   <div class="app">
     <Header/>
     <main>
-      <nav class="navigation-drawer" :class="[isDrawerOpen ? 'open' : '']">
-        <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory" :depth="0"/>
-      </nav>
+      <transition name="drawer">
+        <nav class="navigation-drawer" v-show="isDrawerOpen" >
+          <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory" :depth="0"/>
+        </nav>
+      </transition>
       <div class="page-content">
         <router-view class="page-content__router-view" :key="$route.fullPath" v-if="tree.length"/>
       </div>
@@ -56,20 +58,36 @@
     width: 100%
     position: relative
     .navigation-drawer
+      width: $drawer-width
       overflow-y: auto
       display: block
-      width: 0
       height: 100%
       color: white
       background: linear-gradient($color-primary 40%, $color-secondary)
       transition: $duration-drawer-collapse ease-in-out
-      &.open
-        width: $drawer-width
 
     .page-content
       width: 100%
       &__router-view
         width: 100%
         height: 100%
+
+.drawer-enter-active
+  animation: drawerIn $duration-drawer-collapse
+
+.drawer-leave-active
+  animation: drawerOut $duration-drawer-collapse
+
+@keyframes drawerIn
+  from
+    width: 0
+  to
+    width: $drawer-width
+@keyframes drawerOut
+  from
+    width: $drawer-width
+  to
+    width: 0
+
 </style>
 
