@@ -2,9 +2,11 @@
   <div class="tree">
     <p :style="indent" @click="nodeClicked(node)" class="tree__root-label"
        :class="[currentLesson.trnLsnPath && currentLesson.trnLsnPath === node.trnLsnPath ? 'active' : '']">
-      <i v-if="node.trnCatPath" class="material-icons">folder</i>
-      <i v-else class="material-icons">menu_book</i>
-      {{node.trnCatTitle || node.trnLsnTitle}}
+      <i v-if="(node.categories && node.categories.length) || (node.lessons && node.lessons.length)"
+         class="material-icons tree__arrow" :class="[showChildren ? 'down-arrow' : '']" >keyboard_arrow_right</i>
+      <i v-if="node.trnCatPath" class="material-icons tree__node-type">folder</i>
+      <i v-else class="material-icons tree__node-type">menu_book</i>
+      <span>{{node.trnCatTitle || node.trnLsnTitle}} </span>
     </p>
 
     <div v-if="showChildren" class="tree__subtree">
@@ -41,8 +43,10 @@
     computed: {
       ...mapState(['currentLesson']),
       indent() {
-        if (!this.depth) return {'padding-left': `10px`};
-        return {'padding-left': `${this.depth * 20}px`}
+        console.log(this.node);
+        if (this.depth === 0) return {'padding-left': `10px`}; // Root elements
+        else if (this.node.trnLsnTitle ) return {'padding-left': `${(this.depth) * 20 + 5}px`}; // Lessons elements. +5 is here because of the margin on the span element. This way it is more clean
+        return {'padding-left': `${this.depth * 20}px`} //Others
       },
     },
     methods: {
@@ -63,7 +67,8 @@
     //gets bigger than the page because the words in the treeview wrap
     overflow: hidden
     white-space: nowrap
-    margin: $tree-margin-node
+    margin: $tree-margin
+    user-select: none
 
   .tree__root-label
     box-sizing: border-box
@@ -71,19 +76,20 @@
     font-size: map-get($title-sizes, xx-small)
     font-weight: lighter
     display: flex
-    flex-direction: row
     align-items: center
     padding: $tree-padding-node
     margin: 0
     @include rounded-right-corners($tree-border-radius, $tree-border-radius)
-
     &:hover
       background-color: $color-tree-hover
       cursor: pointer
-
     &.active
       background-color: $color-tree-hover
-
-    i
-      margin-right: map-get($margins, x-small)
+    span
+      margin-left: map-get($margins, x-small)
+    .tree__arrow
+      transition: $tree-duration-arrow-rotation all
+      font-size: $tree-arrow-size
+      &.down-arrow
+        transform: rotate(90deg)
 </style>
