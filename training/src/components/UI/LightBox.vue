@@ -21,9 +21,9 @@
 <style lang="sass" scoped>
 @import "../../assets/sass/variables"
 .light-box
-  position: absolute
+  position: fixed
   width: 100%
-  height: 100%
+  height: 100vh
   z-index: 10000
   &__overlay
     width: 100%
