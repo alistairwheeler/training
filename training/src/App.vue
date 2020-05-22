@@ -71,6 +71,5 @@
       &__router-view
         width: 100%
         height: 100%
-        padding: map-get($paddings, medium)
 </style>
 
