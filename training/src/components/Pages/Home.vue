@@ -1,8 +1,6 @@
 <template>
   <div class="home-page-wrapper">
     <div class="page-container">
-      <Slider/>
-
       <!-- bloc-0 -->
       <div class="bloc bg-Home-training-center l-bloc" id="bloc-0">
         <div class="container bloc-lg">
@@ -115,11 +113,8 @@
 </template>
 
 <script>
-
-  import Slider from "../UI/Slider";
   export default {
     name: 'HomePage',
-    components: {Slider},
   }
 
 </script>
