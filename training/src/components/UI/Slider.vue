@@ -52,12 +52,7 @@
         else this.currentImageIndex--;
       },
       goTo(indexToGo){
-        console.log('SLIDER GOING TO INDEX : ', indexToGo, 'length is', this.slides.length, this.slides);
-        if (typeof indexToGo === 'string') {
-          const fileName = indexToGo;
-          indexToGo = this.slides.findIndex(slide => slide.filename === indexToGo);
-          console.log('filename', fileName, 'indexToGo', indexToGo, 'max index is', this.slides.length);
-        }
+        if (typeof indexToGo === 'string') indexToGo = this.slides.findIndex(slide => slide.filename === indexToGo);
         if (indexToGo > this.currentImageIndex) this.direction = 'right';
         else this.direction = 'left';
         if (indexToGo > this.slides.length-1) this.currentImageIndex = 0;

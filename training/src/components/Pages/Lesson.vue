@@ -12,9 +12,9 @@
           </ul>
           <!-- <button id="toggle-scroll" class="toggle-scroll" @click="toggleScroll">Desactiver le scroll des slides</button>-->
 
-          <div class="lesson_content" v-highlightjs v-on:click="lessonClick"
-               v-if="this.currentLesson.trnLsnHtmlContent"
-               v-html="this.currentLesson.trnLsnHtmlContent"></div>
+          <div class="lesson_content" v-highlightjs @click.prevent="handleClickOnLessonContent"
+               v-if="currentLesson.trnLsnHtmlContent"
+               v-html="currentLesson.trnLsnHtmlContent"></div>
           <EmptyContent v-else/>
         </div>
         <Spinner v-else/>
@@ -53,6 +53,7 @@
       urlList: [],
       lesson: false,
       scrollEnabled: true,
+      alreadyScrolledImages: [],
     }),
     computed: {
       ...mapState(['tree', 'currentLesson', 'currentLessonImages']),
@@ -65,11 +66,10 @@
       },
     },
     methods: {
-      lessonClick(event) {
+      handleClickOnLessonContent(event) {
         if (event && event.target && event.target.tagName === "A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_") !== -1) {
-          event.preventDefault();
           let imageName = event.target.getAttribute("href").split("#IMG_CLICK_")[1];
-          this.$refs.carousel.displayFile(imageName);
+          this.$refs.slider.goTo(imageName);
         }
       },
       toggleScroll() {
@@ -88,14 +88,17 @@
         document.getElementById("lesson-content").addEventListener('scroll', (e) => {
           let imageName = null;
           let links = e.target.querySelectorAll("a");
-          /* How this feature works : we go through all the links of the page with #IMG_SCROLL_ & if their lower boundary is
+          /* How this feature works : we go through all the a tags of the lesson-content element with #IMG_SCROLL_ & if their lower boundary is
           at a certain fixed point, we tell the slider to go to this image
            */
           for (let i = 0; i < links.length; i++) {
             if (links[i].hasAttribute("href") && links[i].getAttribute("href").includes("#IMG_SCROLL_")) {
               if (links[i].getBoundingClientRect().bottom < e.target.getBoundingClientRect().bottom) {
                 imageName = links[i].getAttribute("href").split("#IMG_SCROLL_")[1];
-                if (imageName) potentialImages.push(imageName); // On ajoute son image a la liste
+                if (imageName && !this.alreadyScrolledImages.includes(imageName)) { // We add the imageName to the list
+                  potentialImages.push(imageName);
+                  this.alreadyScrolledImages.push(imageName);
+                }
               }
             }
           }
@@ -192,6 +195,10 @@ video
   @include flex-column-nowrap
   overflow: hidden
   /* ::v-deep is used instead of >>> because we are using sass (with scss syntax). it is a deep selector to apply styles to the v-html content*/
+  & ::v-deep .hljs.clean
+    display: inline
+    padding: 3px
+
   & ::v-deep h1
     font-size: map-get($title-sizes, x-large)
 
