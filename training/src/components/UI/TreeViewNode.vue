@@ -43,7 +43,6 @@
     computed: {
       ...mapState(['currentLesson']),
       indent() {
-        console.log(this.node);
         if (this.depth === 0) return {'padding-left': `10px`}; // Root elements
         else if (this.node.trnLsnTitle ) return {'padding-left': `${(this.depth) * 20 + 5}px`}; // Lessons elements. +5 is here because of the margin on the span element. This way it is more clean
         return {'padding-left': `${this.depth * 20}px`} //Others

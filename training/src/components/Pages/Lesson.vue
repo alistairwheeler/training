@@ -21,7 +21,7 @@
       </div>
 
       <div class="grid-item grid-item-media">
-        <Slider v-if="currentLessonImages.length" :slides="currentLessonImages"/>
+        <Slider v-if="currentLessonImages.length" :slides="currentLessonImages" ref="slider"/>
         <EmptyContent v-else/>
       </div>
       <div class="grid-item grid-item-video">
@@ -65,41 +65,42 @@
       },
     },
     methods: {
-      lessonClick: function (event) {
+      lessonClick(event) {
         if (event && event.target && event.target.tagName === "A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_") !== -1) {
           event.preventDefault();
           let imageName = event.target.getAttribute("href").split("#IMG_CLICK_")[1];
           this.$refs.carousel.displayFile(imageName);
         }
       },
-      toggleScroll: function () {
+      toggleScroll() {
         this.scrollEnabled = !this.scrollEnabled;
         document.getElementById("toggle-scroll").classList.toggle("off");
         if (this.scrollEnabled) {
-          console.log("Scroll is enabled")
+          console.log("Scroll is enabled");
           document.getElementById("toggle-scroll").innerText = "Désactiver le scroll des slides"
         } else {
-          document.getElementById("toggle-scroll").innerText = "Réactiver le scroll des slides"
+          document.getElementById("toggle-scroll").innerText = "Réactiver le scroll des slides";
           console.log("scroll is NOT enabled")
         }
       },
-      addScrollListeners: function () {
+      addScrollListeners() {
         let potentialImages = [];
         document.getElementById("lesson-content").addEventListener('scroll', (e) => {
-          let imageName;
+          let imageName = null;
           let links = e.target.querySelectorAll("a");
-          for (let i = 0; i < links.length; i++) { //On parcourt tous les liens qui ont un attribut href avec #IMC_CLICK dedans
-            if (links[i].hasAttribute("href") && links[i].getAttribute("href").indexOf("#IMG_SCROLL_") !== -1) {
+          /* How this feature works : we go through all the links of the page with #IMG_SCROLL_ & if their lower boundary is
+          at a certain fixed point, we tell the slider to go to this image
+           */
+          for (let i = 0; i < links.length; i++) {
+            if (links[i].hasAttribute("href") && links[i].getAttribute("href").includes("#IMG_SCROLL_")) {
               if (links[i].getBoundingClientRect().bottom < e.target.getBoundingClientRect().bottom) {
                 imageName = links[i].getAttribute("href").split("#IMG_SCROLL_")[1];
-                if (imageName !== undefined)
-                  potentialImages.push(imageName); //On ajoute son image a la liste
+                if (imageName) potentialImages.push(imageName); // On ajoute son image a la liste
               }
             }
           }
-          if (potentialImages.length > 0 && this.scrollEnabled)
-            // TODO : instead use th goTo method in the slider
-            this.$refs.carousel.displayFile(potentialImages[potentialImages.length - 1]); // On affiche la dernière image dans le carousel
+          // On affiche la dernière image dans le carousel
+          if (potentialImages.length && this.scrollEnabled) this.$refs.slider.goTo(potentialImages[potentialImages.length - 1]);
         });
       }
     },
@@ -107,7 +108,6 @@
       let splitted = this.$router.currentRoute.path.split("lesson");
       let lessonPath = splitted[1] ? splitted[1] : "";
       let lesson = this.getLessonFromPath(lessonPath);
-
       if (!lesson)
         await this.$router.push('/404');
       else

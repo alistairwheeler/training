@@ -68,6 +68,8 @@
 @import "../../assets/sass/mixins"
 
 header
+  height: 10vh
+  box-sizing: border-box
   width: 100%
   display: flex
   flex-flow: row

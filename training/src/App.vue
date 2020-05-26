@@ -60,8 +60,8 @@
     .navigation-drawer
       width: $drawer-width
       overflow-y: auto
+      max-height: 100vh - 10vh
       display: block
-      height: 100%
       color: white
       background: linear-gradient($color-primary 40%, $color-secondary)
       transition: $duration-drawer-collapse ease-in-out
