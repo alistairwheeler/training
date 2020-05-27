@@ -12,7 +12,7 @@
           </ul>
           <!-- <button id="toggle-scroll" class="toggle-scroll" @click="toggleScroll">Desactiver le scroll des slides</button>-->
 
-          <div class="lesson_content" v-highlightjs @click.prevent="handleClickOnLessonContent"
+          <div class="lesson-content" v-highlightjs @click.prevent="handleClickOnLessonContent"
                v-if="currentLesson.trnLsnHtmlContent"
                v-html="currentLesson.trnLsnHtmlContent"></div>
           <EmptyContent v-else/>
@@ -130,8 +130,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
-@import "../../assets/sass/utils/variables"
-@import "../../assets/sass/utils/mixins"
+@import "../../assets/sass/variables"
+@import "../../assets/sass/mixins"
 .lesson
   position: relative
 
@@ -191,85 +191,91 @@ video
   font-weight: bold
   margin-top: map-get($margins, medium)
 
-.lesson_content
+.lesson-content
   @include flex-column-nowrap
   overflow: hidden
-  /* ::v-deep is used instead of >>> because we are using sass (with scss syntax). it is a deep selector to apply styles to the v-html content*/
-  & ::v-deep .hljs.clean
-    display: inline
-    padding: 3px
+  /* ::v-deep is used instead of >>> because we are using sass. It is a deep selector to apply styles to the v-html content*/
+  & ::v-deep
+    .hljs.clean
+      display: inline
+      padding: 3px
+    table
+      border-radius: 4px
+      padding: map_get($paddings, "medium")
+      border-collapse: collapse
+      color: $table-color-text
+      th
+        font-weight: bold
+        background-color: $table-color-head-background
+        padding: map_get($paddings, "small")
 
-  & ::v-deep h1
-    font-size: map-get($title-sizes, x-large)
+      tr
+        border-top: 1px solid #dee2e6
+        &:nth-child(odd)
+          background-color: $table-color-row-background
+      th, td
+        padding: map_get($paddings, "small")
 
-  & ::v-deep h2
-    font-size: map-get($title-sizes, large)
-    font-weight: bold
-    color: $color-secondary
+    h1
+      font-size: map-get($title-sizes, x-large)
+    h2
+      font-size: map-get($title-sizes, large)
+      color: $color-secondary
+    h3
+      font-size: map-get($title-sizes, medium)
+      color: $color-secondary
+    h4
+      font-size: map-get($title-sizes, small)
+      color: $color-secondary
+    h5
+      font-size: map-get($title-sizes, x-small)
+      color: $color-secondary
+    h6
+      font-size: map-get($title-sizes, x-small) - 0.1rem
+      color: $color-secondary
+    p
+      text-align: justify
 
-  & ::v-deep h3
-    font-size: map-get($title-sizes, medium)
-    font-weight: bold
-    color: $color-secondary
+    .info, .success, .warning, .error
+      border-radius: map-get($radius, regular)
+      padding: map-get($paddings, medium)
+      margin: map-get($margins, x-small)
 
-  & ::v-deep h4
-    font-size: map-get($title-sizes, small)
-    color: $color-secondary
+    .info
+      background-color: $color-information !important
 
-  & ::v-deep h5
-    font-size: map-get($title-sizes, x-small)
-    color: $color-secondary
+    .success
+      background-color: $color-success !important
 
-  & ::v-deep h6
-    font-size: map-get($title-sizes, x-small) - 0.1rem
-    color: $color-secondary
+    .warning
+      background-color: $color-warning !important
 
-  & ::v-deep p
-    text-align: justify
+    .error
+      background-color: $color-error !important
 
-  & ::v-deep .info,
-  & ::v-deep .success,
-  & ::v-deep .warning,
-  & ::v-deep .error
-    border-radius: map-get($radius, regular)
-    padding: map-get($paddings, x-small)
-    margin: map-get($margins, x-small)
+    blockquote > p::before
+      content: '" '
 
-  & ::v-deep .info
-    background-color: $color-information !important
+    blockquote > p::after
+      content: ' "'
 
-  & ::v-deep .success
-    background-color: $color-success !important
+    blockquote > p
+      font-style: italic
 
-  & ::v-deep .warning
-    background-color: $color-warning !important
+    strong
+      text-decoration: underline
 
-  & ::v-deep .error
-    background-color: $color-error !important
+    ol
+      list-style-type: decimal
+      padding-left: 25px //ol and ul require a certain amount of padding to display the style-type
+      //The use of the reset style in app is still to keep though, because it doesn't provoke other issues
 
-  & ::v-deep blockquote > p::before
-    content: '" '
+    ul
+      list-style-type: disc
+      padding-left: 25px
 
-  & ::v-deep blockquote > p::after
-    content: ' "'
-
-  & ::v-deep blockquote > p
-    font-style: italic
-
-  & ::v-deep strong
-    text-decoration: underline
-
-  & ::v-deep ol
-    list-style-type: decimal
-    padding-left: 25px //ol and ul require a certain amount of padding to display the style-type
-    //The use of the reset style in app is still to keep though, because it doesn't provoke other issues
-
-  & ::v-deep ul
-    list-style-type: disc
-    padding-left: 25px
-
-  & ::v-deep img
-    margin-left: $content-padding
+    img
+      margin-left: $content-padding
 
 
 .toggle-scroll
