@@ -200,11 +200,11 @@ video
       display: inline
       padding: 3px
     table
-      border-radius: 4px
       padding: map_get($paddings, "medium")
       border-collapse: collapse
       color: $table-color-text
       th
+        font-size: map_get($title-sizes, "x-small")
         font-weight: bold
         background-color: $table-color-head-background
         padding: map_get($paddings, "small")
