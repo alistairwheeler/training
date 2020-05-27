@@ -24,7 +24,7 @@
   position: fixed
   width: 100%
   height: 100vh
-  z-index: 10000
+  z-index: $light-box-z-index
   &__overlay
     width: 100%
     height: 100%

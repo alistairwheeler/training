@@ -3,7 +3,7 @@
     <Header/>
     <main>
       <transition name="drawer">
-        <nav class="navigation-drawer" v-show="isDrawerOpen" >
+        <nav class="navigation-drawer" v-show="isDrawerOpen" :class="[ isUserOnLesson ? 'on-lesson' : '']" >
           <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory" :depth="0"/>
         </nav>
       </transition>
@@ -24,6 +24,9 @@
   export default {
     name: 'App',
     components: {LightBox, Header, TreeViewNode},
+    data: () => ({
+      isUserOnLesson: false
+    }),
     computed: {
       ...mapState(['tree', 'isDrawerOpen']),
     },
@@ -32,7 +35,13 @@
       console.log('LOGGED IN');
     },
     async created() {
+      if (this.$router.currentRoute.name === 'Lesson') this.isUserOnLesson = true;
       await this.$store.dispatch('fetchTree', {smp: this.$smp});
+    },
+    watch:{
+      $route (to){
+        this.isUserOnLesson = to.name === 'Lesson';
+      }
     },
   };
 </script>
@@ -59,12 +68,14 @@
     position: relative
     .navigation-drawer
       width: $drawer-width
+      height: 100%
+      z-index: 1000
       overflow-y: auto
-      max-height: 100vh - 10vh
       display: block
-      color: white
       background: linear-gradient($color-primary 40%, $color-secondary)
       transition: $duration-drawer-collapse ease-in-out
+      &.on-lesson
+        max-height: 100vh - $header-height
 
     .page-content
       width: 100%

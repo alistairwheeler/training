@@ -68,6 +68,7 @@
     white-space: nowrap
     margin: $tree-margin
     user-select: none
+    color: white
 
   .tree__root-label
     box-sizing: border-box
