@@ -196,10 +196,11 @@ video
   overflow: hidden
   /* ::v-deep is used instead of >>> because we are using sass. It is a deep selector to apply styles to the v-html content*/
   & ::v-deep
-    .hljs.clean
+    :not(pre) code.hljs
       display: inline
       padding: 3px
     table
+      width: 100%
       padding: map_get($paddings, "medium")
       border-collapse: collapse
       color: $table-color-text
