@@ -187,7 +187,7 @@ video
 /* ----- LESSON LESSON ----- */
 .lesson-title
   color: $color-primary
-  font-size: map-get($title-sizes, x-large) + 1rem
+  font-size: map-get($title-sizes, 1) + 1rem
   font-weight: bold
   margin-top: map-get($margins, medium)
 
@@ -218,21 +218,21 @@ video
         padding: map_get($paddings, "small")
 
     h1
-      font-size: map-get($title-sizes, x-large)
+      font-size: map-get($title-sizes, 3) !important
     h2
-      font-size: map-get($title-sizes, large)
+      font-size: map-get($title-sizes, 4)
       color: $color-secondary
     h3
-      font-size: map-get($title-sizes, medium)
+      font-size: map-get($title-sizes, 5)
       color: $color-secondary
     h4
-      font-size: map-get($title-sizes, small)
+      font-size: map-get($title-sizes, 6)
       color: $color-secondary
     h5
-      font-size: map-get($title-sizes, x-small)
+      font-size: map-get($title-sizes, 6)
       color: $color-secondary
     h6
-      font-size: map-get($title-sizes, x-small) - 0.1rem
+      font-size: map-get($title-sizes, 6) - 0.1rem
       color: $color-secondary
     p
       text-align: justify

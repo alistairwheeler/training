@@ -157,8 +157,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../assets/sass/utils/variables";
-  @import "../../../assets/sass/utils/mixins";
+  @import "../../../assets/sass/variables";
+  @import "../../../assets/sass/mixins";
 
   .wrapper {
     width: 100%;
@@ -186,7 +186,7 @@
     &__title {
       font-weight: bold;
       color: $color-form-title;
-      font-size: map-get($title-sizes, large);
+      font-size: map-get($title-sizes, 2);
       margin-bottom: map-get($margins, large);
     }
 
@@ -239,7 +239,7 @@
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: map-get($title-sizes, x-small);
+      font-size: map-get($title-sizes, 5);
       background-color: lighten($color-primary, 10%);
       color: $color-button-text;
 

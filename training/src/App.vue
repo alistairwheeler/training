@@ -2,11 +2,10 @@
   <div class="app">
     <Header/>
     <main>
-      <transition name="drawer">
-        <nav class="navigation-drawer" v-show="isDrawerOpen" :class="[ isUserOnLesson ? 'on-lesson' : '']" >
-          <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory" :depth="0"/>
-        </nav>
-      </transition>
+      <nav class="navigation-drawer" v-show="isDrawerOpen" :class="[ isUserOnLesson ? 'on-lesson' : '']">
+        <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory"
+                      :depth="0"/>
+      </nav>
       <div class="page-content">
         <router-view class="page-content__router-view" :key="$route.fullPath" v-if="tree.length"/>
       </div>
@@ -38,8 +37,8 @@
       if (this.$router.currentRoute.name === 'Lesson') this.isUserOnLesson = true;
       await this.$store.dispatch('fetchTree', {smp: this.$smp});
     },
-    watch:{
-      $route (to){
+    watch: {
+      $route(to) {
         this.isUserOnLesson = to.name === 'Lesson';
       }
     },
@@ -47,58 +46,64 @@
 </script>
 
 <style lang="sass">
-@import "assets/sass/variables"
+  @import "assets/sass/variables"
 
-*
-  font-family: 'Source Sans Pro', sans-serif
-  box-sizing: border-box
-  margin: 0
-  padding: 0
-  outline: none
+  *
+    font-family: 'Source Sans Pro', sans-serif
+    box-sizing: border-box
+    margin: 0
+    padding: 0
+    outline: none
 
-.app
-  height: 100%
-  display: flex
-  flex-direction: column
-  main
-    flex: 1 1 // So the main content extends to the bottom of the page
+  .app
+    height: 100%
     display: flex
-    flex-direction: row
-    width: 100%
-    position: relative
-    .navigation-drawer
-      width: $drawer-width
-      height: 100%
-      z-index: 1000
-      overflow-y: auto
-      display: block
-      background: linear-gradient($color-primary 40%, $color-secondary)
-      transition: $duration-drawer-collapse ease-in-out
-      &.on-lesson
-        max-height: 100vh - $header-height
+    flex-direction: column
 
-    .page-content
+    main
+      flex: 1 1 // So the main content extends to the bottom of the page
+      display: flex
+      flex-direction: row
       width: 100%
-      &__router-view
-        width: 100%
+      position: relative
+
+      .navigation-drawer
+        box-sizing: border-box
+        min-width: max-content
         height: 100%
+        z-index: 1000
+        overflow: auto
+        display: block
+        background: linear-gradient($color-primary 40%, $color-secondary)
+        transition: $duration-drawer-collapse ease-in-out
 
-.drawer-enter-active
-  animation: drawerIn $duration-drawer-collapse
+        &.on-lesson
+          max-height: 100vh - $header-height
 
-.drawer-leave-active
-  animation: drawerOut $duration-drawer-collapse
+      .page-content
+        width: 100%
 
-@keyframes drawerIn
-  from
-    width: 0
-  to
-    width: $drawer-width
-@keyframes drawerOut
-  from
-    width: $drawer-width
-  to
-    width: 0
+        &__router-view
+          width: 100%
+          height: 100%
+
+  .drawer-enter-active
+    animation: drawerIn $duration-drawer-collapse
+
+  .drawer-leave-active
+    animation: drawerOut $duration-drawer-collapse
+
+  @keyframes drawerIn
+    from
+      width: 0
+    to
+      width: $drawer-width
+
+  @keyframes drawerOut
+    from
+      width: $drawer-width
+    to
+      width: 0
 
 </style>
 

@@ -14,7 +14,7 @@
 </script>
 
 <style lang="sass" scoped>
-@import "../../assets/sass/utils/variables"
+@import "../../assets/sass/variables"
 
 .center-content
   display: flex

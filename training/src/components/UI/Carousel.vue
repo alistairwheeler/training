@@ -79,7 +79,7 @@
 </script>
 
 <style lang="sass" scoped>
-@import "../../assets/sass/utils/variables"
+@import "../../assets/sass/variables"
 .carousel
   width: 100%
   height: 100%

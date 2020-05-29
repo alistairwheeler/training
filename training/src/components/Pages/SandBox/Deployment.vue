@@ -52,8 +52,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 
-  @import "../../../assets/sass/utils/mixins";
-  @import "../../../assets/sass/utils/variables";
+  @import "../../../assets/sass/mixins";
+  @import "../../../assets/sass/variables";
 
   .wrapper {
     width: 100%;
@@ -78,7 +78,7 @@
     &__title {
       font-weight: bold;
       color: $color-form-title;
-      font-size: map-get($title-sizes, large);
+      font-size: map-get($title-sizes, 2);
       margin-bottom: map-get($margins, medium);
     }
 

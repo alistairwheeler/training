@@ -122,8 +122,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
 
-  @import "../../assets/sass/utils/variables"
-  @import "../../assets/sass/utils/mixins"
+  @import "../../assets/sass/variables"
+  @import "../../assets/sass/mixins"
 
   .home-page-wrapper
     /*@include flex-column-nowrap
@@ -221,7 +221,7 @@
     color: $color-secondary
 
     &__title
-      font-size: map-get($title-sizes, x-large)+1rem
+      font-size: map-get($title-sizes, 1)+1rem
 
 
     &__promotion

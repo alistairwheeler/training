@@ -64,16 +64,15 @@
   .tree
     //Really important for global rendering. Otherwise, when the side menu is collapsed, the height of the menu
     //gets bigger than the page because the words in the treeview wrap
-    overflow: hidden
+    // overflow: hidden
     white-space: nowrap
     margin: $tree-margin
     user-select: none
     color: white
 
   .tree__root-label
-    box-sizing: border-box
     width: 100%
-    font-size: map-get($title-sizes, xx-small)
+    font-size: map-get($title-sizes, 6)
     font-weight: lighter
     display: flex
     align-items: center
