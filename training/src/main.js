@@ -1,23 +1,17 @@
 /* eslint-disable no-console,no-undef */
 import Vue from 'vue'
 import App from './App.vue'
-import VueRouter from 'vue-router' //Documentation + Guide : https://router.vuejs.org/guide/
-import Vuex from 'vuex' //Documentation + Guide : https://vuex.vuejs.org/guide/
+import VueRouter from 'vue-router'
+import Vuex from 'vuex'
 import VueHighlightJS from 'vue-highlightjs'
-//3. Importing the router from router.js :
 import router from './router'
-//4. Importing the Store instance from store.js :
 import store from './store'
 
 Vue.use(VueHighlightJS);
-
 Vue.config.productionTip = false;
-
-//1. middleware to use vue-router, vuex
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-//2. Use the simplicite API 
 // TODO should use specific user for public, not the designer user
 if (process.env.NODE_ENV === "development") {
   Vue.prototype.$smp = new Simplicite.Ajax('https://maxime2.dev.simplicite.io/app', 'api', 'designer', 'simplicite');
