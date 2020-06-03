@@ -1,31 +1,28 @@
 <template>
   <div class="lesson">
-    <div class="grid-lesson">
-      <div id="lesson-content" class="grid-item grid-item-content">
-        <div v-if="currentLesson.row_id" class="occupy100percent">
+    <div class="grid">
+      <div class="grid-item lesson-block">
+        <div v-if="currentLesson.row_id" class="lesson-wrapper">
           <ul class="breadcrumb">
-            <li class="breadcrumb__item" v-for="(breadCrumbItem, index) in breadCrumbItems" :key="index">
-              <span>{{breadCrumbItem.title}}</span>
+            <li class="breadcrumb__item" v-for="(item, index) in breadCrumbItems" :key="index">
+              <span>{{item.title}}</span>
               <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
             </li>
           </ul>
-          <div class="lesson-content" v-highlightjs @click.prevent="handleClickOnLessonContent"
-               v-if="currentLesson.trnLsnHtmlContent"
-               v-html="currentLesson.trnLsnHtmlContent"></div>
+          <div class="lesson-html-content" v-if="currentLesson.trnLsnHtmlContent" v-html="currentLesson.trnLsnHtmlContent"
+               v-highlightjs @click.prevent="handleClickOnLessonContent"></div>
           <EmptyContent v-else/>
         </div>
         <Spinner v-else/>
       </div>
-
-      <div class="grid-item grid-item-media">
+      <div class="grid-item slider-block">
         <Slider v-if="currentLessonImages.length" :slides="currentLessonImages" ref="slider"/>
         <EmptyContent v-else/>
       </div>
-      <div class="grid-item grid-item-video">
-        <div v-if="currentLesson" class="occupy100percent">
-          <!-- Do NOT prelead anything to keep app snappy -->
-          <video controls muted :src="videoUrl" preload="none" poster="../../../public/media.svg"
-                 class="occupy100percent" style="object-fit: contain" v-if="videoUrl">
+      <div class="grid-item video-block">
+        <div v-if="currentLesson" class="lesson-wrapper">
+          <video v-if="videoUrl" class="video-player" controls muted poster="../../../public/media.svg"
+                 :src="videoUrl" preload="none">
             Sorry, your browser doesn't support embedded videos.
           </video>
           <EmptyContent v-else/>
@@ -40,8 +37,8 @@
   /* eslint-disable no-console,no-unused-vars,no-undef */
   import Spinner from "../UI/Spinner";
   import EmptyContent from "../UI/EmptyContent";
-  import {mapGetters, mapState} from "vuex";
   import Slider from "../UI/Slider";
+  import {mapGetters, mapState} from "vuex";
 
   export default {
     name: "LessonItem",
@@ -70,7 +67,7 @@
       },
       addScrollListeners() {
         let potentialImages = [];
-        document.getElementById("lesson-content").addEventListener('scroll', (e) => {
+        document.querySelector(".lesson-block").addEventListener('scroll', (e) => {
           let imageName = null;
           let links = e.target.querySelectorAll("a");
           /* How this feature works : we go through all the a tags of the lesson-content element with #IMG_SCROLL_ & if their lower boundary is
@@ -107,7 +104,7 @@
     mounted() {
       this.addScrollListeners();
     },
-    async beforeDestroy() {
+    beforeDestroy() {
       this.$store.commit('UNLOAD_LESSON');
     }
   };
@@ -120,17 +117,7 @@
 .lesson
   position: relative
 
-.breadcrumb
-  border-bottom: $regular-thickness solid $light-grey
-  background-color: white
-  padding-bottom: 1em
-  &__item
-    text-transform: uppercase
-  &__divider
-    margin: 0 $breadcrumb-margin 0 $breadcrumb-margin
-    text-transform: uppercase
-
-.grid-lesson
+.grid
   position: absolute
   width: 100%
   height: 100%
@@ -140,41 +127,40 @@
 
 .grid-item
   margin: 1em
-  //padding: 0.5em
   background: white
   border-radius: map-get($radius, regular)
   @include box-shadow
   overflow: auto
 
-.grid-item-content
+.lesson-block
   grid-column: 1
   grid-row: 1 / 3
   padding: 1em
+  .breadcrumb
+    border-bottom: $regular-thickness solid $light-grey
+    background-color: white
+    padding-bottom: 1em
+    &__item
+      text-transform: uppercase
+    &__divider
+      margin: $breadcrumb-divider-margin
+      text-transform: uppercase
 
-.grid-item-media
+
+.slider-block
   grid-column: 2
   grid-row: 1
 
-.grid-item-video
+.video-block
   grid-column: 2
   grid-row: 2
+  .lesson-wrapper
+    @include fillParent()
+  .video-player
+    @include fillParent()
+    object-fit: contain
 
-.occupy100percent
-  height: 100%
-  width: 100%
-
-video
-  height: 100%
-  width: 100%
-
-/* ----- LESSON LESSON ----- */
-.lesson-title
-  color: $color-primary
-  font-size: map-get($title-sizes, 1) + 1rem
-  font-weight: bold
-  margin-top: map-get($margins, medium)
-
-.lesson-content
+.lesson-html-content
   @include flex-column-nowrap
   overflow: hidden
   /* ::v-deep is used instead of >>> because we are using sass. It is a deep selector to apply styles to the v-html content*/
