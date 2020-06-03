@@ -2,16 +2,13 @@
   <div class="lesson">
     <div class="grid-lesson">
       <div id="lesson-content" class="grid-item grid-item-content">
-        <div v-if="this.currentLesson.row_id" class="occupy100percent">
+        <div v-if="currentLesson.row_id" class="occupy100percent">
           <ul class="breadcrumb">
-            <li class="breadcrumb__item" v-for="(breadCrumbItem, index) in this.breadCrumbItems" :key="index"
-                @click="breadCrumbItemClicked(breadCrumbItem.path, index, breadCrumbItems.length)">
+            <li class="breadcrumb__item" v-for="(breadCrumbItem, index) in breadCrumbItems" :key="index">
               <span>{{breadCrumbItem.title}}</span>
               <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
             </li>
           </ul>
-          <!-- <button id="toggle-scroll" class="toggle-scroll" @click="toggleScroll">Desactiver le scroll des slides</button>-->
-
           <div class="lesson-content" v-highlightjs @click.prevent="handleClickOnLessonContent"
                v-if="currentLesson.trnLsnHtmlContent"
                v-html="currentLesson.trnLsnHtmlContent"></div>
@@ -25,7 +22,7 @@
         <EmptyContent v-else/>
       </div>
       <div class="grid-item grid-item-video">
-        <div v-if="this.currentLesson" class="occupy100percent">
+        <div v-if="currentLesson" class="occupy100percent">
           <!-- Do NOT prelead anything to keep app snappy -->
           <video controls muted :src="videoUrl" preload="none" poster="../../../public/media.svg"
                  class="occupy100percent" style="object-fit: contain" v-if="videoUrl">
@@ -50,13 +47,12 @@
     name: "LessonItem",
     components: {Slider, Spinner, EmptyContent},
     data: () => ({
-      urlList: [],
+      visualizationMode: 'tutorial',
       lesson: false,
-      scrollEnabled: true,
       alreadyScrolledImages: [],
     }),
     computed: {
-      ...mapState(['tree', 'currentLesson', 'currentLessonImages']),
+      ...mapState(['currentLesson', 'currentLessonImages']),
       ...mapGetters(["breadCrumbItems", "getLessonFromPath"]),
       videoUrl: function () {
         if (this.currentLesson && this.currentLesson.trnLsnVideo)
@@ -70,17 +66,6 @@
         if (event && event.target && event.target.tagName === "A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_") !== -1) {
           let imageName = event.target.getAttribute("href").split("#IMG_CLICK_")[1];
           this.$refs.slider.goTo(imageName);
-        }
-      },
-      toggleScroll() {
-        this.scrollEnabled = !this.scrollEnabled;
-        document.getElementById("toggle-scroll").classList.toggle("off");
-        if (this.scrollEnabled) {
-          console.log("Scroll is enabled");
-          document.getElementById("toggle-scroll").innerText = "Désactiver le scroll des slides"
-        } else {
-          document.getElementById("toggle-scroll").innerText = "Réactiver le scroll des slides";
-          console.log("scroll is NOT enabled")
         }
       },
       addScrollListeners() {
@@ -103,7 +88,7 @@
             }
           }
           // On affiche la dernière image dans le carousel
-          if (potentialImages.length && this.scrollEnabled) this.$refs.slider.goTo(potentialImages[potentialImages.length - 1]);
+          if (potentialImages.length) this.$refs.slider.goToImage(potentialImages[potentialImages.length - 1]);
         });
       }
     },
@@ -141,8 +126,6 @@
   padding-bottom: 1em
   &__item
     text-transform: uppercase
-    &:hover
-      cursor: pointer
   &__divider
     margin: 0 $breadcrumb-margin 0 $breadcrumb-margin
     text-transform: uppercase
@@ -241,43 +224,32 @@ video
       border-radius: map-get($radius, regular)
       padding: map-get($paddings, medium)
       margin: map-get($margins, x-small)
-
     .info
       background-color: $color-information !important
-
     .success
       background-color: $color-success !important
-
     .warning
       background-color: $color-warning !important
-
     .error
       background-color: $color-error !important
 
     blockquote > p::before
       content: '" '
-
     blockquote > p::after
       content: ' "'
-
     blockquote > p
       font-style: italic
-
     strong
       text-decoration: underline
-
     ol
       list-style-type: decimal
       padding-left: 25px //ol and ul require a certain amount of padding to display the style-type
       //The use of the reset style in app is still to keep though, because it doesn't provoke other issues
-
     ul
       list-style-type: disc
       padding-left: 25px
-
     img
       margin-left: $content-padding
-
 
 .toggle-scroll
   border-radius: map-get($radius, x-large)

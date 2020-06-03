@@ -6,7 +6,7 @@
     <button class="slider__control slider__previous" v-if="controls" :class="controlsVisible && slides.length > 1 ? 'visible' : ''" @click.prevent="previous"><i class="material-icons">keyboard_arrow_left</i></button>
     <button class="slider__control slider__next" v-if="controls" :class="controlsVisible && slides.length > 1 ? 'visible' : ''" @click.prevent="next"><i class="material-icons">keyboard_arrow_right</i></button>
     <div class="slider__pagination" v-if="pagination && slides.length > 1">
-      <button v-for="n in slides.length" :key="n" @click="goTo(n-1)" :class="[n-1 === currentImageIndex ? 'active' : '']"/>
+      <button v-for="n in slides.length" :key="n" @click="goToImage(n-1)" :class="[n-1 === currentImageIndex ? 'active' : '']"/>
     </div>
   </div>
 </template>
@@ -51,7 +51,7 @@
         if (this.currentImageIndex === 0) this.currentImageIndex = this.slides.length - 1;
         else this.currentImageIndex--;
       },
-      goTo(indexToGo){
+      goToImage(indexToGo){
         if (typeof indexToGo === 'string') indexToGo = this.slides.findIndex(slide => slide.filename === indexToGo);
         if (indexToGo > this.currentImageIndex) this.direction = 'right';
         else this.direction = 'left';
