@@ -62,7 +62,7 @@
       handleClickOnLessonContent(event) {
         if (event && event.target && event.target.tagName === "A" && event.target.hasAttribute("href") && event.target.getAttribute("href").indexOf("#IMG_CLICK_") !== -1) {
           let imageName = event.target.getAttribute("href").split("#IMG_CLICK_")[1];
-          this.$refs.slider.goTo(imageName);
+          this.$refs.slider.goToImage(imageName);
         }
       },
       addScrollListeners() {
