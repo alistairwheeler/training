@@ -115,7 +115,7 @@ export default new Vuex.Store({
     },
     async loadLesson({commit}, payload) {
       await this.dispatch("loadLessonContent", payload);
-      this.dispatch("loadLessonImages", payload);
+      await this.dispatch("loadLessonImages", payload);
     },
     async loadLessonImages({commit}, payload) {
       return new Promise((resolve, reject) => {
