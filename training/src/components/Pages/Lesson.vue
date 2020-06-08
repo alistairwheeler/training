@@ -246,6 +246,9 @@
       list-style-type: disc
       padding-left: 25px
     img
-      margin-left: $content-padding
-
+      width: 100%
+      max-width: 100%
+      max-height: 250px
+      object-fit: contain
+      margin: 5px auto
 </style>
