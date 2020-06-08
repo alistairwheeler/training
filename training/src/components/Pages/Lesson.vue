@@ -176,7 +176,7 @@
   overflow: hidden
   /* ::v-deep is used instead of >>> because we are using sass. It is a deep selector to apply styles to the v-html content*/
   & ::v-deep
-    :not(pre) code.hljs
+    :not(pre) code.hljs  // targets inline code
       display: inline
       padding: 3px
     table
@@ -198,12 +198,12 @@
         padding: map_get($paddings, "small")
 
     h1
-      font-size: map-get($title-sizes, 3) !important
-    h2
       font-size: map-get($title-sizes, 4)
+    h2
+      font-size: map-get($title-sizes, 5)
       color: $color-secondary
     h3
-      font-size: map-get($title-sizes, 5)
+      font-size: map-get($title-sizes, 6)
       color: $color-secondary
     h4
       font-size: map-get($title-sizes, 6)
@@ -222,13 +222,13 @@
       padding: map-get($paddings, medium)
       margin: map-get($margins, x-small)
     .info
-      background-color: $color-information !important
+      background-color: $color-information
     .success
-      background-color: $color-success !important
+      background-color: $color-success
     .warning
-      background-color: $color-warning !important
+      background-color: $color-warning
     .error
-      background-color: $color-error !important
+      background-color: $color-error
 
     blockquote > p::before
       content: '" '
