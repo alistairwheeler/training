@@ -1,5 +1,5 @@
 <template>
-  <div class="lesson">
+  <div class="lesson" :class="[currentLesson.trnLsnVisualization === 'LINEAR' ? 'linear' : '']" @click="changeVisualization">
     <div class="grid">
       <div class="grid-item lesson-block">
         <div v-if="currentLesson.row_id" class="lesson-wrapper">
@@ -20,7 +20,7 @@
         <EmptyContent v-else/>
       </div>
       <div class="grid-item video-block">
-        <div v-if="currentLesson" class="lesson-wrapper">
+        <div v-if="currentLesson" class="video-wrapper">
           <video v-if="videoUrl" class="video-player" controls muted poster="../../../public/media.svg"
                  :src="videoUrl" preload="none">
             Sorry, your browser doesn't support embedded videos.
@@ -41,7 +41,7 @@
   import {mapGetters, mapState} from "vuex";
 
   export default {
-    name: "LessonItem",
+    name: "Lesson",
     components: {Slider, Spinner, EmptyContent},
     data: () => ({
       visualizationMode: 'tutorial',
@@ -87,7 +87,11 @@
           // On affiche la dernière image dans le carousel
           if (potentialImages.length) this.$refs.slider.goToImage(potentialImages[potentialImages.length - 1]);
         });
-      }
+      },
+      changeVisualization() {
+        if (this.visualizationMode === 'tutorial') this.visualizationMode = 'linear'
+        else this.visualizationMode = 'tutorial'
+      },
     },
     async created() {
       let splittedRoute = this.$router.currentRoute.path.split("lesson");
@@ -116,6 +120,11 @@
 @import "../../assets/sass/mixins"
 .lesson
   position: relative
+.linear
+  .video-block, .slider-block
+    display: none
+  .lesson-block
+    grid-column: 1/3
 
 .grid
   position: absolute
@@ -145,6 +154,8 @@
     &__divider
       margin: $breadcrumb-divider-margin
       text-transform: uppercase
+  .lesson-wrapper
+    @include fillParent()
 
 
 .slider-block
@@ -154,7 +165,7 @@
 .video-block
   grid-column: 2
   grid-row: 2
-  .lesson-wrapper
+  .video-wrapper
     @include fillParent()
   .video-player
     @include fillParent()
@@ -237,15 +248,4 @@
     img
       margin-left: $content-padding
 
-.toggle-scroll
-  border-radius: map-get($radius, x-large)
-  padding: map-get($paddings, medium)
-  background-color: white
-  font-weight: bold
-  color: green
-  border: solid 2px $color-accent
-  outline: none
-  &.off
-    border-color: red
-    color: red
 </style>
