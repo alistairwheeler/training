@@ -49,8 +49,14 @@
       alreadyScrolledImages: [],
     }),
     computed: {
-      ...mapState(['currentLesson', 'currentLessonImages']),
-      ...mapGetters(["breadCrumbItems", "getLessonFromPath"]),
+      ...mapState({
+        currentLesson: state => state.lesson.currentLesson,
+        currentLessonImages: state => state.lesson.currentLessonImages
+      }),
+      ...mapGetters({
+        breadCrumbItems: 'tree/breadCrumbItems',
+        getLessonFromPath: 'tree/getLessonFromPath'
+      }),
       videoUrl: function () {
         if (this.currentLesson && this.currentLesson.trnLsnVideo)
           return this.$smp.documentURL("TrnLesson", "trnLsnVideo", this.currentLesson.row_id, this.currentLesson.trnLsnVideo);
@@ -100,7 +106,7 @@
       if (!lesson)
         await this.$router.push('/404');
       else
-        await this.$store.dispatch("loadLesson", {
+        await this.$store.dispatch("lesson/loadLesson", {
           smp: this.$smp,
           lessonId: lesson.row_id
         });

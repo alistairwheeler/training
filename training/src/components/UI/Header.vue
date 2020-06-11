@@ -28,8 +28,13 @@
       navigationArrowVisible: false,
     }),
     computed: {
-      ...mapState(['isDrawerOpen', 'currentLesson']),
-      ...mapGetters(['getLessonFromPath']),
+      ...mapState(['isDrawerOpen']),
+      ...mapState({
+        currentLesson: state => state.lesson.currentLesson
+      }),
+      ...mapGetters({
+        getLessonFromPath: 'tree/getLessonFromPath'
+      }),
     },
     methods: {
       goToHome() {

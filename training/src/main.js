@@ -5,7 +5,7 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import VueHighlightJS from 'vue-highlightjs'
 import router from './router'
-import store from './store'
+import store from './state/store'
 
 Vue.use(VueHighlightJS);
 Vue.config.productionTip = false;

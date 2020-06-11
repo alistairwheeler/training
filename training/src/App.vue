@@ -3,8 +3,7 @@
     <Header/>
     <main>
       <nav class="navigation-drawer" v-show="isDrawerOpen" :class="[ isUserOnLesson ? 'on-lesson' : '']">
-        <TreeViewNode v-for="motherCategory in tree" :key="motherCategory.trnCatPath" :node="motherCategory"
-                      :depth="0"/>
+        <TreeViewNode v-for="(motherCategory, index) in tree" :key="index" :node="motherCategory" :depth="0"/>
       </nav>
       <div class="page-content">
         <router-view class="page-content__router-view" :key="$route.fullPath" v-if="tree.length"/>
@@ -27,7 +26,10 @@
       isUserOnLesson: false
     }),
     computed: {
-      ...mapState(['tree', 'isDrawerOpen']),
+      ...mapState(['isDrawerOpen']),
+      ...mapState({
+        tree: state => state.tree.tree
+      })
     },
     async beforeCreate() {
       await this.$smp.login();
@@ -35,7 +37,7 @@
     },
     async created() {
       if (this.$router.currentRoute.name === 'Lesson') this.isUserOnLesson = true;
-      await this.$store.dispatch('fetchTree', {smp: this.$smp});
+      await this.$store.dispatch('tree/fetchTree', {smp: this.$smp});
     },
     watch: {
       $route(to) {
