@@ -29,7 +29,7 @@
     }),
     computed: {
       ...mapState({
-        currentLesson: state => state.lesson.currentLesson,
+        lesson: state => state.lesson.lesson,
         isDrawerOpen: state => state.ui.isDrawerOpen
       }),
       ...mapGetters({
@@ -42,8 +42,8 @@
       },
       arrowNavigationClicked(direction){
         let path = '';
-        if (direction === -1) path = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnPrevious;
-        if (direction === 1) path = this.getLessonFromPath(this.currentLesson.trnLsnPath).trnLsnNext;
+        if (direction === -1) path = this.getLessonFromPath(this.lesson.trnLsnPath).trnLsnPrevious;
+        if (direction === 1) path = this.getLessonFromPath(this.lesson.trnLsnPath).trnLsnNext;
         if (path)
           this.$router.push('/lesson/' + path.toString().substring(1)).catch(err => console.error(err));
         else if (direction === -1) this.shakeElement("previous-button");

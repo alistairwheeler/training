@@ -1,7 +1,7 @@
 <template>
   <div class="tree">
     <p :style="indent" @click="nodeClicked(node)" class="tree__root-label"
-       :class="[currentLesson.trnLsnPath && currentLesson.trnLsnPath === node.trnLsnPath ? 'active' : '']">
+       :class="[lesson.trnLsnPath && lesson.trnLsnPath === node.trnLsnPath ? 'active' : '']">
       <i v-if="(node.categories && node.categories.length) || (node.lessons && node.lessons.length)"
          class="material-icons tree__arrow" :class="[showChildren ? 'down-arrow' : '']" >keyboard_arrow_right</i>
       <i v-if="node.trnCatPath" class="material-icons tree__node-type">folder</i>
@@ -42,7 +42,7 @@
     }),
     computed: {
       ...mapState({
-        currentLesson: state => state.lesson.currentLesson
+        lesson: state => state.lesson.lesson
       }),
       indent() {
         if (this.depth === 0) return {'padding-left': `10px`}; // Root elements

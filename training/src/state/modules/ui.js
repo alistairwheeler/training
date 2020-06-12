@@ -1,3 +1,5 @@
+import {SET_DRAWER_STATE, SET_LIGHT_BOX_IMAGE, SET_LIGHT_BOX_VISIBILITY} from "../mutation-types";
+
 export default {
   namespaced: true,
   state: {
@@ -7,24 +9,24 @@ export default {
   },
   actions: {
     toggleDrawer({commit, state}){
-      commit('UPDATE_DRAWER_OPEN', !state.isDrawerOpen);
+      commit(SET_DRAWER_STATE, !state.isDrawerOpen);
     },
     displayLightBox({commit}, imageSrc) {
-      commit('SET_LIGHT_BOX_IMAGE', imageSrc);
-      commit('SET_LIGHT_BOX_VISIBILITY', true);
+      commit(SET_LIGHT_BOX_IMAGE, imageSrc);
+      commit(SET_LIGHT_BOX_VISIBILITY, true);
     },
     hideLightBox({commit}) {
-      commit('SET_LIGHT_BOX_VISIBILITY', false);
+      commit(SET_LIGHT_BOX_VISIBILITY, false);
     }
   },
   mutations: {
-    UPDATE_DRAWER_OPEN(state, choice) {
+    [SET_DRAWER_STATE](state, choice) {
       state.isDrawerOpen = choice;
     },
-    SET_LIGHT_BOX_IMAGE(state, imageSrc) {
+    [SET_LIGHT_BOX_IMAGE](state, imageSrc) {
       state.lightBoxImageSrc = imageSrc;
     },
-    SET_LIGHT_BOX_VISIBILITY(state, visibility) {
+    [SET_LIGHT_BOX_VISIBILITY](state, visibility) {
       state.isLightBoxVisible = visibility;
     },
   }

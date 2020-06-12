@@ -1,3 +1,5 @@
+import {SET_TREE} from "../mutation-types";
+
 export default {
   namespaced: true,
   state: {
@@ -5,7 +7,7 @@ export default {
   },
   getters: {
     breadCrumbItems(state, getters, rootState) {
-      let parents = rootState.lesson.currentLesson.trnLsnPath.split('/');
+      let parents = rootState.lesson.lesson.trnLsnPath.split('/');
       parents.splice(0, 1);
       let cursor = state.tree;
       let path = "";
@@ -64,14 +66,14 @@ export default {
     async fetchTree({commit}, payload) {
       return new Promise((resolve) => {
         payload.smp._call(undefined, "/ext/TrnTreeService?array=true", undefined, tree => {
-          commit('UPDATE_TREE', tree);
+          commit(SET_TREE, tree);
           resolve();
         });
       })
     },
   },
   mutations: {
-    UPDATE_TREE(state, tree) {
+    [SET_TREE](state, tree) {
       state.tree = tree;
     },
   },

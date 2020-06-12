@@ -1,26 +1,26 @@
 <template>
-  <div class="lesson" :class="[currentLesson.trnLsnVisualization === 'LINEAR' ? 'linear' : '']" @click="changeVisualization">
+  <div class="lesson" :class="[lesson.trnLsnVisualization === 'LINEAR' ? 'linear' : '']" @click="changeVisualization">
     <div class="grid">
       <div class="grid-item lesson-block">
-        <div v-if="currentLesson.row_id" class="lesson-wrapper">
+        <div v-if="lesson.row_id" class="lesson-wrapper">
           <ul class="breadcrumb">
             <li class="breadcrumb__item" v-for="(item, index) in breadCrumbItems" :key="index">
               <span>{{item.title}}</span>
               <span class="breadcrumb__divider" v-if="index !== breadCrumbItems.length-1">></span>
             </li>
           </ul>
-          <div class="lesson-html-content" v-if="currentLesson.trnLsnHtmlContent" v-html="currentLesson.trnLsnHtmlContent"
+          <div class="lesson-html-content" v-if="lesson.trnLsnHtmlContent" v-html="lesson.trnLsnHtmlContent"
                v-highlightjs @click.prevent="handleClickOnLessonContent"></div>
           <EmptyContent v-else/>
         </div>
         <Spinner v-else/>
       </div>
       <div class="grid-item slider-block">
-        <Slider v-if="currentLessonImages.length" :slides="currentLessonImages" ref="slider"/>
+        <Slider v-if="lessonImages.length" :slides="lessonImages" ref="slider"/>
         <EmptyContent v-else/>
       </div>
       <div class="grid-item video-block">
-        <div v-if="currentLesson" class="video-wrapper">
+        <div v-if="lesson" class="video-wrapper">
           <video v-if="videoUrl" class="video-player" controls muted poster="../../../public/media.svg"
                  :src="videoUrl" preload="none">
             Sorry, your browser doesn't support embedded videos.
@@ -49,16 +49,16 @@
     }),
     computed: {
       ...mapState({
-        currentLesson: state => state.lesson.currentLesson,
-        currentLessonImages: state => state.lesson.currentLessonImages
+        lesson: state => state.lesson.lesson,
+        lessonImages: state => state.lesson.lessonImages
       }),
       ...mapGetters({
         breadCrumbItems: 'tree/breadCrumbItems',
         getLessonFromPath: 'tree/getLessonFromPath'
       }),
       videoUrl: function () {
-        if (this.currentLesson && this.currentLesson.trnLsnVideo)
-          return this.$smp.documentURL("TrnLesson", "trnLsnVideo", this.currentLesson.row_id, this.currentLesson.trnLsnVideo);
+        if (this.lesson && this.lesson.trnLsnVideo)
+          return this.$smp.documentURL("TrnLesson", "trnLsnVideo", this.lesson.row_id, this.lesson.trnLsnVideo);
         else
           return false;
       },
@@ -105,7 +105,7 @@
       if (!lesson)
         await this.$router.push('/404');
       else
-        await this.$store.dispatch("lesson/loadLesson", {
+        await this.$store.dispatch("lesson/fetchLesson", {
           smp: this.$smp,
           lessonId: lesson.row_id
         });
@@ -114,7 +114,7 @@
       this.addScrollListeners();
     },
     beforeDestroy() {
-      this.$store.dispatch('lesson/unloadLesson');
+      this.$store.dispatch('lesson/unsetLesson');
     }
   };
 </script>
