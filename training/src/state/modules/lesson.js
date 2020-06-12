@@ -5,9 +5,9 @@ export default {
     currentLessonImages: false,
   },
   actions: {
-    async loadLesson(context , payload) {
-      await context.dispatch("loadLessonContent", payload);
-      await context.dispatch("loadLessonImages", payload);
+    async loadLesson({dispatch} , payload) {
+      await dispatch("loadLessonContent", payload);
+      await dispatch("loadLessonImages", payload);
     },
     async loadLessonImages({commit}, payload) {
       return new Promise((resolve, reject) => {

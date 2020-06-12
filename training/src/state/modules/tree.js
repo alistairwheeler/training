@@ -60,11 +60,6 @@ export default {
         return foundLsn;
       },
   },
-  mutations: {
-    UPDATE_TREE(state, tree) {
-      state.tree = tree;
-    },
-  },
   actions: {
     async fetchTree({commit}, payload) {
       return new Promise((resolve) => {
@@ -74,5 +69,10 @@ export default {
         });
       })
     },
-  }
+  },
+  mutations: {
+    UPDATE_TREE(state, tree) {
+      state.tree = tree;
+    },
+  },
 }

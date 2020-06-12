@@ -6,8 +6,8 @@ export default {
     lightBoxImageSrc: '',
   },
   actions: {
-    toggleDrawer(context){
-      context.commit('UPDATE_DRAWER_OPEN', !context.state.isDrawerOpen);
+    toggleDrawer({commit, state}){
+      commit('UPDATE_DRAWER_OPEN', !state.isDrawerOpen);
     },
     displayLightBox({commit}, imageSrc) {
       commit('SET_LIGHT_BOX_IMAGE', imageSrc);
