@@ -19,5 +19,11 @@ const store = new Vuex.Store({
     }
   }
 })
-
 */
+export const SET_LESSON = 'SET_LESSON'
+export const SET_LESSON_IMAGES = 'SET_LESSON_IMAGES'
+export const UNSET_LESSON = 'UNSET_LESSON'
+export const SET_TREE = 'SET_TREE'
+export const SET_DRAWER_STATE = 'SET_DRAWER_STATE'
+export const SET_LIGHT_BOX_IMAGE = 'SET_LIGHT_BOX_IMAGE'
+export const SET_LIGHT_BOX_VISIBILITY = 'SET_LIGHT_BOX_VISIBILITY'

@@ -26,9 +26,9 @@
       isUserOnLesson: false
     }),
     computed: {
-      ...mapState(['isDrawerOpen']),
       ...mapState({
-        tree: state => state.tree.tree
+        tree: state => state.tree.tree,
+        isDrawerOpen: state => state.ui.isDrawerOpen
       })
     },
     async beforeCreate() {

@@ -28,9 +28,9 @@
       navigationArrowVisible: false,
     }),
     computed: {
-      ...mapState(['isDrawerOpen']),
       ...mapState({
-        currentLesson: state => state.lesson.currentLesson
+        currentLesson: state => state.lesson.currentLesson,
+        isDrawerOpen: state => state.ui.isDrawerOpen
       }),
       ...mapGetters({
         getLessonFromPath: 'tree/getLessonFromPath'
@@ -50,7 +50,7 @@
         else if (direction === 1) this.shakeElement("next-button");
       },
       toggleMenu() {
-        this.$store.commit('UPDATE_DRAWER_OPEN', !this.isDrawerOpen);
+        this.$store.dispatch('ui/toggleDrawer');
       },
       shakeElement(elementId) {
         document.getElementById(elementId).classList.add("shaked");

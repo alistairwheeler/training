@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import tree from "./modules/tree";
 import lesson from "./modules/lesson";
+import ui from "./modules/ui";
 
 Vue.use(Vuex);
 
@@ -14,32 +15,6 @@ here for the user to navigate in the app.
 */
 export default new Vuex.Store({
   modules: {
-    tree, lesson
-  },
-  state: {
-    isDrawerOpen: true,
-    isLightBoxVisible: false,
-    lightBoxImageSrc: '',
-  },
-  mutations: {
-    UPDATE_DRAWER_OPEN(state, choice) {
-      state.isDrawerOpen = choice;
-    },
-    SET_LIGHT_BOX_IMAGE(state, imageSrc) {
-      state.lightBoxImageSrc = imageSrc;
-    },
-    SET_LIGHT_BOX_VISIBILITY(state, choice) {
-      state.isLightBoxVisible = choice;
-    },
-  },
-
-  actions: {
-    displayLightBox({commit}, imageSrc) {
-      commit('SET_LIGHT_BOX_IMAGE', imageSrc);
-      commit('SET_LIGHT_BOX_VISIBILITY', true);
-    },
-     hideLightBox({commit}) {
-       commit('SET_LIGHT_BOX_VISIBILITY', false);
-     }
+    tree, lesson, ui
   },
 });

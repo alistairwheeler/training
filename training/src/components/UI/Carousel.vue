@@ -50,8 +50,7 @@
         }
       },
       displayFullScreenImage(image) {
-        this.$store.commit('SET_LIGHT_BOX_IMAGE', image);
-        this.$store.commit('SET_LIGHT_BOX_VISIBILITY', true);
+        this.$store.dispatch('ui/displayLightBox', image);
       }
     },
     mounted() {
