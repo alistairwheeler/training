@@ -15,7 +15,7 @@
     computed: {
       ...mapState({
         lightBoxImageSrc: state => state.ui.lightBoxImageSrc,
-        isLightBoxVisible: state => state.ui.isDisLightBoxVisiblerawerOpen
+        isLightBoxVisible: state => state.ui.isLightBoxVisible
       }),
     },
   }

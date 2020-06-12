@@ -45,7 +45,6 @@
     components: {Slider, Spinner, EmptyContent},
     data: () => ({
       visualizationMode: 'tutorial',
-      lesson: false,
       alreadyScrolledImages: [],
     }),
     computed: {
