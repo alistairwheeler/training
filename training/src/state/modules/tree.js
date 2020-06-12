@@ -66,7 +66,6 @@ export default {
     },
   },
   actions: {
-    // Call only once at app creation
     async fetchTree({commit}, payload) {
       return new Promise((resolve) => {
         payload.smp._call(undefined, "/ext/TrnTreeService?array=true", undefined, tree => {

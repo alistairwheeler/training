@@ -34,17 +34,6 @@ export default new Vuex.Store({
   },
 
   actions: {
-    async fetchLessonsPictureURLs({commit}, payload) {
-      return new Promise((resolve, reject) => {
-        let picture = payload.smp.getBusinessObject("TrnPicture");
-        picture.search(async () => {
-          if (picture.list) {
-            resolve(picture.list.map(pic => payload.smp.imageURL("TrnPicture", "trnPicImage", pic.row_id, pic.trnPicImage, false)))
-          } else
-            reject("Impossible to fetch the pictures")
-        }, {'trnPicLsnId': payload.lessonId})
-      });
-    },
     displayLightBox({commit}, imageSrc) {
       commit('SET_LIGHT_BOX_IMAGE', imageSrc);
       commit('SET_LIGHT_BOX_VISIBILITY', true);

@@ -5,9 +5,9 @@ export default {
     currentLessonImages: false,
   },
   actions: {
-    async loadLesson(payload) {
-      await this.dispatch("loadLessonContent", payload);
-      await this.dispatch("loadLessonImages", payload);
+    async loadLesson(context , payload) {
+      await context.dispatch("loadLessonContent", payload);
+      await context.dispatch("loadLessonImages", payload);
     },
     async loadLessonImages({commit}, payload) {
       return new Promise((resolve, reject) => {
@@ -34,6 +34,9 @@ export default {
         }, payload.lessonId);
       });
     },
+    unloadLesson({commit}) {
+      commit('UNLOAD_LESSON');
+    }
   },
   mutations: {
     UPDATE_CURRENT_LESSON(state, lesson) {

@@ -115,7 +115,7 @@
       this.addScrollListeners();
     },
     beforeDestroy() {
-      this.$store.commit('UNLOAD_LESSON');
+      this.$store.dispatch('lesson/unloadLesson');
     }
   };
 </script>
