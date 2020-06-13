@@ -99,9 +99,7 @@
       },
     },
     async created() {
-      let splittedRoute = this.$router.currentRoute.path.split("lesson");
-      let lessonPath = splittedRoute[1] ? splittedRoute[1] : "";
-      let lesson = this.getLessonFromPath(lessonPath);
+      let lesson = this.getLessonFromPath(`/${this.$router.currentRoute.params.lessonPath}`);
       if (!lesson)
         await this.$router.push('/404');
       else
@@ -161,7 +159,6 @@
       text-transform: uppercase
   .lesson-wrapper
     @include fillParent()
-
 
 .slider-block
   grid-column: 2
