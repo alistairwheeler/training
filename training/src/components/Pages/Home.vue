@@ -32,9 +32,6 @@
               <h2 class="mg-md h2-2-style tc-medium-slate-blue mx-auto d-block text-lg-center">
                 <strong>Discover &nbsp;Simplicité</strong>
               </h2>
-              <h4 class="mg-md h4-style tc-black text-lg-center">
-                Here is who it work's
-              </h4>
               <div class="p-1-style text-lg-left">
                 Simplicité is a low-code platform designed to help the efficient realization of complex
                 and
