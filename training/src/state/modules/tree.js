@@ -7,7 +7,7 @@ export default {
   },
   getters: {
     breadCrumbItems(state, getters, rootState) {
-      let parents = rootState.lesson.lesson.trnLsnPath.split('/');
+      let parents = rootState.lesson.lesson.trnLsnFrontPath.split('/');
       parents.splice(0, 1);
       let cursor = state.tree;
       let path = "";
@@ -16,22 +16,22 @@ export default {
 
       parents.forEach(function (val, idx) {
         path += "/" + val;
-        let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath === path);
+        let foundCat = cursor.find(item => item.trnCatFrontPath && item.trnCatFrontPath === path);
         if (foundCat !== undefined) {
           result.push({
             title: foundCat.trnCatTitle,
-            path: foundCat.trnCatPath
+            path: foundCat.trnCatFrontPath
           });
           if (idx === parents.length - 2)
             cursor = foundCat.lessons;
           else
             cursor = foundCat.categories;
         } else if (idx === parents.length - 1) {
-          let foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath === path);
+          let foundLsn = cursor.find(item => item.trnLsnFrontPath && item.trnLsnFrontPath === path);
           if (foundLsn !== undefined) {
             result.push({
               title: foundLsn.trnLsnTitle,
-              path: foundLsn.trnLsnPath
+              path: foundLsn.trnLsnFrontPath
             });
             finish = true;
           }
@@ -49,14 +49,14 @@ export default {
 
         parents.forEach(function (val, idx) {
           path += "/" + val;
-          let foundCat = cursor.find(item => item.trnCatPath && item.trnCatPath === path);
+          let foundCat = cursor.find(item => item.trnCatFrontPath && item.trnCatFrontPath === path);
           if (foundCat !== undefined) {
             if (idx === parents.length - 2)
               cursor = foundCat.lessons;
             else
               cursor = foundCat.categories;
           } else if (idx === parents.length - 1) {
-            foundLsn = cursor.find(item => item.trnLsnPath && item.trnLsnPath === path);
+            foundLsn = cursor.find(item => item.trnLsnFrontPath && item.trnLsnFrontPath === path);
           }
         });
         return foundLsn;

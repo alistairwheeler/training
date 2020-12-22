@@ -42,8 +42,8 @@
       },
       arrowNavigationClicked(direction){
         let path = '';
-        if (direction === -1) path = this.getLessonFromPath(this.lesson.trnLsnPath).trnLsnPrevious;
-        if (direction === 1) path = this.getLessonFromPath(this.lesson.trnLsnPath).trnLsnNext;
+        if (direction === -1) path = this.getLessonFromPath(this.lesson.trnLsnFrontPath).trnLsnPrevious;
+        if (direction === 1) path = this.getLessonFromPath(this.lesson.trnLsnFrontPath).trnLsnNext;
         if (path)
           this.$router.push('/lesson/' + path.toString().substring(1)).catch(err => console.error(err));
         else if (direction === -1) this.shakeElement("previous-button");

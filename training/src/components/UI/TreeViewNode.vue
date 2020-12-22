@@ -1,10 +1,10 @@
 <template>
   <div class="tree">
     <p :style="indent" @click="nodeClicked(node)" class="tree__root-label"
-       :class="[lesson.trnLsnPath && lesson.trnLsnPath === node.trnLsnPath ? 'active' : '']">
+       :class="[lesson.trnLsnFrontPath && lesson.trnLsnFrontPath === node.trnLsnFrontPath ? 'active' : '']">
       <i v-if="(node.categories && node.categories.length) || (node.lessons && node.lessons.length)"
          class="material-icons tree__arrow" :class="[showChildren ? 'down-arrow' : '']" >keyboard_arrow_right</i>
-      <i v-if="node.trnCatPath" class="material-icons tree__node-type">folder</i>
+      <i v-if="node.trnCatFrontPath" class="material-icons tree__node-type">folder</i>
       <i v-else class="material-icons tree__node-type">menu_book</i>
       <span>{{node.trnCatTitle || node.trnLsnTitle}} </span>
     </p>
@@ -52,8 +52,8 @@
     },
     methods: {
       nodeClicked(node) {
-        if (node.trnCatPath) this.showChildren = !this.showChildren;
-        else this.$router.push('/lesson' + node.trnLsnPath).catch(err => console.error(err))
+        if (node.trnCatFrontPath) this.showChildren = !this.showChildren;
+        else this.$router.push('/lesson' + node.trnLsnFrontPath).catch(err => console.error(err))
       },
     }
   }
