@@ -4,6 +4,7 @@
       <i class="material-icons menu-icon__image">menu</i>
     </div>
     <div class="logo" @click="goToHome"></div>
+    <SearchBar class="search-bar"/>
     <nav class="header-buttons">
       <i id="previous-button" class="material-icons header-buttons__button" @click="arrowNavigationClicked(-1)"
          v-show="navigationArrowVisible">skip_previous</i>
@@ -21,12 +22,14 @@
 
 <script>
   import {mapGetters, mapState} from "vuex";
+  import SearchBar from "./SearchBar";
 
   export default {
     name: "Header",
     data: () => ({
       navigationArrowVisible: false,
     }),
+    components: {SearchBar},
     computed: {
       ...mapState({
         lesson: state => state.lesson.lesson,
@@ -123,6 +126,9 @@ header
   .shaked
     animation: headshake 100ms cubic-bezier(.4, .1, .6, .9)
     animation-iteration-count: 2
+
+  .search-bar
+    width: 50%
 
   @keyframes headshake
     0%
