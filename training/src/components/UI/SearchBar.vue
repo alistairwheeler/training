@@ -2,118 +2,77 @@
 <div id="SearchBar">
   <ReactiveBase app="myindex" url="http://127.0.0.1:9200">
 
-    <DataSearch class="datasearch" @valueSelected="valueSelected" componentId="SearchSensor" queryFormat="and"
-                :dataField="searchFields">
-                <div slot="renderNoSuggestion" >
-                  <div>
-                      Aucun résultat de recherche
-                  </div>
-                </div>
-                <div
-                    class="suggestion"
-                    slot="render"
-                    slot-scope="{
-                        downshiftProps: { isOpen, highlightedIndex, getItemProps, getItemEvents },
-                        data: suggestions,
-                    }"
-                  >
-                  <div v-if="isOpen" class="result-list-container">
-                    <div  class="result-container" v-for="suggestion in (suggestions || []).map(s => ({
-                                      label: s.source.trnLsnTitle,
-                                      value: s.source.trnLsnTitle,
-                                      excerpt: s.source.trnLsnDescription,
-                                      path: s.source.trnLsnFrontPath,
-                                      key: s._id,
-                                  }))"
-                      v-bind="getItemProps({ item: suggestion })"
-                      v-on="getItemEvents({ item: suggestion })"
-                      :key="suggestion._id">
-                      <div class="result-item">
-                        <div class="result-title">{{suggestion.label}}</div>
-                        <div class="result-url">
-                          <div>
-                            <a :href="trainingUrl+suggestion.path" target="_blank"><img :src="'http://www.google.com/s2/favicons?domain='+trainingUrl+suggestion.path"/> {{trainingUrl}}{{suggestion.path}}</a>
-                          </div>
-                        </div>
-                        <div class="result-body">
-                          {{suggestion.excerpt}}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              </div>
-    </DataSearch>
-    <!--<MultiList componentId="MultiList" dataField="searchType.keyword"  title="Type" :showCount="false" :showSearch="false"
-      className="multi-list-container"/>-->
+    <DataSearch @valueChange="valueChange" @valueSelected="valueSelected" componentId="SearchSensor" queryFormat="or" iconPosition="right" :showIcon="false"
+            :dataField="searchFields"
+            :fieldWeights="fieldWeights"
+            :highlight="true">
 
-    <!--<div v-if="searchUsed">
-      <ReactiveList componentId="SearchResult" dataField="searchFields" className="result-list-container" :pagination="true" :size="10" :react="{ and: ['SearchSensor', 'MultiList'] }">
-        <div slot="renderItem" slot-scope="{item}" class="result-container">
-              <div class="result-item" :id="item._id" :key="item._id" :itemUrl="trainingUrl+item.trnLsnFrontPath" @click="openPage(trainingUrl+item.trnLsnFrontPath)">
-                <div class="result-title">{{item.searchType}} - {{item.trnLsnTitle}}</div>
-                <div class="result-url">
-                  <div>
-                    <a :href="trainingUrl+item.trnLsnFrontPath" target="_blank"><img :src="'http://www.google.com/s2/favicons?domain='+trainingUrl+item.trnLsnFrontPath"/> {{trainingUrl}}{{item.trnLsnFrontPath}}</a>
-                  </div>
-                </div>
-                <div class="result-body">
-                  {{item.trnLsnDescription}}
-                </div>
-          </div>
-        </div>
-
-        <div slot="renderItem" slot-scope="{ item }">
-          <div :id="item._id" class="flex search-content" :key="item._id">
-            <div class="flex column justify-center ml20">
-              <div class="flex column justify-space-between">
-                <div class="search-header">
-                  <a :href="'https://docs2.simplicite.io'+item.trnLsnFrontPath" target="_blank">{{ item.trnLsnTitle }}</a>
-                </div>
-                <div>
-                  {{ item.trnLsnDescription }}
-                </div>
-              </div>
-
+            <div slot="renderNoSuggestion">
+              Aucun résultat de recherche
             </div>
+            <div
+                class="suggestion"
+                slot="render"
+                slot-scope="{
+                    error,
+                    loading,
+                    downshiftProps: { isOpen, highlightedIndex, getItemProps, getItemEvents },
+                    data: suggestions,
+                }"
+              >
+              <div v-if="isOpen" class="result-list-container">
+                <div v-for="suggestion in (suggestions || []).map(s => ({
+                                  label: s.source.trnLsnTitle,
+                                  value: s.source.trnLsnTitle,
+                                  excerpt: s.source.trnLsnDescription,
+                                  path: s.source.trnLsnFrontPath,
+                                  titleHighlight: s.source.highlight.trnLsnTitle,
+                                  excerptHighlight: s.source.highlight.trnLsnDescription,
+                                  cat: s.source.trnCatTitle,
+                                  key: s._id,
+                                  source : s.source
+                              }))"
+                  v-bind="getItemProps({ item: suggestion })"
+                  v-on="getItemEvents({ item: suggestion })"
+                  :key="suggestion._id">
+
+                  <suggestion-item :inputValue="inputValue" :suggestion="suggestion" :trainingUrl="trainingUrl" />
+
+                </div>
+              </div>
           </div>
-        </div>
-      </ReactiveList>
-    </div>-->
+        </DataSearch>
   </ReactiveBase>
 </div>
 </template>
 
 
 <script>
+
+import SuggestionItem from "./SuggestionItem";
+
 export default {
+
   name: "SearchBar",
+  components :{
+    SuggestionItem
+  },
   data: function() {
     return {
+      inputValue:'',
       searchUsed: false,
       trainingUrl : "https://docs2.simplicite.io",
       searchFields : ['trnLsnTitle', 'trnLsnDescription', 'trnLsnContent'],
+      fieldWeights : [3, 2, 1]
     }
   },
   methods: {
     valueSelected(val, event, item) {
+      console.log(item)
       this.$router.push('/lesson' + item.trnLsnFrontPath).catch(err => console.error(err));
-      //this.searchUsed = true;
     },
-    inputMethod(val) {
-      this.name = val.target.value;
-    },
-    /*suggestions(suggestionsList){
-      console.log(suggestionsList)
-    },*/
-    parseSuggestion: suggestion => ({
-      label: `${suggestion.source.trnLsnTitle}`,
-      value: suggestion.source.trnLsnTitle,
-      source: suggestion.source  // for onValueSelected to work with parseSuggestion
-    }),
-
-    openPage(item){
-      window.open(item, "_blank");
-
+    valueChange(val){
+      this.inputValue = val
     }
 
   }
