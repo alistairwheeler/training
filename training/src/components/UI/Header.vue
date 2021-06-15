@@ -4,7 +4,7 @@
       <i class="material-icons menu-icon__image">menu</i>
     </div>
     <div class="logo" @click="goToHome"></div>
-    <SearchBar class="search-bar"/>
+    <SearchBar ref="searchbaritem" class="search-bar" v-show="searchbarVisible"/>
     <nav class="header-buttons">
       <i id="previous-button" class="material-icons header-buttons__button" @click="arrowNavigationClicked(-1)"
          v-show="navigationArrowVisible">skip_previous</i>
@@ -27,6 +27,7 @@
   export default {
     name: "Header",
     data: () => ({
+      searchbarVisible:true,
       navigationArrowVisible: false,
     }),
     components: {SearchBar},

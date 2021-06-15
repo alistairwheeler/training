@@ -17,10 +17,12 @@
         <a :href="trainingUrl+suggestion.path" target="_blank"><img :src="'http://www.google.com/s2/favicons?domain='+trainingUrl+suggestion.path"/> {{trainingUrl}}{{suggestion.path}}</a>
       </div>
     </div-->
-    <div v-if="highlightedExcerpt" class="result-body" v-html="highlightedExcerpt">
-    </div>
-    <div v-else class="result-body">
-      {{suggestion.excerpt}}
+    <div class="result-body">
+      <div class="result-icon material-icons" v-html="materialIconCode"></div>
+      <div class="result-text">
+        <div v-if="highlightedExcerpt" v-html="highlightedExcerpt"></div>
+        <div v-else>{{suggestion.excerpt}}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -47,8 +49,24 @@ export default {
     }
   },
   computed:{
+    materialIconCode: function(){
+      var materialCode = '';
+      switch(this.suggestion.cat){
+        case "Configuration":
+          materialCode = "design_services"
+          break;
+        case "Development":
+          materialCode = "code"
+          break;
+        case "Apis":
+          materialCode = "api"
+          break;
+        default:
+          materialCode = "settings"
+      }
+      return materialCode
+    },
     highlightedTitle: function(){
-
       if(this.suggestion.titleHighlight && Array.isArray(this.suggestion.titleHighlight) && this.suggestion.titleHighlight.length > 0){
           /*
           //UNDERKILL ?
@@ -92,6 +110,9 @@ export default {
   border-radius: .3rem
   font-size: .8rem
   font-weight: lighter
+  min-width: 12em
+  text-align: center
+  align-content: center
 
 
 .result-title
@@ -106,9 +127,23 @@ export default {
 
 
 .result-body
+  display: flex
   height: 100%
   font-size: 1rem
+  flex-grow: 1
 
+.result-text
+  border-left: .10rem solid #ccc
+  padding-left: .5rem
+  flex-grow: 1
+  line-height: 1.3rem
+
+.result-icon
+  align-self: center
+  margin: 1rem
+  border-radius: 3px
+  padding: .5rem
+  background: linear-gradient(to bottom, #ccc 18%, #ffefef)
 
 .result-item
   //border:solid black;
@@ -123,7 +158,6 @@ export default {
     background-color: #EDF3FA
     border-radius: .3rem
     cursor: pointer
-
 
 
 </style>
